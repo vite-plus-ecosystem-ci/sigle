@@ -9,12 +9,13 @@ ENV APP_NAME="server"
 
 # Install pnpm
 ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
+ENV PATH="$PNPM_HOME/bin:$PATH"
+RUN apk add --no-cache git
 COPY --link ./package.json ./
 RUN corepack enable pnpm
 RUN TURBO_VERSION=$(grep -o '"turbo": "[^"]*' package.json | cut -d'"' -f4) && \
     pnpm install turbo@${TURBO_VERSION} --global
-RUN pnpm install @dotenvx/dotenvx@^1 --global
+RUN pnpm install @dotenvx/dotenvx@^2 --global
 
 # --- Turbo stage ---
 
@@ -36,6 +37,7 @@ COPY .gitignore .gitignore
 COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 COPY --from=builder /app/out/pnpm-workspace.yaml ./pnpm-workspace.yaml
+RUN npm pkg delete scripts.prepare
 RUN pnpm install --frozen-lockfile --prod=false
 
 COPY --from=builder /app/out/full/ .
@@ -68,7 +70,8 @@ COPY --from=installer --chown=nitro:nodejs /app/apps/$APP_NAME/prisma ./prisma
 # Copy the generated prisma client as it contains the required Query engine
 COPY --from=installer --chown=nitro:nodejs /app/apps/$APP_NAME/src/__generated__/prisma ./apps/$APP_NAME/src/__generated__/prisma
 COPY --from=builder --chown=nitro:nodejs /app/apps/$APP_NAME/.env.testnet.local ./.env.testnet.local
-RUN node scripts/prod-deps.js
+RUN node scripts/prod-deps.cjs
+RUN npm pkg delete scripts.prepare
 RUN pnpm install --dangerously-allow-all-builds
 
 USER nitro

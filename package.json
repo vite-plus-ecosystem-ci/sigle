@@ -1,22 +1,23 @@
 {
   "name": "root",
+  "version": "0.0.0",
   "private": true,
   "scripts": {
     "build": "turbo build",
     "release": "pnpm changeset publish",
     "test": "turbo test",
-    "check-types": "turbo check-types",
     "prepare": "vp config",
     "version": "pnpm changeset version && pnpm install --lockfile-only"
   },
   "devDependencies": {
     "@changesets/cli": "2.31.0",
-    "syncpack": "14.3.0",
-    "turbo": "2.9.6",
-    "vite-plus": "0.1.20"
+    "syncpack": "15.3.2",
+    "turbo": "2.10.5",
+    "vite": "catalog:",
+    "vite-plus": "catalog:"
   },
   "engines": {
     "node": ">=24"
   },
-  "packageManager": "pnpm@10.33.0"
+  "packageManager": "pnpm@11.13.1"
 }

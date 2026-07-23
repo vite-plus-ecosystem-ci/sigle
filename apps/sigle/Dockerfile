@@ -9,12 +9,13 @@ ENV APP_NAME="sigle"
 
 # Install pnpm
 ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
+ENV PATH="$PNPM_HOME/bin:$PATH"
+RUN apk add --no-cache git
 COPY --link ./package.json ./
 RUN corepack enable pnpm
 RUN TURBO_VERSION=$(grep -o '"turbo": "[^"]*' package.json | cut -d'"' -f4) && \
     pnpm install turbo@${TURBO_VERSION} --global
-RUN pnpm install @dotenvx/dotenvx@^1 --global
+RUN pnpm install @dotenvx/dotenvx@^2 --global
 
 # --- Turbo stage ---
 
@@ -36,6 +37,7 @@ RUN apk update && \
 # First install the dependencies (as they change less often)
 COPY .gitignore .gitignore
 COPY --from=builder /app/out/json/ .
+RUN npm pkg delete scripts.prepare
 RUN pnpm install --frozen-lockfile --prod=false
 
 COPY --from=builder /app/out/full/ .

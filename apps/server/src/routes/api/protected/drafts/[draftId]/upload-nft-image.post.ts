@@ -133,25 +133,52 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const optimizedBuffer = await optimizeImage({
+  const optimizeResult = await optimizeImage({
     buffer: Buffer.from(await file.arrayBuffer()),
-    contentType: parsedFile.data.file.type,
     quality: env.STACKS_ENV === "mainnet" ? 85 : 75,
     width: env.STACKS_ENV === "mainnet" ? 800 : 500,
   });
 
-  await checkUploadQuota(event.context.user.id, optimizedBuffer.length);
+  if (optimizeResult.isErr()) {
+    throw new HTTPError({
+      status: 400,
+      message: "Failed to optimize image.",
+    });
+  }
 
-  const { cid } = await ipfsUploadFile(event, {
+  const optimizedBuffer = optimizeResult.value;
+
+  const quotaResult = await checkUploadQuota(
+    event.context.user.id,
+    optimizedBuffer.length,
+  );
+
+  if (quotaResult.isErr()) {
+    throw new HTTPError({
+      status: 429,
+      message: quotaResult.error.message,
+    });
+  }
+
+  const uploadResult = await ipfsUploadFile(event, {
     content: optimizedBuffer,
-    contentType: parsedFile.data.type,
+    contentType: "image/webp",
   });
+
+  if (uploadResult.isErr()) {
+    throw new HTTPError({
+      status: 500,
+      message: uploadResult.error.message,
+    });
+  }
+
+  const { cid } = uploadResult.value;
 
   await recordUpload({
     userId: event.context.user.id,
     cid,
     sizeBytes: optimizedBuffer.length,
-    contentType: parsedFile.data.file.type,
+    contentType: "image/webp",
   });
 
   event.context.$posthog.capture({
