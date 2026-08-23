@@ -6,21 +6,19 @@ import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { cn } from "@/lib/cn";
 
-const Sheet = DialogPrimitive.Root;
-
-const SheetTrigger = DialogPrimitive.Trigger;
-
-const portalVariants = cva("fixed inset-0 z-50 flex", {
-  variants: {
-    position: {
-      top: "items-start",
-      bottom: "items-end",
-      left: "justify-start",
-      right: "justify-end",
+const Sheet = DialogPrimitive.Root,
+  SheetTrigger = DialogPrimitive.Trigger,
+  portalVariants = cva("fixed inset-0 z-50 flex", {
+    variants: {
+      position: {
+        top: "items-start",
+        bottom: "items-end",
+        left: "justify-start",
+        right: "justify-end",
+      },
     },
-  },
-  defaultVariants: { position: "right" },
-});
+    defaultVariants: { position: "right" },
+  });
 
 interface SheetPortalProps
   extends DialogPrimitive.Portal.Props, VariantProps<typeof portalVariants> {}

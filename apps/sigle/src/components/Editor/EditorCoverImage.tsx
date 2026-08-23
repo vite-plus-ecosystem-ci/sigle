@@ -21,72 +21,71 @@ import { sigleApiClient } from "@/lib/sigle";
 import type { EditorPostFormData } from "./EditorFormProvider";
 
 export const EditorCoverImage = () => {
-  const params = useParams();
-  const postId = params.postId as string;
-  const posthog = usePostHog();
-  const [preview, setPreview] = useState<string | null>(null);
-  const { setValue, watch } = useFormContext<EditorPostFormData>();
-  const watchCoverImage = watch("coverImage");
-  const { mutateAsync: uploadMedia, isPending: loadingUploadImage } =
-    sigleApiClient.useMutation(
-      "post",
-      "/api/protected/drafts/{draftId}/upload-media",
-    );
+  const params = useParams(),
+    postId = params.postId as string,
+    posthog = usePostHog(),
+    [preview, setPreview] = useState<string | null>(null),
+    { setValue, watch } = useFormContext<EditorPostFormData>(),
+    watchCoverImage = watch("coverImage"),
+    { mutateAsync: uploadMedia, isPending: loadingUploadImage } =
+      sigleApiClient.useMutation(
+        "post",
+        "/api/protected/drafts/{draftId}/upload-media",
+      ),
+    onDrop = useCallback(
+      async (acceptedFiles: File[]) => {
+        const file = acceptedFiles[0];
+        if (!file) return;
+        if (loadingUploadImage) return;
 
-  const onDrop = useCallback(
-    async (acceptedFiles: File[]) => {
-      const file = acceptedFiles[0];
-      if (!file) return;
-      if (loadingUploadImage) return;
+        const previewBlobUrl = URL.createObjectURL(file);
+        setPreview(previewBlobUrl);
 
-      const previewBlobUrl = URL.createObjectURL(file);
-      setPreview(previewBlobUrl);
-
-      posthog.capture("cover_image_upload_start", {
-        postId,
-      });
-      const formData = new FormData();
-      formData.append("file", file);
-      uploadMedia(
-        {
-          params: {
-            path: {
-              draftId: postId,
+        posthog.capture("cover_image_upload_start", {
+          postId,
+        });
+        const formData = new FormData();
+        formData.append("file", file);
+        uploadMedia(
+          {
+            params: {
+              path: {
+                draftId: postId,
+              },
+            },
+            // oxlint-disable-next-line typescript/no-explicit-any
+            body: formData as any,
+          },
+          {
+            onSuccess: (data) => {
+              URL.revokeObjectURL(previewBlobUrl);
+              setValue("coverImage", data.url);
+              setPreview(null);
+              posthog.capture("cover_image_upload_success", {
+                postId,
+              });
+            },
+            onError: (error) => {
+              setPreview(null);
+              posthog.capture("cover_image_upload_error", {
+                postId,
+              });
+              toast.error(error?.message);
             },
           },
-          // oxlint-disable-next-line typescript/no-explicit-any
-          body: formData as any,
-        },
-        {
-          onSuccess: (data) => {
-            URL.revokeObjectURL(previewBlobUrl);
-            setValue("coverImage", data.url);
-            setPreview(null);
-            posthog.capture("cover_image_upload_success", {
-              postId,
-            });
-          },
-          onError: (error) => {
-            setPreview(null);
-            posthog.capture("cover_image_upload_error", {
-              postId,
-            });
-            toast.error(error?.message);
-          },
-        },
-      );
-    },
-    [postId, loadingUploadImage, posthog, setValue, setPreview, uploadMedia],
-  );
+        );
+      },
+      [postId, loadingUploadImage, posthog, setValue, setPreview, uploadMedia],
+    );
 
   // This is required for the migration process from Gaia.
   // It can be removed once it's done.
   useEffect(() => {
     const autoUploadImage = async () => {
       if (watchCoverImage?.startsWith("https://gaia.blockstack.org/hub/")) {
-        const response = await fetch(watchCoverImage);
-        const blob = await response.blob();
-        const file = new File([blob], "cover-image", { type: blob.type });
+        const response = await fetch(watchCoverImage),
+          blob = await response.blob(),
+          file = new File([blob], "cover-image", { type: blob.type });
         onDrop([file]);
       }
     };
@@ -95,26 +94,24 @@ export const EditorCoverImage = () => {
   }, [watchCoverImage, onDrop]);
 
   const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
-    onDrop,
-    accept: {
-      "image/jpeg": [],
-      "image/png": [],
+      onDrop,
+      accept: {
+        "image/jpeg": [],
+        "image/png": [],
+      },
+    }),
+    onRemove: MouseEventHandler<HTMLButtonElement> = (e) => {
+      // Prevent the form from submitting
+      e.preventDefault();
+      e.stopPropagation();
+      setValue("coverImage", undefined);
+      posthog.capture("cover_image_removed", {
+        postId,
+      });
     },
-  });
-
-  const onRemove: MouseEventHandler<HTMLButtonElement> = (e) => {
-    // Prevent the form from submitting
-    e.preventDefault();
-    e.stopPropagation();
-    setValue("coverImage", undefined);
-    posthog.capture("cover_image_removed", {
-      postId,
-    });
-  };
-
-  const resolvedWatchCoverImage = watchCoverImage
-    ? resolveImageUrl(watchCoverImage, { gateway: true })
-    : null;
+    resolvedWatchCoverImage = watchCoverImage
+      ? resolveImageUrl(watchCoverImage, { gateway: true })
+      : null;
 
   return (
     <div

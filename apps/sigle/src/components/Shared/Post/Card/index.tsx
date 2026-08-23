@@ -19,11 +19,11 @@ interface PostCardProps {
 }
 
 export const PostCard = ({ post, className }: PostCardProps) => {
-  const [collectDialogOpen, setCollectDialogOpen] = useState(false);
-  const canCollect =
-    post.collectible &&
-    (post.collectible.maxSupply === 0 ||
-      post.collectible.collected < post.collectible.maxSupply);
+  const [collectDialogOpen, setCollectDialogOpen] = useState(false),
+    canCollect =
+      post.collectible &&
+      (post.collectible.maxSupply === 0 ||
+        post.collectible.collected < post.collectible.maxSupply);
 
   return (
     <Card className={cn("relative pt-0", className)}>

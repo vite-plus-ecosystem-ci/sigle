@@ -22,9 +22,9 @@ export const useCurrencyFiatPrice = (
       if (!coingeckoId) return null;
 
       const data = await fetch(
-        `https://api.coingecko.com/api/v3/simple/price?ids=${coingeckoId}&vs_currencies=usd`,
-      );
-      const json = await data.json();
+          `https://api.coingecko.com/api/v3/simple/price?ids=${coingeckoId}&vs_currencies=usd`,
+        ),
+        json = await data.json();
       return json[coingeckoId] ? json[coingeckoId].usd : null;
     },
     enabled: !!currencySymbol,

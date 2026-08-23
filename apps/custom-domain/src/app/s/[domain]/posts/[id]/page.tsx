@@ -14,16 +14,15 @@ export async function generateMetadata({
 }: {
   params: Promise<{ domain: string; id: string }>;
 }): Promise<Metadata> {
-  const { domain: domainUnsafe, id } = await params;
-  const domain = decodeURIComponent(domainUnsafe);
-
-  const { data: site } = await sigleApiFetchClient.GET("/api/sites/{domain}", {
-    params: {
-      path: {
-        domain,
+  const { domain: domainUnsafe, id } = await params,
+    domain = decodeURIComponent(domainUnsafe),
+    { data: site } = await sigleApiFetchClient.GET("/api/sites/{domain}", {
+      params: {
+        path: {
+          domain,
+        },
       },
-    },
-  });
+    });
   if (!site) {
     notFound();
   }
@@ -39,13 +38,13 @@ export async function generateMetadata({
     notFound();
   }
 
-  const title = post.metaTitle || post.title;
-  const description = post.metaDescription;
-  const seoImage = post.coverImage
-    ? resolveImageUrl(post.coverImage.id)
-    : site.user.profile?.pictureUri
-      ? resolveImageUrl(site.user.profile.pictureUri.id)
-      : undefined;
+  const title = post.metaTitle || post.title,
+    description = post.metaDescription,
+    seoImage = post.coverImage
+      ? resolveImageUrl(post.coverImage.id)
+      : site.user.profile?.pictureUri
+        ? resolveImageUrl(site.user.profile.pictureUri.id)
+        : undefined;
 
   return {
     title,
@@ -77,16 +76,15 @@ export default async function Post({
 }: {
   params: Promise<{ domain: string; id: string }>;
 }) {
-  const { domain: domainUnsafe, id } = await params;
-  const domain = decodeURIComponent(domainUnsafe);
-
-  const { data: site } = await sigleApiFetchClient.GET("/api/sites/{domain}", {
-    params: {
-      path: {
-        domain,
+  const { domain: domainUnsafe, id } = await params,
+    domain = decodeURIComponent(domainUnsafe),
+    { data: site } = await sigleApiFetchClient.GET("/api/sites/{domain}", {
+      params: {
+        path: {
+          domain,
+        },
       },
-    },
-  });
+    });
   if (!site) {
     notFound();
   }
@@ -103,21 +101,17 @@ export default async function Post({
   }
 
   const { data: posts } = await sigleApiFetchClient.GET("/api/posts/list", {
-    params: {
-      query: {
-        username: site.user.id,
-        limit: 4,
+      params: {
+        query: {
+          username: site.user.id,
+          limit: 4,
+        },
       },
-    },
-  });
-
-  const tableOfContent = post.content
-    ? extractTableOfContents(post.content)
-    : [];
-  const posthtml = post.content ? addIdsToHeadings(post.content) : "";
-
-  const filteredPosts =
-    posts?.results.filter((p) => p.id !== post.id).slice(0, 3) || [];
+    }),
+    tableOfContent = post.content ? extractTableOfContents(post.content) : [],
+    posthtml = post.content ? addIdsToHeadings(post.content) : "",
+    filteredPosts =
+      posts?.results.filter((p) => p.id !== post.id).slice(0, 3) || [];
 
   return (
     <main className="mt-10">

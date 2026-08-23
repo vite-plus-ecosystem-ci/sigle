@@ -4,27 +4,26 @@ import { STACKS_MOCKNET } from "@stacks/network";
 import { Cl } from "@stacks/transactions";
 import { beforeEach, describe, expect, it } from "vite-plus/test";
 
-const contract = "sigle-minter-fixed-price-v001";
-const accounts = simnet.getAccounts();
-const deployer = accounts.get("deployer")!;
-const wallet1 = accounts.get("wallet_1")!;
-const wallet2 = accounts.get("wallet_2")!;
-const wallet3 = accounts.get("wallet_3")!;
-
-const sigleClient = createClient({
-  network: STACKS_MOCKNET,
-  networkName: "mocknet",
-});
+const contract = "sigle-minter-fixed-price-v001",
+  accounts = simnet.getAccounts(),
+  deployer = accounts.get("deployer")!,
+  wallet1 = accounts.get("wallet_1")!,
+  wallet2 = accounts.get("wallet_2")!,
+  wallet3 = accounts.get("wallet_3")!,
+  sigleClient = createClient({
+    network: STACKS_MOCKNET,
+    networkName: "mocknet",
+  });
 
 describe(contract, () => {
   const { contract: defaultContract } = sigleClient.generatePostContract({
-    collectInfo: {
-      amount: 0,
-      maxSupply: 100,
-    },
-    metadata: "ipfs://anything",
-  });
-  const defaultContractName = `${wallet1}.default-contract`;
+      collectInfo: {
+        amount: 0,
+        maxSupply: 100,
+      },
+      metadata: "ipfs://anything",
+    }),
+    defaultContractName = `${wallet1}.default-contract`;
 
   describe("update-fees", () => {
     describe("update-fees", () => {
@@ -68,22 +67,21 @@ describe(contract, () => {
     });
 
     it("allows minting within valid parameters", () => {
-      const quantity = 1;
-
-      const { result } = simnet.callPublicFn(
-        contract,
-        "mint",
-        [
-          Cl.contractPrincipal(
-            defaultContractName.split(".")[0],
-            defaultContractName.split(".")[1],
-          ), // token contract
-          Cl.uint(quantity),
-          Cl.none(), // no referrer
-          Cl.none(), // no specific recipient
-        ],
-        wallet2,
-      );
+      const quantity = 1,
+        { result } = simnet.callPublicFn(
+          contract,
+          "mint",
+          [
+            Cl.contractPrincipal(
+              defaultContractName.split(".")[0],
+              defaultContractName.split(".")[1],
+            ), // token contract
+            Cl.uint(quantity),
+            Cl.none(), // no referrer
+            Cl.none(), // no specific recipient
+          ],
+          wallet2,
+        );
 
       expect(result).toBeOk(Cl.bool(true));
     });
@@ -177,13 +175,13 @@ describe(contract, () => {
 
     it("fees should match the SDK values for paid mints", () => {
       const { contract: defaultContract } = sigleClient.generatePostContract({
-        collectInfo: {
-          amount: 42000,
-          maxSupply: 100,
-        },
-        metadata: "ipfs://anything",
-      });
-      const defaultContractName = `${wallet1}.default-contract`;
+          collectInfo: {
+            amount: 42000,
+            maxSupply: 100,
+          },
+          metadata: "ipfs://anything",
+        }),
+        defaultContractName = `${wallet1}.default-contract`;
 
       simnet.deployContract(
         defaultContractName.split(".")[1],
@@ -252,14 +250,14 @@ describe(contract, () => {
 
     it("fees should respect the create referrer fee for mints", () => {
       const { contract: defaultContract } = sigleClient.generatePostContract({
-        collectInfo: {
-          amount: 42000,
-          maxSupply: 100,
-          createReferrer: wallet3,
-        },
-        metadata: "ipfs://anything",
-      });
-      const defaultContractName = `${wallet1}.default-contract`;
+          collectInfo: {
+            amount: 42000,
+            maxSupply: 100,
+            createReferrer: wallet3,
+          },
+          metadata: "ipfs://anything",
+        }),
+        defaultContractName = `${wallet1}.default-contract`;
 
       simnet.deployContract(
         defaultContractName.split(".")[1],

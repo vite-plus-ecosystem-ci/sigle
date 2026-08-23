@@ -19,13 +19,12 @@ interface PostUserActionsProps {
 }
 
 export const PostUserActions = ({ post }: PostUserActionsProps) => {
-  const [collectDialogOpen, setCollectDialogOpen] = useState(false);
-  const [shareDialogOpen, setShareDialogOpen] = useState(false);
-
-  const canCollect = post.collectible
-    ? post.collectible.maxSupply === 0 ||
-      post.collectible.collected < post.collectible.maxSupply
-    : false;
+  const [collectDialogOpen, setCollectDialogOpen] = useState(false),
+    [shareDialogOpen, setShareDialogOpen] = useState(false),
+    canCollect = post.collectible
+      ? post.collectible.maxSupply === 0 ||
+        post.collectible.collected < post.collectible.maxSupply
+      : false;
 
   // TODO add published time + read time under user name in the format "Mar 1, 2026 (clock icon) 6 min read"
 

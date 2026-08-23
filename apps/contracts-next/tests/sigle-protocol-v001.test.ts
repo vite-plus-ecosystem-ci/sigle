@@ -2,11 +2,11 @@
 import { Cl } from "@stacks/transactions";
 import { describe, expect, it } from "vite-plus/test";
 
-const contract = "sigle-protocol-v001";
-const accounts = simnet.getAccounts();
-const deployer = accounts.get("deployer")!;
-const wallet1 = accounts.get("wallet_1")!;
-const wallet2 = accounts.get("wallet_2")!;
+const contract = "sigle-protocol-v001",
+  accounts = simnet.getAccounts(),
+  deployer = accounts.get("deployer")!,
+  wallet1 = accounts.get("wallet_1")!,
+  wallet2 = accounts.get("wallet_2")!;
 
 describe(contract, () => {
   describe("initialization", () => {

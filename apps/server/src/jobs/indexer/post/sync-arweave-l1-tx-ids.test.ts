@@ -102,35 +102,34 @@ describe("sync-arweave-l1-tx-ids", () => {
       await createTestUser({ id: userId });
 
       const post1 = await createTestPost({
-        id: "post-1",
-        txId: "tx-arweave-1",
-        userId,
-      });
-
-      const mockFetch = vi.fn(() =>
-        Promise.resolve(
-          new Response(
-            JSON.stringify({
-              data: {
-                transactions: {
-                  edges: [
-                    {
-                      node: {
-                        id: "tx-arweave-1",
-                        bundledIn: { id: "l1-bundle-tx-1" },
+          id: "post-1",
+          txId: "tx-arweave-1",
+          userId,
+        }),
+        mockFetch = vi.fn(() =>
+          Promise.resolve(
+            new Response(
+              JSON.stringify({
+                data: {
+                  transactions: {
+                    edges: [
+                      {
+                        node: {
+                          id: "tx-arweave-1",
+                          bundledIn: { id: "l1-bundle-tx-1" },
+                        },
                       },
-                    },
-                  ],
+                    ],
+                  },
                 },
+              }),
+              {
+                status: 200,
+                headers: { "Content-Type": "application/json" },
               },
-            }),
-            {
-              status: 200,
-              headers: { "Content-Type": "application/json" },
-            },
+            ),
           ),
-        ),
-      );
+        );
       vi.stubGlobal("fetch", mockFetch);
 
       await executeIndexerSyncArweaveL1TxIdsJob({});

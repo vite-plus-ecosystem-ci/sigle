@@ -18,10 +18,10 @@ import {
  * @see https://github.com/remarkjs/react-markdown/blob/main/lib/index.js#L421
  */
 function customUrlTransform(value: string): string {
-  const colon = value.indexOf(":");
-  const questionMark = value.indexOf("?");
-  const numberSign = value.indexOf("#");
-  const slash = value.indexOf("/");
+  const colon = value.indexOf(":"),
+    questionMark = value.indexOf("?"),
+    numberSign = value.indexOf("#"),
+    slash = value.indexOf("/");
 
   if (
     // If there is no protocol, it's relative.

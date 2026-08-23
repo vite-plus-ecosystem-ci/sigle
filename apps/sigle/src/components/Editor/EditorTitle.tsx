@@ -2,10 +2,10 @@ import { useFormContext, useFormState } from "react-hook-form";
 import type { EditorPostFormData } from "./EditorFormProvider";
 
 export const EditorTitle = () => {
-  const { register } = useFormContext<EditorPostFormData>();
-  const { errors } = useFormState<EditorPostFormData>({
-    name: "title",
-  });
+  const { register } = useFormContext<EditorPostFormData>(),
+    { errors } = useFormState<EditorPostFormData>({
+      name: "title",
+    });
 
   return (
     <div className="mt-4 space-y-2">

@@ -11,26 +11,22 @@ interface Props {
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const params = await props.params;
-
-  const { data: user } = await sigleApiFetchClient.GET(
-    "/api/users/{username}",
-    {
+  const params = await props.params,
+    { data: user } = await sigleApiFetchClient.GET("/api/users/{username}", {
       params: {
         path: {
           username: params.username,
         },
       },
-    },
-  );
+    });
   if (!user) {
     notFound();
   }
 
-  const title = user.id;
-  const description = user.profile?.description
-    ? user.profile.description
-    : `Read ${title} publications on Sigle.`;
+  const title = user.id,
+    description = user.profile?.description
+      ? user.profile.description
+      : `Read ${title} publications on Sigle.`;
 
   return {
     title: `${title} | Sigle Profile`,

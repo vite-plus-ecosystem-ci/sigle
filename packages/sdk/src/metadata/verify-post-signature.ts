@@ -37,21 +37,16 @@ export function verifyPostSignature(
   }
 
   try {
-    const message = JSON.stringify(metadataToSign);
-    const messageHash = bytesToHex(hashMessage(message));
-    const stacksSignature = createMessageSignature(signature);
-    const publicKey = publicKeyFromSignatureRsv(
-      messageHash,
-      stacksSignature.data,
-    );
-
-    const recoveredAddress = publicKeyToAddress(publicKey, options?.network);
-
-    const isSignatureValid = verifyMessageSignatureRsv({
-      signature,
-      message,
-      publicKey,
-    });
+    const message = JSON.stringify(metadataToSign),
+      messageHash = bytesToHex(hashMessage(message)),
+      stacksSignature = createMessageSignature(signature),
+      publicKey = publicKeyFromSignatureRsv(messageHash, stacksSignature.data),
+      recoveredAddress = publicKeyToAddress(publicKey, options?.network),
+      isSignatureValid = verifyMessageSignatureRsv({
+        signature,
+        message,
+        publicKey,
+      });
     if (!isSignatureValid) {
       return Result.err(
         new InvalidSignatureError({

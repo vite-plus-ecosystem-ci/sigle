@@ -16,9 +16,9 @@ import { GeneralSettings } from "./GeneralSettings";
 import { MetaSettings } from "./MetaSettings";
 
 export const EditorSettings = () => {
-  const menuOpen = useEditorStore((state) => state.menuOpen);
-  const setMenuOpen = useEditorStore((state) => state.setMenuOpen);
-  const collectEnabled = false;
+  const menuOpen = useEditorStore((state) => state.menuOpen),
+    setMenuOpen = useEditorStore((state) => state.setMenuOpen),
+    collectEnabled = false;
 
   return (
     <Drawer open={!!menuOpen} onOpenChange={setMenuOpen} direction="right">

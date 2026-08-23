@@ -21,21 +21,20 @@ export async function checkUploadQuota(
   startOfToday.setUTCHours(0, 0, 0, 0);
 
   const [totalAgg, dailyAgg] = await Promise.all([
-    prisma.userUpload.aggregate({
-      where: { userId },
-      _sum: { sizeBytes: true },
-    }),
-    prisma.userUpload.aggregate({
-      where: {
-        userId,
-        createdAt: { gte: startOfToday },
-      },
-      _sum: { sizeBytes: true },
-    }),
-  ]);
-
-  const currentTotal = totalAgg._sum.sizeBytes ?? 0;
-  const currentDaily = dailyAgg._sum.sizeBytes ?? 0;
+      prisma.userUpload.aggregate({
+        where: { userId },
+        _sum: { sizeBytes: true },
+      }),
+      prisma.userUpload.aggregate({
+        where: {
+          userId,
+          createdAt: { gte: startOfToday },
+        },
+        _sum: { sizeBytes: true },
+      }),
+    ]),
+    currentTotal = totalAgg._sum.sizeBytes ?? 0,
+    currentDaily = dailyAgg._sum.sizeBytes ?? 0;
 
   if (currentDaily + sizeBytes > env.UPLOAD_QUOTA_DAILY_BYTES) {
     return Result.err(

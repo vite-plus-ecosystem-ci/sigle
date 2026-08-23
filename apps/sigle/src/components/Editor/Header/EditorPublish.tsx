@@ -5,9 +5,9 @@ import type { EditorPostFormData } from "../EditorFormProvider";
 import { useEditorStore } from "../store";
 
 export const EditorPublish = () => {
-  const { watch } = useFormContext<EditorPostFormData>();
-  const type = watch("type");
-  const setPublishOpen = useEditorStore((state) => state.setPublishOpen);
+  const { watch } = useFormContext<EditorPostFormData>(),
+    type = watch("type"),
+    setPublishOpen = useEditorStore((state) => state.setPublishOpen);
 
   if (type === "published") {
     return (

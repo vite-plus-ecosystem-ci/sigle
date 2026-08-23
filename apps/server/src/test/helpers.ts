@@ -18,8 +18,8 @@ interface CreateTestUserOptions {
 export async function createTestUser(
   options: CreateTestUserOptions = {},
 ): Promise<User & { profile?: Profile | null }> {
-  const now = new Date();
-  const userId = options.id ?? "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM";
+  const now = new Date(),
+    userId = options.id ?? "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM";
 
   return prisma.user.create({
     data: {
@@ -65,24 +65,23 @@ interface CreateTestPostOptions {
 export async function createTestPost(
   options: CreateTestPostOptions,
 ): Promise<Post> {
-  const now = new Date();
-
-  const post = await prisma.post.create({
-    data: {
-      id: options.id ?? `post-${Date.now()}`,
-      version: options.version ?? "1.0.0",
-      txId: options.txId ?? `0x${Math.random().toString(16).slice(2)}`,
-      blockHeight: options.blockHeight ?? 100,
-      title: options.title ?? "Test Post",
-      content: options.content ?? "Test content",
-      excerpt: options.excerpt ?? "Test excerpt",
-      metadataUri: options.metadataUri ?? "ipfs://QmTest",
-      signature: options.signature,
-      createdAt: now,
-      updatedAt: now,
-      userId: options.userId,
-    },
-  });
+  const now = new Date(),
+    post = await prisma.post.create({
+      data: {
+        id: options.id ?? `post-${Date.now()}`,
+        version: options.version ?? "1.0.0",
+        txId: options.txId ?? `0x${Math.random().toString(16).slice(2)}`,
+        blockHeight: options.blockHeight ?? 100,
+        title: options.title ?? "Test Post",
+        content: options.content ?? "Test content",
+        excerpt: options.excerpt ?? "Test excerpt",
+        metadataUri: options.metadataUri ?? "ipfs://QmTest",
+        signature: options.signature,
+        createdAt: now,
+        updatedAt: now,
+        userId: options.userId,
+      },
+    });
 
   await prisma.postRevision.upsert({
     where: {

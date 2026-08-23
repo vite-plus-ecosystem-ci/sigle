@@ -11,21 +11,20 @@ export const indexerIndexProfilesSchema = z.object({
   data: z.object({}),
 });
 
-const API_LIMIT = 50;
-
-const eventLogSchema = z.object({
-  value: z.object({
-    a: z.object({
-      value: z.literal("set-profile"),
+const API_LIMIT = 50,
+  eventLogSchema = z.object({
+    value: z.object({
+      a: z.object({
+        value: z.literal("set-profile"),
+      }),
+      address: z.object({
+        value: z.string(),
+      }),
+      uri: z.object({
+        value: z.string(),
+      }),
     }),
-    address: z.object({
-      value: z.string(),
-    }),
-    uri: z.object({
-      value: z.string(),
-    }),
-  }),
-});
+  });
 
 export const executeIndexerIndexProfilesJob = async (
   _data: z.TypeOf<typeof indexerIndexProfilesSchema>["data"],
@@ -34,19 +33,18 @@ export const executeIndexerIndexProfilesJob = async (
   // and createdAt doesn't change on update. This ensures we start from
   // the most recently indexed profile update.
   const latestProfile = await prisma.profile.findFirst({
-    select: {
-      txId: true,
-    },
-    orderBy: {
-      updatedAt: "desc",
-    },
-  });
+      select: {
+        txId: true,
+      },
+      orderBy: {
+        updatedAt: "desc",
+      },
+    }),
+    lastProcessedTxId = latestProfile?.txId;
 
-  const lastProcessedTxId = latestProfile?.txId;
-
-  let offset = 0;
-  let hasMore = true;
-  let caughtUp = false;
+  let offset = 0,
+    hasMore = true,
+    caughtUp = false;
   const profiles: {
     txId: string;
     address: string;
@@ -105,8 +103,8 @@ export const executeIndexerIndexProfilesJob = async (
         event.contract_log &&
         event.contract_log.topic === "print"
       ) {
-        const eventValue = cvToJSON(hexToCV(event.contract_log.value.hex));
-        const eventLog = eventLogSchema.safeParse(eventValue);
+        const eventValue = cvToJSON(hexToCV(event.contract_log.value.hex)),
+          eventLog = eventLogSchema.safeParse(eventValue);
         if (!eventLog.success) {
           consola.error("Failed to parse event log with schema", {
             txId: event.tx_id,

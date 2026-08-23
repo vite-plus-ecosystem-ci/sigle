@@ -12,8 +12,8 @@ export async function getProfileMetadataFromUri(
     MetadataFetchFailedError | InvalidMetadataError | UnhandledException
   >
 > {
-  const url = resolveImageUrl(baseTokenUri);
-  const fetchResult = await fetchMetadata(url);
+  const url = resolveImageUrl(baseTokenUri),
+    fetchResult = await fetchMetadata(url);
 
   if (fetchResult.isErr()) {
     return fetchResult;

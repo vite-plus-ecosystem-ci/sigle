@@ -10,58 +10,57 @@ import type { EditorPostFormData } from "../EditorFormProvider";
 import { useEditorStore } from "../store";
 
 export const EditorSave = () => {
-  const params = useParams();
-  const postId = params.postId as string;
-  const searchParams = useSearchParams();
-  const forceSave = searchParams.get("forceSave") === "true";
-  const [saveState, setSaveState] = useState<
-    "idle" | "saving" | "error" | "saved"
-  >("idle");
-  const { watch, getValues } = useFormContext<EditorPostFormData>();
-  const type = watch("type");
-  const { mutate: updatePost } = sigleApiClient.useMutation(
-    "post",
-    "/api/protected/drafts/{draftId}/update",
-  );
-  const editor = useEditorStore((state) => state.editor);
-
-  const onAutoSave = useDebouncedCallback(
-    () => {
-      if (!editor) return;
-      const values = getValues();
-      updatePost(
-        {
-          params: {
-            path: {
-              draftId: postId,
+  const params = useParams(),
+    postId = params.postId as string,
+    searchParams = useSearchParams(),
+    forceSave = searchParams.get("forceSave") === "true",
+    [saveState, setSaveState] = useState<"idle" | "saving" | "error" | "saved">(
+      "idle",
+    ),
+    { watch, getValues } = useFormContext<EditorPostFormData>(),
+    type = watch("type"),
+    { mutate: updatePost } = sigleApiClient.useMutation(
+      "post",
+      "/api/protected/drafts/{draftId}/update",
+    ),
+    editor = useEditorStore((state) => state.editor),
+    onAutoSave = useDebouncedCallback(
+      () => {
+        if (!editor) return;
+        const values = getValues();
+        updatePost(
+          {
+            params: {
+              path: {
+                draftId: postId,
+              },
             },
-          },
-          body: {
-            ...values,
-            collect: {
-              ...values.collect,
-              collectPrice: {
-                ...values.collect.collectPrice,
-                price: Number(
-                  parseBTC(String(values.collect.collectPrice.price)),
-                ),
+            body: {
+              ...values,
+              collect: {
+                ...values.collect,
+                collectPrice: {
+                  ...values.collect.collectPrice,
+                  price: Number(
+                    parseBTC(String(values.collect.collectPrice.price)),
+                  ),
+                },
               },
             },
           },
-        },
-        {
-          onSuccess: () => {
-            setSaveState("saved");
+          {
+            onSuccess: () => {
+              setSaveState("saved");
+            },
+            onError: () => {
+              setSaveState("error");
+            },
           },
-          onError: () => {
-            setSaveState("error");
-          },
-        },
-      );
-    },
-    2000,
-    [editor],
-  );
+        );
+      },
+      2000,
+      [editor],
+    );
 
   // Force save the post on mount if forceSave is true
   useEffect(() => {

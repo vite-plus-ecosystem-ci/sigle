@@ -14,20 +14,20 @@ interface ProfileFeedProps {
 }
 
 export const ProfileFeed = ({ user }: ProfileFeedProps) => {
-  const { data: session } = useSession();
-  // TODO useSuspenseQuery or load more button to decide
-  const { data: posts } = sigleApiClient.useSuspenseQuery(
-    "get",
-    "/api/posts/list",
-    {
-      params: {
-        query: {
-          username: user.id,
-          limit: 25,
+  const { data: session } = useSession(),
+    // TODO useSuspenseQuery or load more button to decide
+    { data: posts } = sigleApiClient.useSuspenseQuery(
+      "get",
+      "/api/posts/list",
+      {
+        params: {
+          query: {
+            username: user.id,
+            limit: 25,
+          },
         },
       },
-    },
-  );
+    );
 
   if (posts.results.length === 0 && user.id === session?.user.id) {
     return (

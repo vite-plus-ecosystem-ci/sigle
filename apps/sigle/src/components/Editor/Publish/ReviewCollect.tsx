@@ -7,22 +7,20 @@ import type { EditorPostFormData } from "../EditorFormProvider";
 import { useEditorStore } from "../store";
 
 export const PublishReviewCollect = () => {
-  const { getValues } = useFormContext<EditorPostFormData>();
-  const setMenuOpen = useEditorStore((state) => state.setMenuOpen);
-  const setPublishOpen = useEditorStore((state) => state.setPublishOpen);
-  const data = getValues();
-
-  const collectLimit =
-    data.collect.collectLimit.type === "fixed" &&
-    data.collect.collectLimit.limit
-      ? data.collect.collectLimit.limit
-      : undefined;
-  const isCollectEnabled = false;
-
-  const openCollectSettings = () => {
-    setPublishOpen(false);
-    setMenuOpen("collect");
-  };
+  const { getValues } = useFormContext<EditorPostFormData>(),
+    setMenuOpen = useEditorStore((state) => state.setMenuOpen),
+    setPublishOpen = useEditorStore((state) => state.setPublishOpen),
+    data = getValues(),
+    collectLimit =
+      data.collect.collectLimit.type === "fixed" &&
+      data.collect.collectLimit.limit
+        ? data.collect.collectLimit.limit
+        : undefined,
+    isCollectEnabled = false,
+    openCollectSettings = () => {
+      setPublishOpen(false);
+      setMenuOpen("collect");
+    };
 
   if (!isCollectEnabled) {
     return null;

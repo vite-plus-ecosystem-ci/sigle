@@ -14,22 +14,21 @@ interface PublishReviewProps {
 
 export const PublishReview = ({ onPublish }: PublishReviewProps) => {
   const [isFormValid, setIsFormValid] = useState<
-    | {
-        valid: false;
-        title?: string;
-        content?: string;
-        metaTitle?: string;
-        metaDescription?: string;
-        coverImage?: string;
-        collectLimit?: string;
-        price?: string;
-      }
-    | "loading"
-    | { valid: true }
-  >("loading");
-  const { handleSubmit, formState, watch } =
-    useFormContext<EditorPostFormData>();
-  const type = watch("type");
+      | {
+          valid: false;
+          title?: string;
+          content?: string;
+          metaTitle?: string;
+          metaDescription?: string;
+          coverImage?: string;
+          collectLimit?: string;
+          price?: string;
+        }
+      | "loading"
+      | { valid: true }
+    >("loading"),
+    { handleSubmit, formState, watch } = useFormContext<EditorPostFormData>(),
+    type = watch("type");
 
   // Validate form on mount so we can show the various error messages in the callout
   // and disable the publish button

@@ -137,31 +137,30 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const draftId = getRouterParam(event, "draftId");
-  const body = await readValidatedBodyZod(event, updateDraftSchema);
-
-  const updatedDraft = await prisma.draft.update({
-    where: {
-      id: draftId,
-      userId: event.context.user.id,
-    },
-    data: {
-      title: body.title,
-      content: body.content,
-      metaTitle: body.metaTitle,
-      metaDescription: body.metaDescription,
-      coverImage: body.coverImage,
-      collectPriceType: body.collect.collectPrice.type,
-      collectPrice: body.collect.collectPrice.price,
-      collectLimitType: body.collect.collectLimit.type,
-      collectLimit: body.collect.collectLimit.limit,
-      tags: body.tags,
-      canonicalUri: body.canonicalUri,
-    },
-    select: {
-      id: true,
-    },
-  });
+  const draftId = getRouterParam(event, "draftId"),
+    body = await readValidatedBodyZod(event, updateDraftSchema),
+    updatedDraft = await prisma.draft.update({
+      where: {
+        id: draftId,
+        userId: event.context.user.id,
+      },
+      data: {
+        title: body.title,
+        content: body.content,
+        metaTitle: body.metaTitle,
+        metaDescription: body.metaDescription,
+        coverImage: body.coverImage,
+        collectPriceType: body.collect.collectPrice.type,
+        collectPrice: body.collect.collectPrice.price,
+        collectLimitType: body.collect.collectLimit.type,
+        collectLimit: body.collect.collectLimit.limit,
+        tags: body.tags,
+        canonicalUri: body.canonicalUri,
+      },
+      select: {
+        id: true,
+      },
+    });
 
   return updatedDraft;
 });

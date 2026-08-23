@@ -55,106 +55,102 @@ export const PostCollectDialog = ({
   open,
   onOpenChange,
 }: PostCollectDialogProps) => {
-  const searchParams = useSearchParams();
-  const referral = searchParams.get("referral");
-  const { data: session } = useSession();
-  const { login } = useStacksLogin();
-  const { data: currencyFiatPrice, isLoading: loadingCurrencyFiatPrice } =
-    useCurrencyFiatPrice(
-      // We wait for the dialog to be open to fetch the price
-      open ? "sBTC" : undefined,
-    );
-  const [editions, setEditions] = useState(1);
-  const isPostOwner = session?.user.id === post.user.id;
+  const searchParams = useSearchParams(),
+    referral = searchParams.get("referral"),
+    { data: session } = useSession(),
+    { login } = useStacksLogin(),
+    { data: currencyFiatPrice, isLoading: loadingCurrencyFiatPrice } =
+      useCurrencyFiatPrice(
+        // We wait for the dialog to be open to fetch the price
+        open ? "sBTC" : undefined,
+      ),
+    [editions, setEditions] = useState(1),
+    isPostOwner = session?.user.id === post.user.id,
+    { contractCall, loading: contractLoading } = useContractCall({
+      onSuccess: (data) => {
+        toast.promise(getPromiseTransactionConfirmation(data.txId), {
+          loading: "Collect transaction submitted",
+          success: "Collected successfully",
+          error: (err) =>
+            err instanceof Error ? err.message : "Transaction failed",
+          action: {
+            label: "View tx",
+            onClick: () =>
+              window.open(getExplorerTransactionUrl(data.txId), "_blank"),
+          },
+        });
+        onOpenChange(false);
+      },
+      onError: (error) => {
+        toast.error("Failed to collect", {
+          description: error,
+        });
+      },
+    }),
+    onCollect = async () => {
+      if (!session) {
+        login();
+        return;
+      }
 
-  const { contractCall, loading: contractLoading } = useContractCall({
-    onSuccess: (data) => {
-      toast.promise(getPromiseTransactionConfirmation(data.txId), {
-        loading: "Collect transaction submitted",
-        success: "Collected successfully",
-        error: (err) =>
-          err instanceof Error ? err.message : "Transaction failed",
-        action: {
-          label: "View tx",
-          onClick: () =>
-            window.open(getExplorerTransactionUrl(data.txId), "_blank"),
-        },
-      });
-      onOpenChange(false);
-    },
-    onError: (error) => {
-      toast.error("Failed to collect", {
-        description: error,
-      });
-    },
-  });
+      if (!post.collectible || !post.minterFixedPrice) {
+        return;
+      }
 
-  const onCollect = async () => {
-    if (!session) {
-      login();
-      return;
-    }
+      // Handle owner mint case
+      if (isPostOwner) {
+        const { parameters } = await sigleClient.ownerMint({
+          contract: post.collectible.address,
+        });
 
-    if (!post.collectible || !post.minterFixedPrice) {
-      return;
-    }
+        await contractCall(parameters);
+        return;
+      }
 
-    // Handle owner mint case
-    if (isPostOwner) {
-      const { parameters } = await sigleClient.ownerMint({
+      const { parameters } = await sigleClient.mint({
+        sender: session.user.id,
         contract: post.collectible.address,
+        amount: editions,
+        referral: referral ? referral : undefined,
+        price: post.minterFixedPrice.price,
       });
 
       await contractCall(parameters);
-      return;
-    }
+    },
+    incrementEditions = () => {
+      if (!post.collectible || !post.minterFixedPrice) {
+        return;
+      }
 
-    const { parameters } = await sigleClient.mint({
-      sender: session.user.id,
-      contract: post.collectible.address,
-      amount: editions,
-      referral: referral ? referral : undefined,
-      price: post.minterFixedPrice.price,
-    });
-
-    await contractCall(parameters);
-  };
-
-  const incrementEditions = () => {
-    if (!post.collectible || !post.minterFixedPrice) {
-      return;
-    }
-
-    const remainingEditions = post.collectible.maxSupply - editions;
-    if (
-      (post.collectible.openEdition ||
-        editions < post.collectible.maxSupply ||
-        remainingEditions < 1) &&
-      editions < maxMints
-    ) {
-      setEditions(editions + 1);
-    }
-  };
-
-  const decrementEditions = () => {
-    if (editions > 1) {
-      setEditions(editions - 1);
-    }
-  };
+      const remainingEditions = post.collectible.maxSupply - editions;
+      if (
+        (post.collectible.openEdition ||
+          editions < post.collectible.maxSupply ||
+          remainingEditions < 1) &&
+        editions < maxMints
+      ) {
+        setEditions(editions + 1);
+      }
+    },
+    decrementEditions = () => {
+      if (editions > 1) {
+        setEditions(editions - 1);
+      }
+    };
 
   if (!post.minterFixedPrice || !post.collectible) {
     return null;
   }
 
-  const price = BigInt(post.minterFixedPrice.price);
-  const isFree = price === BigInt(0);
-  const loadingCollect = contractLoading;
-  const totalPrice = BigInt(editions) * (price + fixedMintFee.total);
-  const protocolFee = BigInt(editions) * fixedMintFee.protocol;
-  const creatorFee = BigInt(editions) * (price + fixedMintFee.creator);
-  const createReferrerFee = BigInt(editions) * fixedMintFee.createReferrer;
-  const mintReferrerFee = BigInt(editions) * fixedMintFee.mintReferrer;
-  const maxMints = isPostOwner ? 1 : 10;
+  const price = BigInt(post.minterFixedPrice.price),
+    isFree = price === BigInt(0),
+    loadingCollect = contractLoading,
+    totalPrice = BigInt(editions) * (price + fixedMintFee.total),
+    protocolFee = BigInt(editions) * fixedMintFee.protocol,
+    creatorFee = BigInt(editions) * (price + fixedMintFee.creator),
+    createReferrerFee = BigInt(editions) * fixedMintFee.createReferrer,
+    mintReferrerFee = BigInt(editions) * fixedMintFee.mintReferrer,
+    maxMints = isPostOwner ? 1 : 10;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

@@ -20,38 +20,35 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const router = useRouter();
-  const pathname = usePathname();
-
-  const { data: userWhitelist } = sigleApiClient.useQuery(
-    "get",
-    "/api/protected/user/whitelisted",
-  );
-
-  const navigationLinks = [
-    {
-      label: "Dashboard",
-      href: "/dashboard",
-    },
-    ...(userWhitelist?.whitelisted
-      ? [
-          {
-            label: "Drafts",
-            href: "/dashboard/drafts",
-          },
-        ]
-      : []),
-    {
-      label: "Settings",
-      href: "/dashboard/settings",
-    },
-  ];
-
-  const handleNavigation = (href: string | null) => {
-    if (href) {
-      router.push(href);
-    }
-  };
+  const router = useRouter(),
+    pathname = usePathname(),
+    { data: userWhitelist } = sigleApiClient.useQuery(
+      "get",
+      "/api/protected/user/whitelisted",
+    ),
+    navigationLinks = [
+      {
+        label: "Dashboard",
+        href: "/dashboard",
+      },
+      ...(userWhitelist?.whitelisted
+        ? [
+            {
+              label: "Drafts",
+              href: "/dashboard/drafts",
+            },
+          ]
+        : []),
+      {
+        label: "Settings",
+        href: "/dashboard/settings",
+      },
+    ],
+    handleNavigation = (href: string | null) => {
+      if (href) {
+        router.push(href);
+      }
+    };
 
   return (
     <div className="mx-auto max-w-4xl px-4">

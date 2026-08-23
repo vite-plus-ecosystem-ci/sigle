@@ -15,19 +15,18 @@ interface PostEditPageProps {
 }
 
 export default function PostEditPage(props: PostEditPageProps) {
-  const params = use(props.params);
-
-  const { data: post } = sigleApiClient.useSuspenseQuery(
-    "get",
-    "/api/protected/drafts/{draftId}",
-    {
-      params: {
-        path: {
-          draftId: params.postId,
+  const params = use(props.params),
+    { data: post } = sigleApiClient.useSuspenseQuery(
+      "get",
+      "/api/protected/drafts/{draftId}",
+      {
+        params: {
+          path: {
+            draftId: params.postId,
+          },
         },
       },
-    },
-  );
+    );
 
   return (
     <EditorFormProvider post={post}>
