@@ -22,8 +22,8 @@ interface CommandListProps {
 
 export const CommandList = forwardRef<CommandListRef, CommandListProps>(
   ({ items, command }, ref) => {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const [selectedIndex, setSelectedIndex] = useState(0);
+    const containerRef = useRef<HTMLDivElement>(null),
+      [selectedIndex, setSelectedIndex] = useState(0);
 
     // When filter is happening reset to index 0
     useEffect(() => setSelectedIndex(0), [items]);
@@ -61,15 +61,14 @@ export const CommandList = forwardRef<CommandListRef, CommandListProps>(
     }, [selectedIndex]);
 
     const selectItem = (index: number) => {
-      const item = items[index];
+        const item = items[index];
 
-      if (item) {
-        command(item);
-      }
-    };
-
-    const basicItems = items.filter((item) => item.section === "basic");
-    const embedItems = items.filter((item) => item.section === "embed");
+        if (item) {
+          command(item);
+        }
+      },
+      basicItems = items.filter((item) => item.section === "basic"),
+      embedItems = items.filter((item) => item.section === "embed");
 
     return (
       <ScrollArea

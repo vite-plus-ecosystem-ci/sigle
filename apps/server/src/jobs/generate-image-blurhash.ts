@@ -26,17 +26,16 @@ export const generateImageBlurhashJob = defineJob("generate-image-blurhash")
       throw new Error("Image not found");
     }
 
-    const mediaUrl = resolveImageUrl(mediaImage.id);
-    const imageResponse = await fetch(mediaUrl);
+    const mediaUrl = resolveImageUrl(mediaImage.id),
+      imageResponse = await fetch(mediaUrl);
     if (!imageResponse.ok) {
       throw new Error("Failed to fetch image");
     }
-    const imageBuffer = await imageResponse.arrayBuffer();
-    const { width, height, size } = await sharp(
-      Buffer.from(imageBuffer),
-    ).metadata();
-
-    const blurhashResult = await generateBlurhash({ buffer: imageBuffer });
+    const imageBuffer = await imageResponse.arrayBuffer(),
+      { width, height, size } = await sharp(
+        Buffer.from(imageBuffer),
+      ).metadata(),
+      blurhashResult = await generateBlurhash({ buffer: imageBuffer });
     if (blurhashResult.isErr()) {
       throw blurhashResult.error;
     }

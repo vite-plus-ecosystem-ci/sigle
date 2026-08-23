@@ -53,28 +53,26 @@ describe(executeNewPostJob, () => {
   it("creates a new post and creates its initial PostRevision", async () => {
     await createTestUser({ id: userId });
 
-    const baseTokenUri = "ar://tx-metadata-id";
-    const postId = "post-123";
-    const txId = "tx-456";
-
-    const { contract } = sigleClient.generatePostContract({
-      metadata: baseTokenUri,
-      collectInfo: {
-        amount: 1000n,
-        maxSupply: BigInt(MAX_UINT),
-      },
-    });
-
-    const mockPostMetadata = {
-      $schema: "https://json-schemas.sigle.io/posts/1.0.0.json",
-      content: {
-        id: postId,
-        title: "New Post Title",
-        content: "New Post Content",
-        tags: ["news"],
-        attributes: [{ key: "excerpt", value: "Excerpt", type: "String" }],
-      },
-    };
+    const baseTokenUri = "ar://tx-metadata-id",
+      postId = "post-123",
+      txId = "tx-456",
+      { contract } = sigleClient.generatePostContract({
+        metadata: baseTokenUri,
+        collectInfo: {
+          amount: 1000n,
+          maxSupply: BigInt(MAX_UINT),
+        },
+      }),
+      mockPostMetadata = {
+        $schema: "https://json-schemas.sigle.io/posts/1.0.0.json",
+        content: {
+          id: postId,
+          title: "New Post Title",
+          content: "New Post Content",
+          tags: ["news"],
+          attributes: [{ key: "excerpt", value: "Excerpt", type: "String" }],
+        },
+      };
 
     mockFetch.mockResolvedValue({
       ok: true,

@@ -94,29 +94,28 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const query = await getValidatedQueryZod(event, listQuerySchema);
-
-  const draftsList = await prisma.draft.findMany({
-    select: {
-      id: true,
-      title: true,
-      content: true,
-      metaTitle: true,
-      metaDescription: true,
-      coverImage: true,
-      txId: true,
-      txStatus: true,
-      createdAt: true,
-      updatedAt: true,
-    },
-    where: {
-      userId: event.context.user.id,
-    },
-    orderBy: {
-      updatedAt: "desc",
-    },
-    take: query.limit,
-  });
+  const query = await getValidatedQueryZod(event, listQuerySchema),
+    draftsList = await prisma.draft.findMany({
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        metaTitle: true,
+        metaDescription: true,
+        coverImage: true,
+        txId: true,
+        txStatus: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+      where: {
+        userId: event.context.user.id,
+      },
+      orderBy: {
+        updatedAt: "desc",
+      },
+      take: query.limit,
+    });
 
   return draftsList;
 });

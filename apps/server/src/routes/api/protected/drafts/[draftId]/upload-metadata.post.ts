@@ -94,9 +94,8 @@ export default defineEventHandler(async (event) => {
       message: "Bad Request",
     });
   }
-  const body = await readValidatedBodyZod(event, uploadMetadataDraftSchema);
-
-  const parsedMetadata = PostMetadataSchema.safeParse(body.metadata);
+  const body = await readValidatedBodyZod(event, uploadMetadataDraftSchema),
+    parsedMetadata = PostMetadataSchema.safeParse(body.metadata);
   if (!parsedMetadata.success) {
     throw new HTTPError({
       status: 400,
@@ -192,40 +191,36 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const { id } = uploadResult.value;
-
-  const postData = parsedMetadata.data;
-  const metaTitle = postData.content.attributes?.find(
-    (attribute) => attribute.key === "meta-title",
-  )?.value;
-  const metaDescription = postData.content.attributes?.find(
-    (attribute) => attribute.key === "meta-description",
-  )?.value;
-  const excerpt = postData.content.attributes?.find(
-    (attribute) => attribute.key === "excerpt",
-  )?.value;
-  const canonicalUri = postData.content.attributes?.find(
-    (attribute) => attribute.key === "canonical-uri",
-  )?.value;
-
-  const versionSplit = postData.$schema.split("/");
-  const version = versionSplit[versionSplit.length - 1].replace(".json", "");
-
-  const targetPostId = body.type === "published" ? draftId : id;
+  const { id } = uploadResult.value,
+    postData = parsedMetadata.data,
+    metaTitle = postData.content.attributes?.find(
+      (attribute) => attribute.key === "meta-title",
+    )?.value,
+    metaDescription = postData.content.attributes?.find(
+      (attribute) => attribute.key === "meta-description",
+    )?.value,
+    excerpt = postData.content.attributes?.find(
+      (attribute) => attribute.key === "excerpt",
+    )?.value,
+    canonicalUri = postData.content.attributes?.find(
+      (attribute) => attribute.key === "canonical-uri",
+    )?.value,
+    versionSplit = postData.$schema.split("/"),
+    version = versionSplit[versionSplit.length - 1].replace(".json", ""),
+    targetPostId = body.type === "published" ? draftId : id;
 
   await prisma.$transaction(async (tx) => {
-    const userId = event.context.user.id;
-
-    const existingPost = await tx.post.findUnique({
-      select: {
-        id: true,
-        txId: true,
-        createdAt: true,
-      },
-      where: {
-        id: targetPostId,
-      },
-    });
+    const userId = event.context.user.id,
+      existingPost = await tx.post.findUnique({
+        select: {
+          id: true,
+          txId: true,
+          createdAt: true,
+        },
+        where: {
+          id: targetPostId,
+        },
+      });
 
     if (existingPost && existingPost.txId !== id) {
       await tx.postRevision.upsert({
@@ -245,45 +240,44 @@ export default defineEventHandler(async (event) => {
     }
 
     const sharedMetadata = {
-      metadataUri: `ar://${id}`,
-      title: postData.content.title,
-      content: postData.content.content,
-      metaTitle: metaTitle ?? null,
-      metaDescription: metaDescription ?? null,
-      excerpt: excerpt || "",
-      tags: postData.content.tags,
-      canonicalUri: canonicalUri ?? null,
-    };
-
-    const updatedPost = existingPost
-      ? await tx.post.update({
-          where: {
-            id: targetPostId,
-          },
-          data: {
-            ...sharedMetadata,
-            txId: id,
-            version,
-            blockHeight: 0,
-            signature,
-            revisionsCount: {
-              increment: 1,
+        metadataUri: `ar://${id}`,
+        title: postData.content.title,
+        content: postData.content.content,
+        metaTitle: metaTitle ?? null,
+        metaDescription: metaDescription ?? null,
+        excerpt: excerpt || "",
+        tags: postData.content.tags,
+        canonicalUri: canonicalUri ?? null,
+      },
+      updatedPost = existingPost
+        ? await tx.post.update({
+            where: {
+              id: targetPostId,
             },
-          },
-        })
-      : await tx.post.create({
-          data: {
-            ...sharedMetadata,
-            id: targetPostId,
-            txId: id,
-            version,
-            blockHeight: 0,
-            signature,
-            userId,
-            createdAt: new Date(),
-            revisionsCount: 1,
-          },
-        });
+            data: {
+              ...sharedMetadata,
+              txId: id,
+              version,
+              blockHeight: 0,
+              signature,
+              revisionsCount: {
+                increment: 1,
+              },
+            },
+          })
+        : await tx.post.create({
+            data: {
+              ...sharedMetadata,
+              id: targetPostId,
+              txId: id,
+              version,
+              blockHeight: 0,
+              signature,
+              userId,
+              createdAt: new Date(),
+              revisionsCount: 1,
+            },
+          });
 
     await tx.postRevision.upsert({
       where: {

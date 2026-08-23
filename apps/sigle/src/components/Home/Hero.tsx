@@ -7,8 +7,8 @@ import { NextLink } from "../Shared/NextLink";
 import { Button } from "../ui/button";
 
 export const HomeHero = () => {
-  const { login } = useStacksLogin();
-  const { data: session } = useSession();
+  const { login } = useStacksLogin(),
+    { data: session } = useSession();
 
   return (
     <div className="container mx-auto px-4 py-10 text-center md:py-20">

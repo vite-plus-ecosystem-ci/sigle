@@ -21,22 +21,21 @@ import {
 import type { EditorPostFormData } from "../../EditorFormProvider";
 
 export const CollectPrice = () => {
-  const { setValue, watch, register } = useFormContext<EditorPostFormData>();
-  const type = watch("type");
-  const watchCollectType = watch("collect.collectPrice.type");
-  const watchCollectPrice = watch("collect.collectPrice.price");
-  const { errors } = useFormState<EditorPostFormData>({
-    name: ["collect.collectPrice.price"],
-  });
-  const { data: currencyFiatPrice } = useCurrencyFiatPrice("sBTC");
-
-  const onSelectPriceChange = (value: string) => {
-    if (value === "free") {
-      setValue("collect.collectPrice.type", "free");
-    } else {
-      setValue("collect.collectPrice.type", "paid");
-    }
-  };
+  const { setValue, watch, register } = useFormContext<EditorPostFormData>(),
+    type = watch("type"),
+    watchCollectType = watch("collect.collectPrice.type"),
+    watchCollectPrice = watch("collect.collectPrice.price"),
+    { errors } = useFormState<EditorPostFormData>({
+      name: ["collect.collectPrice.price"],
+    }),
+    { data: currencyFiatPrice } = useCurrencyFiatPrice("sBTC"),
+    onSelectPriceChange = (value: string) => {
+      if (value === "free") {
+        setValue("collect.collectPrice.type", "free");
+      } else {
+        setValue("collect.collectPrice.type", "paid");
+      }
+    };
 
   return (
     <Field>

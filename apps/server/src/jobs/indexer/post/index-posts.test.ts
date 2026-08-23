@@ -45,9 +45,8 @@ vi.mock<typeof import("@/lib/consola")>(
     }) as unknown as typeof import("@/lib/consola"),
 );
 
-const mockFetch = vi.spyOn(globalThis, "fetch");
-
-const { executeIndexerIndexPostsJob } = await import("./index-posts");
+const mockFetch = vi.spyOn(globalThis, "fetch"),
+  { executeIndexerIndexPostsJob } = await import("./index-posts");
 
 describe("executeIndexerIndexPostsJob", () => {
   let testDb: TestDatabase | undefined = undefined;
@@ -299,27 +298,26 @@ describe("executeIndexerIndexPostsJob", () => {
 
     // Mock first page of 100 transactions ending with cursor "cursor-100"
     const page1Edges = Array.from({ length: 100 }, (_, i) => ({
-      cursor: `cursor-${i + 1}`,
-      node: {
-        id: `arweave-tx-${i + 1}`,
-        block: {
-          height: 1000 + i,
-          timestamp: 1672531199,
+        cursor: `cursor-${i + 1}`,
+        node: {
+          id: `arweave-tx-${i + 1}`,
+          block: {
+            height: 1000 + i,
+            timestamp: 1672531199,
+          },
         },
-      },
-    }));
-
-    // Mock second page with 5 transactions
-    const page2Edges = Array.from({ length: 5 }, () => ({
-      cursor: `cursor-101`,
-      node: {
-        id: `arweave-tx-101`,
-        block: {
-          height: 1100,
-          timestamp: 1672531199,
+      })),
+      // Mock second page with 5 transactions
+      page2Edges = Array.from({ length: 5 }, () => ({
+        cursor: `cursor-101`,
+        node: {
+          id: `arweave-tx-101`,
+          block: {
+            height: 1100,
+            timestamp: 1672531199,
+          },
         },
-      },
-    }));
+      }));
 
     mockFetch
       .mockResolvedValueOnce({

@@ -50,172 +50,161 @@ export const UpdateProfileMetadata = ({
   profile,
   setEditingProfileMetadata,
 }: UpdateProfileMetadataProps) => {
-  const { data: session } = useSession();
-
-  const {
-    start: startToast,
-    completeStep,
-    setStepError,
-  } = useMultiStepToast({
-    steps: [
-      { id: "upload", title: "Uploading data to Arweave" },
-      { id: "transaction", title: "Waiting for blockchain confirmation" },
-      { id: "index", title: "Indexing profile" },
-    ],
-    successMessage: "Profile updated!",
-  });
-
-  const uploadProfileMetadata = sigleApiClient.useMutation(
-    "post",
-    "/api/protected/user/profile/upload-metadata",
-  );
-
-  const triggerIndexing = sigleApiClient.useMutation(
-    "post",
-    "/api/protected/user/profile/trigger-indexing",
-  );
-
-  const userId = session?.user.id;
-
-  const refetchProfile = sigleApiClient.useQuery(
-    "get",
-    "/api/users/{username}",
+  const { data: session } = useSession(),
     {
-      params: {
-        path: {
-          username: userId || "",
+      start: startToast,
+      completeStep,
+      setStepError,
+    } = useMultiStepToast({
+      steps: [
+        { id: "upload", title: "Uploading data to Arweave" },
+        { id: "transaction", title: "Waiting for blockchain confirmation" },
+        { id: "index", title: "Indexing profile" },
+      ],
+      successMessage: "Profile updated!",
+    }),
+    uploadProfileMetadata = sigleApiClient.useMutation(
+      "post",
+      "/api/protected/user/profile/upload-metadata",
+    ),
+    triggerIndexing = sigleApiClient.useMutation(
+      "post",
+      "/api/protected/user/profile/trigger-indexing",
+    ),
+    userId = session?.user.id,
+    refetchProfile = sigleApiClient.useQuery(
+      "get",
+      "/api/users/{username}",
+      {
+        params: {
+          path: {
+            username: userId || "",
+          },
         },
       },
-    },
-    {
-      enabled: false,
-    },
-  );
-
-  const { contractCall } = useContractCall();
-
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    getValues,
-    formState: { errors, isSubmitting },
-  } = useForm({
-    resolver: zodResolver(updateProfileMetadataSchema),
-    values: {
-      displayName: profile?.displayName || undefined,
-      description: profile?.description || undefined,
-      picture: profile?.pictureUri?.id || undefined,
-      coverPicture: profile?.coverPictureUri?.id || undefined,
-      website: profile?.website || undefined,
-      twitter: profile?.twitter || undefined,
-    },
-  });
-
-  const onSubmit = handleSubmit(async (formValues) => {
-    startToast();
-
-    const metadata = createProfileMetadata({
-      $schema: ProfileMetadataSchemaId.LATEST,
-      content: {
-        id: createId(),
-        displayName: formValues.displayName || undefined,
-        description: formValues.description || undefined,
-        twitter: formValues.twitter || undefined,
-        website: formValues.website || undefined,
-        picture: formValues.picture || undefined,
-        coverPicture: formValues.coverPicture || undefined,
+      {
+        enabled: false,
       },
-    });
+    ),
+    { contractCall } = useContractCall(),
+    {
+      register,
+      handleSubmit,
+      setValue,
+      getValues,
+      formState: { errors, isSubmitting },
+    } = useForm({
+      resolver: zodResolver(updateProfileMetadataSchema),
+      values: {
+        displayName: profile?.displayName || undefined,
+        description: profile?.description || undefined,
+        picture: profile?.pictureUri?.id || undefined,
+        coverPicture: profile?.coverPictureUri?.id || undefined,
+        website: profile?.website || undefined,
+        twitter: profile?.twitter || undefined,
+      },
+    }),
+    onSubmit = handleSubmit(async (formValues) => {
+      startToast();
 
-    const data = await uploadProfileMetadata
-      .mutateAsync({
-        body: {
-          metadata: metadata as unknown as Record<string, never>,
-        },
-      })
-      .then((result) => Result.ok(result))
-      .catch((error) => Result.err(error));
-    if (data.isErr()) {
-      setStepError(
-        "upload",
-        data.error.message ? data.error.message : data.error,
-      );
-      return;
-    }
-    completeStep("upload");
+      const metadata = createProfileMetadata({
+          $schema: ProfileMetadataSchemaId.LATEST,
+          content: {
+            id: createId(),
+            displayName: formValues.displayName || undefined,
+            description: formValues.description || undefined,
+            twitter: formValues.twitter || undefined,
+            website: formValues.website || undefined,
+            picture: formValues.picture || undefined,
+            coverPicture: formValues.coverPicture || undefined,
+          },
+        }),
+        data = await uploadProfileMetadata
+          .mutateAsync({
+            body: {
+              metadata: metadata as unknown as Record<string, never>,
+            },
+          })
+          .then((result) => Result.ok(result))
+          .catch((error) => Result.err(error));
+      if (data.isErr()) {
+        setStepError(
+          "upload",
+          data.error.message ? data.error.message : data.error,
+        );
+        return;
+      }
+      completeStep("upload");
 
-    const { parameters } = sigleClient.setProfile({
-      metadata: `ar://${data.value.id}`,
-    });
-
-    const contractCallResult = await contractCall(parameters);
-    if (contractCallResult.isErr()) {
-      setStepError("transaction", contractCallResult.error.message);
-      return;
-    }
-
-    const txId = contractCallResult.value;
-    const transactionResult = await waitForTransaction({ txId });
-    if (transactionResult.isErr()) {
-      setStepError("transaction", transactionResult.error.message);
-      return;
-    }
-    if (transactionResult.value.tx_status !== "success") {
-      setStepError("transaction", "Transaction failed");
-      return;
-    }
-    completeStep("transaction");
-
-    try {
-      await triggerIndexing.mutateAsync({});
-    } catch (error) {
-      setStepError(
-        "index",
-        error instanceof Error ? error.message : "Failed to trigger indexing",
-      );
-      return;
-    }
-
-    const pollingInterval = 2_000;
-    const timeout = 180_000;
-    const startTime = Date.now();
-
-    let isIndexed = false;
-    while (Date.now() - startTime < timeout) {
-      const result = await refetchProfile.refetch();
-
-      // Successfully indexed
-      if (result.data?.profile?.txId === txId) {
-        isIndexed = true;
-        break;
+      const { parameters } = sigleClient.setProfile({
+          metadata: `ar://${data.value.id}`,
+        }),
+        contractCallResult = await contractCall(parameters);
+      if (contractCallResult.isErr()) {
+        setStepError("transaction", contractCallResult.error.message);
+        return;
       }
 
-      await new Promise((resolve) => {
-        setTimeout(resolve, pollingInterval);
-      });
-    }
+      const txId = contractCallResult.value,
+        transactionResult = await waitForTransaction({ txId });
+      if (transactionResult.isErr()) {
+        setStepError("transaction", transactionResult.error.message);
+        return;
+      }
+      if (transactionResult.value.tx_status !== "success") {
+        setStepError("transaction", "Transaction failed");
+        return;
+      }
+      completeStep("transaction");
 
-    if (!isIndexed) {
-      setStepError(
-        "index",
-        "Profile update timed out. Please refresh the page.",
-      );
-      return;
-    }
+      try {
+        await triggerIndexing.mutateAsync({});
+      } catch (error) {
+        setStepError(
+          "index",
+          error instanceof Error ? error.message : "Failed to trigger indexing",
+        );
+        return;
+      }
 
-    completeStep("index");
-    setEditingProfileMetadata(false);
-  });
+      const pollingInterval = 2_000,
+        timeout = 180_000,
+        startTime = Date.now();
 
-  const handleXChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    let value = event.target.value;
-    // If user pastes a full url, extract the username
-    if (value.startsWith("http")) {
-      value = value.split("/").pop() || "";
-    }
-    setValue("twitter", value, { shouldValidate: true });
-  };
+      let isIndexed = false;
+      while (Date.now() - startTime < timeout) {
+        const result = await refetchProfile.refetch();
+
+        // Successfully indexed
+        if (result.data?.profile?.txId === txId) {
+          isIndexed = true;
+          break;
+        }
+
+        await new Promise((resolve) => {
+          setTimeout(resolve, pollingInterval);
+        });
+      }
+
+      if (!isIndexed) {
+        setStepError(
+          "index",
+          "Profile update timed out. Please refresh the page.",
+        );
+        return;
+      }
+
+      completeStep("index");
+      setEditingProfileMetadata(false);
+    }),
+    handleXChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+      let value = event.target.value;
+      // If user pastes a full url, extract the username
+      if (value.startsWith("http")) {
+        value = value.split("/").pop() || "";
+      }
+      setValue("twitter", value, { shouldValidate: true });
+    };
 
   return (
     <form onSubmit={onSubmit} className="space-y-4">

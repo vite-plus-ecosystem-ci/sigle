@@ -53,124 +53,123 @@ import { useEditorStore } from "./store";
 const lowlight = createLowlight(common);
 
 export const EditorTipTap = () => {
-  const params = useParams();
-  const postId = params.postId as string;
-  const posthog = usePostHog();
-  const { width } = useWindowSize();
-  const isMobile = width ? width < 768 : false;
-  const { setValue, getValues } = useFormContext<EditorPostFormData>();
-  const setEditor = useEditorStore((state) => state.setEditor);
-  const { mutateAsync: uploadMedia } = sigleApiClient.useMutation(
-    "post",
-    "/api/protected/drafts/{draftId}/upload-media",
-  );
+  const params = useParams(),
+    postId = params.postId as string,
+    posthog = usePostHog(),
+    { width } = useWindowSize(),
+    isMobile = width ? width < 768 : false,
+    { setValue, getValues } = useFormContext<EditorPostFormData>(),
+    setEditor = useEditorStore((state) => state.setEditor),
+    { mutateAsync: uploadMedia } = sigleApiClient.useMutation(
+      "post",
+      "/api/protected/drafts/{draftId}/upload-media",
+    ),
+    editor = useEditor({
+      immediatelyRender: true,
+      extensions: [
+        TipTapCharacterCount,
+        // Nodes
+        TipTapDocument,
+        TipTapParagraph,
+        TipTapText,
+        TipTapBlockquote.extend({ content: "paragraph+" }),
+        TipTapLink.configure({
+          openOnClick: false,
+          // We disable the link on paste because we have other plugins listening to links like twitter or youtube...
+          linkOnPaste: false,
+        }),
+        TipTapListItem,
+        TipTapBulletList,
+        TipTapOrderedList,
+        TipTapHardBreak,
+        TipTapHeading.configure({
+          // Only allow h2 and h3
+          levels: [2, 3],
+        }),
+        TipTapHorizontalRule,
+        TipTapCodeBlockLowlight.extend({
+          addNodeView() {
+            return ReactNodeViewRenderer(CodeBlockComponent);
+          },
+        }).configure({
+          lowlight,
+        }),
+        TipTapImage.configure({
+          uploadFile: async (file: File) => {
+            posthog.capture("editor_image_upload_start", {
+              postId,
+            });
 
-  const editor = useEditor({
-    immediatelyRender: true,
-    extensions: [
-      TipTapCharacterCount,
-      // Nodes
-      TipTapDocument,
-      TipTapParagraph,
-      TipTapText,
-      TipTapBlockquote.extend({ content: "paragraph+" }),
-      TipTapLink.configure({
-        openOnClick: false,
-        // We disable the link on paste because we have other plugins listening to links like twitter or youtube...
-        linkOnPaste: false,
-      }),
-      TipTapListItem,
-      TipTapBulletList,
-      TipTapOrderedList,
-      TipTapHardBreak,
-      TipTapHeading.configure({
-        // Only allow h2 and h3
-        levels: [2, 3],
-      }),
-      TipTapHorizontalRule,
-      TipTapCodeBlockLowlight.extend({
-        addNodeView() {
-          return ReactNodeViewRenderer(CodeBlockComponent);
-        },
-      }).configure({
-        lowlight,
-      }),
-      TipTapImage.configure({
-        uploadFile: async (file: File) => {
-          posthog.capture("editor_image_upload_start", {
-            postId,
-          });
+            const formData = new FormData();
+            formData.append("file", file);
 
-          const formData = new FormData();
-          formData.append("file", file);
-
-          try {
-            const data = await uploadMedia({
-              params: {
-                path: {
-                  draftId: postId,
+            try {
+              const data = await uploadMedia({
+                params: {
+                  path: {
+                    draftId: postId,
+                  },
                 },
-              },
-              // oxlint-disable-next-line typescript/no-explicit-any
-              body: formData as any,
-            });
+                // oxlint-disable-next-line typescript/no-explicit-any
+                body: formData as any,
+              });
 
-            posthog.capture("editor_image_upload_success", {
-              postId,
-            });
-            return data.url;
-            // oxlint-disable-next-line typescript/no-explicit-any
-          } catch (error: any) {
-            toast.error("Failed to upload image", {
-              description: error.message,
-            });
-            posthog.capture("editor_image_upload_error", {
-              postId,
-              error: error.message,
-            });
-            throw error;
-          }
-        },
-      }),
-      // Marks
-      TipTapBold,
-      TipTapCode,
-      TipTapItalic,
-      TipTapStrike,
-      TipTapUnderline,
-      // Extensions
-      Markdown,
-      TipTapDropcursor.configure({
-        class: "bg-primary",
-        width: 2,
-      }),
-      TipTapUndoRedo,
-      TipTapPlaceholder(isMobile),
-      TipTapTypography,
-      // Custom extensions
-      TipTapEmbed,
-      !isMobile
-        ? SlashCommands.configure({
-            commands: slashCommands,
-          })
-        : undefined,
-      isMobile ? TipTapMobileScroll : undefined,
-    ] as Extensions,
-    content: getValues().content || "<p></p>",
-    contentType: getValues().content ? "markdown" : "html",
-    // Expose the editor to the parent so we can use it to get the content
-    onCreate: ({ editor }) => {
-      const contentMarkdown = editor.getMarkdown();
-      if (getValues("content") !== contentMarkdown) {
+              posthog.capture("editor_image_upload_success", {
+                postId,
+              });
+              return data.url;
+              // oxlint-disable-next-line typescript/no-explicit-any
+            } catch (error: any) {
+              toast.error("Failed to upload image", {
+                description: error.message,
+              });
+              posthog.capture("editor_image_upload_error", {
+                postId,
+                error: error.message,
+              });
+              throw error;
+            }
+          },
+        }),
+        // Marks
+        TipTapBold,
+        TipTapCode,
+        TipTapItalic,
+        TipTapStrike,
+        TipTapUnderline,
+        // Extensions
+        Markdown,
+        TipTapDropcursor.configure({
+          class: "bg-primary",
+          width: 2,
+        }),
+        TipTapUndoRedo,
+        TipTapPlaceholder(isMobile),
+        TipTapTypography,
+        // Custom extensions
+        TipTapEmbed,
+        !isMobile
+          ? SlashCommands.configure({
+              commands: slashCommands,
+            })
+          : undefined,
+        isMobile ? TipTapMobileScroll : undefined,
+      ] as Extensions,
+      content: getValues().content || "<p></p>",
+      contentType: getValues().content ? "markdown" : "html",
+      // Expose the editor to the parent so we can use it to get the content
+      onCreate: ({ editor }) => {
+        const contentMarkdown = editor.getMarkdown();
+        if (getValues("content") !== contentMarkdown) {
+          setValue("content", contentMarkdown);
+        }
+        setEditor(editor);
+      },
+      onUpdate: ({ editor }) => {
+        const contentMarkdown = editor.getMarkdown();
         setValue("content", contentMarkdown);
-      }
-      setEditor(editor);
-    },
-    onUpdate: ({ editor }) => {
-      const contentMarkdown = editor.getMarkdown();
-      setValue("content", contentMarkdown);
-    },
-  });
+      },
+    });
 
   return (
     <div className="prose pb-5 lg:prose-lg dark:prose-invert">

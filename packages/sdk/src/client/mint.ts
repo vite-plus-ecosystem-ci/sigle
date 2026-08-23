@@ -37,26 +37,25 @@ export const mint = async ({
   network: StacksNetwork;
   networkName: StacksNetworkName;
 }): Promise<MintReturn> => {
-  const sBTCAsset = config[networkName].sBTCAsset;
-  const [contractAddress, contractName] = params.contract.split(".");
-  const minterData = await fetchCallReadOnlyFunction({
-    contractAddress,
-    contractName,
-    functionName: "get-minter",
-    functionArgs: [],
-    network,
-    senderAddress: params.sender,
-  });
+  const sBTCAsset = config[networkName].sBTCAsset,
+    [contractAddress, contractName] = params.contract.split("."),
+    minterData = await fetchCallReadOnlyFunction({
+      contractAddress,
+      contractName,
+      functionName: "get-minter",
+      functionArgs: [],
+      network,
+      senderAddress: params.sender,
+    });
 
   if (!(minterData.type === "ok" && minterData.value.type === "contract")) {
     throw new Error("Invalid minter data");
   }
-  const minterContract = minterData.value.value;
-  const [minterContractAddress, minterContractName] = minterContract.split(".");
-
-  const totalFixedMintFee = fixedMintFee.total * BigInt(params.amount);
-  const totalPrice =
-    BigInt(params.price) * BigInt(params.amount) + totalFixedMintFee;
+  const minterContract = minterData.value.value,
+    [minterContractAddress, minterContractName] = minterContract.split("."),
+    totalFixedMintFee = fixedMintFee.total * BigInt(params.amount),
+    totalPrice =
+      BigInt(params.price) * BigInt(params.amount) + totalFixedMintFee;
 
   return {
     parameters: {

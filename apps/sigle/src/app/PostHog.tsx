@@ -7,8 +7,8 @@ import { env } from "@/env";
 import { useSession } from "@/lib/auth-hooks";
 
 export function PostHogInit(): null {
-  const { data: session } = useSession();
-  const posthog = usePostHog();
+  const { data: session } = useSession(),
+    posthog = usePostHog();
 
   useEffect(() => {
     if (env.NEXT_PUBLIC_POSTHOG_KEY) {
@@ -36,9 +36,9 @@ export function PostHogInit(): null {
 }
 
 function PostHogPageView(): null {
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const posthog = usePostHog();
+  const pathname = usePathname(),
+    searchParams = useSearchParams(),
+    posthog = usePostHog();
 
   // Track pageviews
   useEffect(() => {

@@ -17,12 +17,12 @@ export const PostCollectCard = ({ post }: PostCollectCardProps) => {
   }
 
   const mintPercentage =
-    post.collectible.maxSupply > 0
-      ? (post.collectible.collected / post.collectible.maxSupply) * 100
-      : 0;
-  const canCollect =
-    post.collectible.maxSupply === 0 ||
-    post.collectible.collected < post.collectible.maxSupply;
+      post.collectible.maxSupply > 0
+        ? (post.collectible.collected / post.collectible.maxSupply) * 100
+        : 0,
+    canCollect =
+      post.collectible.maxSupply === 0 ||
+      post.collectible.collected < post.collectible.maxSupply;
 
   return (
     <>

@@ -8,13 +8,13 @@ export const metadata = {
 };
 
 const navbar = (
-  <Navbar
-    logo={<b>Sigle</b>}
-    projectLink="https://github.com/sigle/sigle"
-    chatLink="https://app.sigle.io/discord"
-  />
-);
-const footer = <Footer>MIT {new Date().getFullYear()} © Sigle.</Footer>;
+    <Navbar
+      logo={<b>Sigle</b>}
+      projectLink="https://github.com/sigle/sigle"
+      chatLink="https://app.sigle.io/discord"
+    />
+  ),
+  footer = <Footer>MIT {new Date().getFullYear()} © Sigle.</Footer>;
 
 export default async function RootLayout({ children }) {
   return (

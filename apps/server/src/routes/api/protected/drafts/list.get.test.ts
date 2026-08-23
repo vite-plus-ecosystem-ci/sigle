@@ -58,13 +58,12 @@ describe("api/protected/drafts/list.get", () => {
     mockGetValidatedQueryZod.mockResolvedValue({ limit: 10 });
 
     const mockEvent = {
-      context: { user: { id: userId } },
-      path: "/api/protected/drafts",
-      method: "GET",
-      headers: {},
-    } as unknown as H3Event;
-
-    const result = await handler(mockEvent);
+        context: { user: { id: userId } },
+        path: "/api/protected/drafts",
+        method: "GET",
+        headers: {},
+      } as unknown as H3Event,
+      result = await handler(mockEvent);
 
     expect(result).toHaveLength(2);
   });
@@ -75,13 +74,12 @@ describe("api/protected/drafts/list.get", () => {
     mockGetValidatedQueryZod.mockResolvedValue({ limit: 10 });
 
     const mockEvent = {
-      context: { user: { id: userId } },
-      path: "/api/protected/drafts",
-      method: "GET",
-      headers: {},
-    } as unknown as H3Event;
-
-    const result = await handler(mockEvent);
+        context: { user: { id: userId } },
+        path: "/api/protected/drafts",
+        method: "GET",
+        headers: {},
+      } as unknown as H3Event,
+      result = await handler(mockEvent);
 
     expect(result).toHaveLength(0);
   });
@@ -95,13 +93,12 @@ describe("api/protected/drafts/list.get", () => {
     mockGetValidatedQueryZod.mockResolvedValue({ limit: 2 });
 
     const mockEvent = {
-      context: { user: { id: userId } },
-      path: "/api/protected/drafts",
-      method: "GET",
-      headers: {},
-    } as unknown as H3Event;
-
-    const result = await handler(mockEvent);
+        context: { user: { id: userId } },
+        path: "/api/protected/drafts",
+        method: "GET",
+        headers: {},
+      } as unknown as H3Event,
+      result = await handler(mockEvent);
 
     expect(result).toHaveLength(2);
   });

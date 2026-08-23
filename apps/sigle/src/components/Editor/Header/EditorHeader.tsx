@@ -20,20 +20,20 @@ const headerIconSize = 20;
  * Scroll logic taken from https://www.codemzy.com/blog/react-sticky-header-disappear-scroll
  */
 export const EditorHeader = () => {
-  const { watch } = useFormContext<EditorPostFormData>();
-  const type = watch("type");
-  const menuOpen = useEditorStore((state) => state.menuOpen);
-  const setMenuOpen = useEditorStore((state) => state.setMenuOpen);
-  const [scrollDirection, setScrollDirection] = useState<"down" | "up" | null>(
-    null,
-  );
+  const { watch } = useFormContext<EditorPostFormData>(),
+    type = watch("type"),
+    menuOpen = useEditorStore((state) => state.menuOpen),
+    setMenuOpen = useEditorStore((state) => state.setMenuOpen),
+    [scrollDirection, setScrollDirection] = useState<"down" | "up" | null>(
+      null,
+    );
 
   useEffect(() => {
     let lastScrollY = window.pageYOffset;
 
     const updateScrollDirection = () => {
-      const scrollY = window.pageYOffset;
-      const direction = scrollY > lastScrollY ? "down" : "up";
+      const scrollY = window.pageYOffset,
+        direction = scrollY > lastScrollY ? "down" : "up";
       if (
         direction !== scrollDirection &&
         (scrollY - lastScrollY > 10 || scrollY - lastScrollY < -10)

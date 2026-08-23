@@ -2,12 +2,12 @@ import * as cheerio from "cheerio";
 import slugify from "slugify";
 
 export const addIdsToHeadings = (html: string): string => {
-  const $ = cheerio.load(html);
-  const headings = $("h2, h3");
+  const $ = cheerio.load(html),
+    headings = $("h2, h3");
 
   headings.each((_index, heading) => {
-    const text = $(heading).text();
-    const id = slugify(text, { lower: true, strict: true });
+    const text = $(heading).text(),
+      id = slugify(text, { lower: true, strict: true });
 
     $(heading).attr("id", id);
   });
@@ -33,13 +33,13 @@ export const addIdsToHeadings = (html: string): string => {
 export const extractTableOfContents = (
   html: string,
 ): { level: 2 | 3; text: string; id: string }[] => {
-  const $ = cheerio.load(html);
-  const headings = $("h2, h3");
-  const tableOfContents: { level: 2 | 3; text: string; id: string }[] = [];
+  const $ = cheerio.load(html),
+    headings = $("h2, h3"),
+    tableOfContents: { level: 2 | 3; text: string; id: string }[] = [];
 
   headings.each((_index, heading) => {
-    const level = heading.tagName.toLowerCase() === "h2" ? 2 : 3;
-    const text = $(heading).text();
+    const level = heading.tagName.toLowerCase() === "h2" ? 2 : 3,
+      text = $(heading).text();
 
     if (text) {
       const id = slugify(text, { lower: true, strict: true });

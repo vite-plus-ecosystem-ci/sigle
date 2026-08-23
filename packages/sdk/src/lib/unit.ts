@@ -1,7 +1,7 @@
 import { InvalidDecimalNumberError } from "../errors/unit.js";
 
-const STACKS_DECIMALS = 6;
-const BTC_DECIMALS = 8;
+const STACKS_DECIMALS = 6,
+  BTC_DECIMALS = 8;
 
 /**
  * https://github.com/wevm/viem/blob/d0275721a89d0d803e907041d4d16e7f9818bfba/src/utils/unit/parseUnits.ts
@@ -27,12 +27,11 @@ export function parseUnits(value: string, decimals: number): bigint {
     fraction = "";
   } else if (fraction.length > decimals) {
     const [left, unit, right] = [
-      fraction.slice(0, decimals - 1),
-      fraction.slice(decimals - 1, decimals),
-      fraction.slice(decimals),
-    ];
-
-    const rounded = Math.round(Number(`${unit}.${right}`));
+        fraction.slice(0, decimals - 1),
+        fraction.slice(decimals - 1, decimals),
+        fraction.slice(decimals),
+      ],
+      rounded = Math.round(Number(`${unit}.${right}`));
     if (rounded > 9)
       fraction = `${BigInt(left) + BigInt(1)}0`.padStart(left.length + 1, "0");
     else fraction = `${left}${rounded}`;

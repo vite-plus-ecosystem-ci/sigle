@@ -29,24 +29,22 @@ export const executeIndexerMintJob = async (
   }
 
   const existingUsers = await prisma.user.findMany({
-    where: {
-      id: {
-        in: Array.from(userAddresses),
+      where: {
+        id: {
+          in: Array.from(userAddresses),
+        },
       },
-    },
-    select: {
-      id: true,
-    },
-  });
-
-  const existingUserIds = new Set(existingUsers.map((user) => user.id));
-
-  // Create any users that don't exist yet
-  const usersToCreate = Array.from(userAddresses)
-    .filter((address) => !existingUserIds.has(address))
-    .map((address) => ({
-      id: address,
-    }));
+      select: {
+        id: true,
+      },
+    }),
+    existingUserIds = new Set(existingUsers.map((user) => user.id)),
+    // Create any users that don't exist yet
+    usersToCreate = Array.from(userAddresses)
+      .filter((address) => !existingUserIds.has(address))
+      .map((address) => ({
+        id: address,
+      }));
 
   if (usersToCreate.length > 0) {
     await prisma.user.createMany({
@@ -56,23 +54,23 @@ export const executeIndexerMintJob = async (
   }
 
   const updatedCollectible = await prisma.collectible.update({
-    where: {
-      address: data.address,
-    },
-    data: {
-      collected: {
-        increment: data.quantity,
+      where: {
+        address: data.address,
       },
-    },
-    select: {
-      post: {
-        select: {
-          id: true,
+      data: {
+        collected: {
+          increment: data.quantity,
         },
       },
-    },
-  });
-  const updatedPost = updatedCollectible.post;
+      select: {
+        post: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    }),
+    updatedPost = updatedCollectible.post;
 
   for (const event of data.nftMintEvents) {
     const postNftData = {

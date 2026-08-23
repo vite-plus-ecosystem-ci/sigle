@@ -10,15 +10,14 @@ interface EditorBottomInfoProps {
 }
 
 export const EditorBottomInfo = ({ editor }: EditorBottomInfoProps) => {
-  const [showShortcutsDialog, setShowShortcutsDialog] = useState(false);
-  const { resolvedTheme, setTheme } = useTheme();
-
-  const { wordsCount } = useEditorState({
-    editor,
-    selector: (context) => ({
-      wordsCount: context.editor.storage.characterCount?.words() || 0,
-    }),
-  });
+  const [showShortcutsDialog, setShowShortcutsDialog] = useState(false),
+    { resolvedTheme, setTheme } = useTheme(),
+    { wordsCount } = useEditorState({
+      editor,
+      selector: (context) => ({
+        wordsCount: context.editor.storage.characterCount?.words() || 0,
+      }),
+    });
 
   return (
     // oxlint-disable-next-line better-tailwindcss/no-unknown-classes

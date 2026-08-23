@@ -20,32 +20,31 @@ const mockFetch = vi.fn();
 
 vi.stubGlobal("fetch", mockFetch);
 
-const { getMetadataFromUri } = await import("./post");
-
-const validMetadata = {
-  $schema: PostMetadataSchemaId.LATEST,
-  signature: "mock-signature",
-  content: {
-    id: "post-123",
-    title: "Test Post",
-    content: "# Hello World",
-    attributes: [
-      { type: "String", key: "meta-title", value: "SEO Title" },
-      { type: "String", key: "meta-description", value: "SEO Description" },
-      { type: "String", key: "excerpt", value: "Post excerpt" },
-      {
-        type: "String",
-        key: "canonical-uri",
-        value: "https://example.com/post",
+const { getMetadataFromUri } = await import("./post"),
+  validMetadata = {
+    $schema: PostMetadataSchemaId.LATEST,
+    signature: "mock-signature",
+    content: {
+      id: "post-123",
+      title: "Test Post",
+      content: "# Hello World",
+      attributes: [
+        { type: "String", key: "meta-title", value: "SEO Title" },
+        { type: "String", key: "meta-description", value: "SEO Description" },
+        { type: "String", key: "excerpt", value: "Post excerpt" },
+        {
+          type: "String",
+          key: "canonical-uri",
+          value: "https://example.com/post",
+        },
+      ],
+      coverImage: {
+        url: "https://example.com/image.jpg",
+        type: "image/jpeg",
       },
-    ],
-    coverImage: {
-      url: "https://example.com/image.jpg",
-      type: "image/jpeg",
+      tags: ["tag1", "tag2"],
     },
-    tags: ["tag1", "tag2"],
-  },
-};
+  };
 
 describe("post metadata", () => {
   beforeEach(() => {

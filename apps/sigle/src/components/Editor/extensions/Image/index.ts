@@ -52,9 +52,9 @@ export const TipTapImage = TipTapImageBase.extend<
       setImageFromFile:
         ({ file }) =>
         ({ chain, editor }) => {
-          const uploadId = nanoid();
-          // We show a preview of  the image image as uploading can take a while.
-          const preview = URL.createObjectURL(file);
+          const uploadId = nanoid(),
+            // We show a preview of  the image image as uploading can take a while.
+            preview = URL.createObjectURL(file);
 
           chain()
             .insertContent({
@@ -74,15 +74,11 @@ export const TipTapImage = TipTapImageBase.extend<
                   node.attrs.uploadId === uploadId
                 ) {
                   const attrs = {
-                    ...node.attrs,
-                    src: imageUrl,
-                    uploadId: undefined,
-                  };
-                  const newNode = node.type.create(
-                    attrs,
-                    node.content,
-                    node.marks,
-                  );
+                      ...node.attrs,
+                      src: imageUrl,
+                      uploadId: undefined,
+                    },
+                    newNode = node.type.create(attrs, node.content, node.marks);
                   transaction.replaceWith(pos, pos + node.nodeSize, newNode);
                 }
               });
@@ -111,21 +107,20 @@ export const TipTapImage = TipTapImageBase.extend<
   // This is required for the migration process from Gaia.
   // It can be removed once it's done.
   onCreate() {
-    const { editor } = this;
-    const transaction = editor.state.tr;
+    const { editor } = this,
+      transaction = editor.state.tr;
 
     editor.state.doc.descendants((node, pos) => {
       if (
         node.type.name === "image" &&
         node.attrs.src?.startsWith("https://gaia.blockstack.org/hub/")
       ) {
-        const uploadId = nanoid();
-        const attrs = {
-          ...node.attrs,
-          uploadId,
-        };
-
-        const newNode = node.type.create(attrs, node.content, node.marks);
+        const uploadId = nanoid(),
+          attrs = {
+            ...node.attrs,
+            uploadId,
+          },
+          newNode = node.type.create(attrs, node.content, node.marks);
         transaction.replaceWith(pos, pos + node.nodeSize, newNode);
 
         fetch(node.attrs.src)
@@ -142,15 +137,15 @@ export const TipTapImage = TipTapImageBase.extend<
                 innerNode.attrs.uploadId === uploadId
               ) {
                 const updatedAttrs = {
-                  ...innerNode.attrs,
-                  src: imageUrl,
-                  uploadId: undefined,
-                };
-                const updatedNode = innerNode.type.create(
-                  updatedAttrs,
-                  innerNode.content,
-                  innerNode.marks,
-                );
+                    ...innerNode.attrs,
+                    src: imageUrl,
+                    uploadId: undefined,
+                  },
+                  updatedNode = innerNode.type.create(
+                    updatedAttrs,
+                    innerNode.content,
+                    innerNode.marks,
+                  );
                 updateTransaction.replaceWith(
                   innerPos,
                   innerPos + innerNode.nodeSize,

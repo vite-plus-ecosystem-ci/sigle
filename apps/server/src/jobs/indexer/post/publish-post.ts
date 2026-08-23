@@ -39,17 +39,16 @@ export const executePublishPostJob = async (
     });
     return;
   }
-  const metadata = metadataResult.value;
-
-  const existingPostWithSignature = await prisma.post.findUnique({
-    select: {
-      id: true,
-      txId: true,
-    },
-    where: {
-      signature: metadata.signature,
-    },
-  });
+  const metadata = metadataResult.value,
+    existingPostWithSignature = await prisma.post.findUnique({
+      select: {
+        id: true,
+        txId: true,
+      },
+      where: {
+        signature: metadata.signature,
+      },
+    });
   if (
     existingPostWithSignature &&
     existingPostWithSignature.txId !== data.txId
@@ -69,27 +68,26 @@ export const executePublishPostJob = async (
   const targetPostId = data.rootTxId || data.txId;
 
   await prisma.$transaction(async (tx) => {
-    const userId = data.author;
-    const post = await tx.post.findUnique({
-      select: {
-        id: true,
-        txId: true,
-        createdAt: true,
-        coverImageId: true,
-      },
-      where: {
-        id: targetPostId,
-      },
-    });
-
-    const user = await tx.user.findUnique({
-      select: {
-        id: true,
-      },
-      where: {
-        id: userId,
-      },
-    });
+    const userId = data.author,
+      post = await tx.post.findUnique({
+        select: {
+          id: true,
+          txId: true,
+          createdAt: true,
+          coverImageId: true,
+        },
+        where: {
+          id: targetPostId,
+        },
+      }),
+      user = await tx.user.findUnique({
+        select: {
+          id: true,
+        },
+        where: {
+          id: userId,
+        },
+      });
     if (!user) {
       await tx.user.create({
         data: {

@@ -97,13 +97,12 @@ describe("api/users/[username]/index.get", () => {
     await createTestPost({ id: "post-2", userId, title: "Test Post 2" });
 
     const mockEvent = {
-      context: {},
-      path: "/api/users/ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM",
-      method: "GET",
-      headers: {},
-    } as unknown as H3Event;
-
-    const result = await handler(mockEvent);
+        context: {},
+        path: "/api/users/ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM",
+        method: "GET",
+        headers: {},
+      } as unknown as H3Event,
+      result = await handler(mockEvent);
 
     expect(result).toStrictEqual({
       id: userId,

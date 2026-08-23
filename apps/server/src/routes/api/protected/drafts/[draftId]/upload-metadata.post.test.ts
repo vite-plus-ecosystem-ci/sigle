@@ -23,13 +23,12 @@ vi.mock<typeof import("nitro")>(import("nitro"), () => ({
 }));
 
 const mockGetRouterParam = vi.fn((event: unknown, name: string) => {
-  if (name === "draftId") {
-    return (event as { draftId?: string }).draftId ?? undefined;
-  }
-  return undefined;
-});
-
-const mockReadValidatedBodyZod = vi.fn();
+    if (name === "draftId") {
+      return (event as { draftId?: string }).draftId ?? undefined;
+    }
+    return undefined;
+  }),
+  mockReadValidatedBodyZod = vi.fn();
 
 vi.mock<typeof import("nitro/h3")>(import("nitro/h3"), async () => {
   const actual = await vi.importActual("nitro/h3");
@@ -144,16 +143,15 @@ describe("api/protected/drafts/[draftId]/upload-metadata.post", () => {
     );
 
     const mockEvent = {
-      context: {
-        user: { id: userId },
-        $posthog: { capture: vi.fn() },
-      },
-      path: "/api/protected/drafts/draft-1/upload-metadata",
-      method: "POST",
-      headers: {},
-    } as unknown as H3Event;
-
-    const result = await handler(mockEvent);
+        context: {
+          user: { id: userId },
+          $posthog: { capture: vi.fn() },
+        },
+        path: "/api/protected/drafts/draft-1/upload-metadata",
+        method: "POST",
+        headers: {},
+      } as unknown as H3Event,
+      result = await handler(mockEvent);
 
     expect(result).toStrictEqual({
       id: "arweave-tx-draft",
@@ -183,14 +181,14 @@ describe("api/protected/drafts/[draftId]/upload-metadata.post", () => {
   });
 
   it("edits existing post, adds Root-TX tag, increments revisionsCount, and creates new PostRevision", async () => {
-    const user = await createTestUser({ id: userId });
-    const originalPost = await createTestPost({
-      id: "original-post-id",
-      txId: "original-post-id",
-      userId: user.id,
-      title: "Original Post",
-      content: "Original content",
-    });
+    const user = await createTestUser({ id: userId }),
+      originalPost = await createTestPost({
+        id: "original-post-id",
+        txId: "original-post-id",
+        userId: user.id,
+        title: "Original Post",
+        content: "Original content",
+      });
 
     mockGetRouterParam.mockReturnValue(originalPost.id);
 
@@ -222,16 +220,15 @@ describe("api/protected/drafts/[draftId]/upload-metadata.post", () => {
     );
 
     const mockEvent = {
-      context: {
-        user: { id: userId },
-        $posthog: { capture: vi.fn() },
-      },
-      path: `/api/protected/drafts/${originalPost.id}/upload-metadata`,
-      method: "POST",
-      headers: {},
-    } as unknown as H3Event;
-
-    const result = await handler(mockEvent);
+        context: {
+          user: { id: userId },
+          $posthog: { capture: vi.fn() },
+        },
+        path: `/api/protected/drafts/${originalPost.id}/upload-metadata`,
+        method: "POST",
+        headers: {},
+      } as unknown as H3Event,
+      result = await handler(mockEvent);
 
     expect(result).toStrictEqual({
       id: originalPost.id,

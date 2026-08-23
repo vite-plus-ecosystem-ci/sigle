@@ -13,17 +13,15 @@ import type { EditorPostFormData } from "../EditorFormProvider";
 import { useEditorStore } from "../store";
 
 export const SeoPreview = () => {
-  const editor = useEditorStore((state) => state.editor);
-  const { watch } = useFormContext<EditorPostFormData>();
-  const watchTitle = watch("title");
-  const watchMetaTitle = watch("metaTitle");
-  const watchMetaDescription = watch("metaDescription");
-  const watchCoverImage = watch("coverImage");
-
-  const metaTitle = watchMetaTitle || watchTitle;
-  const metaDescription =
-    watchMetaDescription || editor?.getText().slice(0, 90);
-  const metaImage = watchCoverImage;
+  const editor = useEditorStore((state) => state.editor),
+    { watch } = useFormContext<EditorPostFormData>(),
+    watchTitle = watch("title"),
+    watchMetaTitle = watch("metaTitle"),
+    watchMetaDescription = watch("metaDescription"),
+    watchCoverImage = watch("coverImage"),
+    metaTitle = watchMetaTitle || watchTitle,
+    metaDescription = watchMetaDescription || editor?.getText().slice(0, 90),
+    metaImage = watchCoverImage;
 
   return (
     <div>
