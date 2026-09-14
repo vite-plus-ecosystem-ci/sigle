@@ -81,6 +81,7 @@ export default defineConfig({
       "no-plusplus": "off",
       "no-ternary": "off",
       "no-useless-return": "off",
+      "one-var": "off",
       "prefer-destructuring": "off",
       "prefer-promise-reject-errors": "off",
       "sort-imports": "off",
