@@ -7,32 +7,12 @@ export default defineConfig({
     ignorePatterns: [".next/**", "out/**", "build/**", "next-env.d.ts"],
     settings: {
       "better-tailwindcss": {
-        cwd: "./apps/sigle",
+        cwd: "./apps/custom-domain",
         entryPoint: "./src/app/globals.css",
       },
     },
     rules: {
-      "no-alert": "off",
-      "no-unknown-property": [
-        "error",
-        {
-          ignore: ["tw"],
-        },
-      ],
-      "no-restricted-imports": [
-        "error",
-        {
-          paths: [
-            {
-              name: "next/link",
-              message: "Use components/Shared/NextLink instead",
-            },
-          ],
-        },
-      ],
       "only-export-components": "off",
-      "no-html-link-for-pages": "off",
-      "no-untyped-mock-factory": "off",
       "vite-plus/prefer-vite-plus-imports": "error",
     },
     overrides: [
@@ -59,19 +39,5 @@ export default defineConfig({
         specifier: "vite-plus/oxlint-plugin",
       },
     ],
-  },
-  resolve: {
-    tsconfigPaths: true,
-  },
-  test: {
-    environment: "happy-dom",
-    globals: true,
-    setupFiles: ["./src/test/setup.ts"],
-    include: ["src/**/*.test.{ts,tsx}"],
-    exclude: ["tests/**"],
-    coverage: {
-      provider: "v8",
-      reporter: ["text", "json", "html"],
-    },
   },
 });
