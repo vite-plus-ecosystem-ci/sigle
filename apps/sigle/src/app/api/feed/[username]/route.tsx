@@ -8,8 +8,8 @@ export async function GET(
   _: Request,
   { params }: { params: Promise<{ username: string }> },
 ) {
-  const { username } = await params;
-  const { data: user, error: userError } = await sigleApiFetchClient.GET(
+  const { username } = await params,
+   { data: user, error: userError } = await sigleApiFetchClient.GET(
     "/api/users/{username}",
     {
       params: {
@@ -47,8 +47,8 @@ export async function GET(
     });
   }
 
-  const userLink = `${env.NEXT_PUBLIC_APP_URL}/u/${username}`;
-  const feed = new Feed({
+  const userLink = `${env.NEXT_PUBLIC_APP_URL}/u/${username}`,
+   feed = new Feed({
     title: user.profile?.displayName || user.id,
     description: user.profile?.description,
     id: userLink,

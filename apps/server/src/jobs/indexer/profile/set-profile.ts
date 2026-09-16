@@ -33,17 +33,17 @@ export const executeIndexerSetProfileJob = async (
     });
     return;
   }
-  const metadata = metadataResult.value;
+  const metadata = metadataResult.value,
 
-  const {
+   {
     id: _,
     picture: __,
     coverPicture: ____,
     ...metadataWithoutId
-  } = metadata.content;
+  } = metadata.content,
 
   // Ensure user exists
-  const user = await prisma.user.findUnique({
+   user = await prisma.user.findUnique({
     select: {
       id: true,
     },

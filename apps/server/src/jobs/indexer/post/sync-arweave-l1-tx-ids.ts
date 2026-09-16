@@ -38,8 +38,8 @@ export async function fetchArweaveL1TxIds(
     return Result.ok({});
   }
 
-  const idsJson = JSON.stringify(txIds);
-  const query = `
+  const idsJson = JSON.stringify(txIds),
+   query = `
     query {
       transactions(
         ids: ${idsJson}
@@ -59,8 +59,8 @@ export async function fetchArweaveL1TxIds(
 
   return Result.tryPromise({
     try: async () => {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000);
+      const controller = new AbortController(),
+       timeoutId = setTimeout(() => controller.abort(), 5000);
 
       try {
         const response = await fetch(`${env.ARWEAVE_GATEWAY_URL}/graphql`, {
@@ -83,8 +83,8 @@ export async function fetchArweaveL1TxIds(
           );
         }
 
-        const edges = result.data?.transactions?.edges ?? [];
-        const mapping: Record<string, string> = {};
+        const edges = result.data?.transactions?.edges ?? [],
+         mapping: Record<string, string> = {};
 
         for (const edge of edges) {
           const l1TxId = edge.node.bundledIn?.id;
@@ -113,16 +113,16 @@ export const executeIndexerSyncArweaveL1TxIdsJob = async (
     select: { txId: true },
     where: { arweaveL1TxId: null },
     take: 100,
-  });
+  }),
 
-  const revisionsWithoutL1 = await prisma.postRevision.findMany({
+   revisionsWithoutL1 = await prisma.postRevision.findMany({
     select: { txId: true },
     where: { arweaveL1TxId: null },
     take: 100,
-  });
+  }),
 
-  const txIdsSet = new Set<string>();
-  const maxLen = Math.max(postsWithoutL1.length, revisionsWithoutL1.length);
+   txIdsSet = new Set<string>(),
+   maxLen = Math.max(postsWithoutL1.length, revisionsWithoutL1.length);
   for (let i = 0; i < maxLen; i++) {
     if (i < postsWithoutL1.length) {
       txIdsSet.add(postsWithoutL1[i].txId);
@@ -153,16 +153,16 @@ export const executeIndexerSyncArweaveL1TxIdsJob = async (
     throw new Error(fetchResult.error.error);
   }
 
-  const mapping = fetchResult.value;
-  const updatedTxIds = Object.keys(mapping);
+  const mapping = fetchResult.value,
+   updatedTxIds = Object.keys(mapping);
 
   if (updatedTxIds.length === 0) {
     consola.info("No new L1 transaction IDs found on Arweave yet");
     return;
   }
 
-  let updatedPostsCount = 0;
-  let updatedRevisionsCount = 0;
+  let updatedPostsCount = 0,
+   updatedRevisionsCount = 0;
 
   for (const [txId, arweaveL1TxId] of Object.entries(mapping)) {
     const postRes = await prisma.post.updateMany({

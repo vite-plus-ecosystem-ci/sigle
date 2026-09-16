@@ -45,9 +45,9 @@ vi.mock<typeof import("@/lib/consola")>(
     }) as unknown as typeof import("@/lib/consola"),
 );
 
-const mockFetch = vi.spyOn(globalThis, "fetch");
+const mockFetch = vi.spyOn(globalThis, "fetch"),
 
-const { executeIndexerIndexPostsJob } = await import("./index-posts");
+ { executeIndexerIndexPostsJob } = await import("./index-posts");
 
 describe("executeIndexerIndexPostsJob", () => {
   let testDb: TestDatabase | undefined = undefined;
@@ -307,10 +307,10 @@ describe("executeIndexerIndexPostsJob", () => {
           timestamp: 1672531199,
         },
       },
-    }));
+    })),
 
     // Mock second page with 5 transactions
-    const page2Edges = Array.from({ length: 5 }, () => ({
+     page2Edges = Array.from({ length: 5 }, () => ({
       cursor: `cursor-101`,
       node: {
         id: `arweave-tx-101`,

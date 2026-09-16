@@ -20,15 +20,15 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const router = useRouter();
-  const pathname = usePathname();
+  const router = useRouter(),
+   pathname = usePathname(),
 
-  const { data: userWhitelist } = sigleApiClient.useQuery(
+   { data: userWhitelist } = sigleApiClient.useQuery(
     "get",
     "/api/protected/user/whitelisted",
-  );
+  ),
 
-  const navigationLinks = [
+   navigationLinks = [
     {
       label: "Dashboard",
       href: "/dashboard",
@@ -45,9 +45,9 @@ export default function DashboardLayout({
       label: "Settings",
       href: "/dashboard/settings",
     },
-  ];
+  ],
 
-  const handleNavigation = (href: string | null) => {
+   handleNavigation = (href: string | null) => {
     if (href) {
       router.push(href);
     }

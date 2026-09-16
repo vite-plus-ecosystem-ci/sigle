@@ -40,8 +40,8 @@ describe("api/users/trending.get", () => {
   });
 
   it("returns trending users with posts", async () => {
-    const user1 = await createTestUser({ id: "user1" });
-    const user2 = await createTestUser({ id: "user2" });
+    const user1 = await createTestUser({ id: "user1" }),
+     user2 = await createTestUser({ id: "user2" });
 
     await createTestPost({ id: "post-1", userId: user1.id, title: "Post 1" });
     await createTestPost({ id: "post-2", userId: user2.id, title: "Post 2" });
@@ -51,9 +51,9 @@ describe("api/users/trending.get", () => {
       path: "/api/users/trending",
       method: "GET",
       headers: {},
-    } as unknown as Parameters<typeof handler>[0];
+    } as unknown as Parameters<typeof handler>[0],
 
-    const result = await handler(mockEvent);
+     result = await handler(mockEvent);
 
     expect(result).toHaveLength(2);
   });
@@ -67,9 +67,9 @@ describe("api/users/trending.get", () => {
       path: "/api/users/trending",
       method: "GET",
       headers: {},
-    } as unknown as Parameters<typeof handler>[0];
+    } as unknown as Parameters<typeof handler>[0],
 
-    const result = await handler(mockEvent);
+     result = await handler(mockEvent);
 
     expect(result).toHaveLength(0);
   });
@@ -85,9 +85,9 @@ describe("api/users/trending.get", () => {
       path: "/api/users/trending",
       method: "GET",
       headers: {},
-    } as unknown as Parameters<typeof handler>[0];
+    } as unknown as Parameters<typeof handler>[0],
 
-    const result = (await handler(mockEvent)) as unknown as {
+     result = (await handler(mockEvent)) as unknown as {
       id: string;
       postsCount: number;
     }[];

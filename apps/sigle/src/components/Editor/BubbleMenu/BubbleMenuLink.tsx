@@ -22,11 +22,11 @@ interface EditorBubbleMenuProps {
 }
 
 export const EditorBubbleMenuLink = ({ editor }: EditorBubbleMenuProps) => {
-  const linkValue = useBubbleMenuStore((state) => state.linkValue);
-  const setLinkValue = useBubbleMenuStore((state) => state.setLinkValue);
-  const setLinkOpen = useBubbleMenuStore((state) => state.setLinkOpen);
+  const linkValue = useBubbleMenuStore((state) => state.linkValue),
+   setLinkValue = useBubbleMenuStore((state) => state.setLinkValue),
+   setLinkOpen = useBubbleMenuStore((state) => state.setLinkOpen),
 
-  const onSubmitLink = (event: React.FormEvent<HTMLFormElement>) => {
+   onSubmitLink = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     let safeLinkValue = linkValue.trim();
@@ -59,17 +59,17 @@ export const EditorBubbleMenuLink = ({ editor }: EditorBubbleMenuProps) => {
     }
 
     resetLink();
-  };
+  },
 
-  const onKeyDown = (event: React.KeyboardEvent) => {
+   onKeyDown = (event: React.KeyboardEvent) => {
     // If user press escape we hide the link input
     if (event.key === "Escape") {
       event.preventDefault();
       resetLink();
     }
-  };
+  },
 
-  const resetLink = () => {
+   resetLink = () => {
     setLinkOpen(false);
     setLinkValue("");
   };

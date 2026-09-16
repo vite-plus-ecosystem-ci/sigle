@@ -17,8 +17,8 @@ export function BlurImage({
 }: BlurImageProps) {
   const blurDataURL = useMemo(() => {
     if (!blurhash) return undefined;
-    const pixels = decode(blurhash, 32, 32);
-    const canvas = document.createElement("canvas");
+    const pixels = decode(blurhash, 32, 32),
+     canvas = document.createElement("canvas");
     canvas.width = 32;
     canvas.height = 32;
     const ctx = canvas.getContext("2d");

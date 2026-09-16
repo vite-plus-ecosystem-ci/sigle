@@ -105,9 +105,9 @@ describe("sync-arweave-l1-tx-ids", () => {
         id: "post-1",
         txId: "tx-arweave-1",
         userId,
-      });
+      }),
 
-      const mockFetch = vi.fn(() =>
+       mockFetch = vi.fn(() =>
         Promise.resolve(
           new Response(
             JSON.stringify({

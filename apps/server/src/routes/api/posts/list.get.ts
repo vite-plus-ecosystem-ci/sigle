@@ -92,12 +92,12 @@ const listQuerySchema = z.object({
 });
 
 export default defineEventHandler(async (event) => {
-  const query = await getValidatedQueryZod(event, listQuerySchema);
+  const query = await getValidatedQueryZod(event, listQuerySchema),
 
-  const where = {
+   where = {
     userId: query.username,
-  };
-  const [postsList, total] = await Promise.all([
+  },
+   [postsList, total] = await Promise.all([
     prisma.post.findMany({
       select: {
         ...SELECT_PUBLIC_POST_FIELDS,

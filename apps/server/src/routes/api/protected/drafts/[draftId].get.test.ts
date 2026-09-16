@@ -62,8 +62,8 @@ describe("api/protected/drafts/[draftId].get", () => {
   });
 
   it("returns draft by id", async () => {
-    const user = await createTestUser({ id: userId });
-    const draft = await createTestDraft({
+    const user = await createTestUser({ id: userId }),
+     draft = await createTestDraft({
       id: "draft-1",
       userId: user.id,
       title: "Test Draft",
@@ -76,9 +76,9 @@ describe("api/protected/drafts/[draftId].get", () => {
       path: "/api/protected/drafts/draft-1",
       method: "GET",
       headers: {},
-    } as unknown as H3Event<Request>;
+    } as unknown as H3Event<Request>,
 
-    const result = await handler(mockEvent);
+     result = await handler(mockEvent);
 
     expect(result).toMatchObject({
       id: draft.id,
@@ -128,9 +128,9 @@ describe("api/protected/drafts/[draftId].get", () => {
       path: "/api/protected/drafts/post-1",
       method: "GET",
       headers: {},
-    } as unknown as H3Event<Request>;
+    } as unknown as H3Event<Request>,
 
-    const result = await handler(mockEvent);
+     result = await handler(mockEvent);
 
     expect(result).toMatchObject({
       id: "post-1",

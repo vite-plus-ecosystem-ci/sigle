@@ -18,8 +18,8 @@ interface CreateTestUserOptions {
 export async function createTestUser(
   options: CreateTestUserOptions = {},
 ): Promise<User & { profile?: Profile | null }> {
-  const now = new Date();
-  const userId = options.id ?? "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM";
+  const now = new Date(),
+   userId = options.id ?? "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM";
 
   return prisma.user.create({
     data: {
@@ -65,9 +65,9 @@ interface CreateTestPostOptions {
 export async function createTestPost(
   options: CreateTestPostOptions,
 ): Promise<Post> {
-  const now = new Date();
+  const now = new Date(),
 
-  const post = await prisma.post.create({
+   post = await prisma.post.create({
     data: {
       id: options.id ?? `post-${Date.now()}`,
       version: options.version ?? "1.0.0",

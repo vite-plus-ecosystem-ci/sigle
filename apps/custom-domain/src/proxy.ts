@@ -1,11 +1,11 @@
 import { type NextRequest, NextResponse } from "next/server";
 
 export function proxy(request: NextRequest) {
-  const url = request.nextUrl;
-  const hostname = request.headers.get("host");
+  const url = request.nextUrl,
+   hostname = request.headers.get("host"),
 
   // Get the pathname of the request (e.g. /, /about, /blog/first-post)
-  const path = url.pathname;
+   path = url.pathname;
 
   return NextResponse.rewrite(new URL(`/s/${hostname}${path}`, request.url));
 }

@@ -19,14 +19,14 @@ export const UploadProfileCoverPicture = ({
   picture,
   setPicture,
 }: UploadProfileCoverPictureProps) => {
-  const posthog = usePostHog();
-  const { mutate: uploadImage, isPending: loadingUploadImage } =
+  const posthog = usePostHog(),
+   { mutate: uploadImage, isPending: loadingUploadImage } =
     sigleApiClient.useMutation(
       "post",
       "/api/protected/user/profile/upload-cover",
-    );
+    ),
 
-  const onDrop = useCallback(
+   onDrop = useCallback(
     async (acceptedFiles: File[]) => {
       const file = acceptedFiles[0];
       if (!file) return;
@@ -53,17 +53,17 @@ export const UploadProfileCoverPicture = ({
       );
     },
     [posthog, uploadImage, setPicture, loadingUploadImage],
-  );
+  ),
 
-  const { getRootProps, getInputProps } = useDropzone({
+   { getRootProps, getInputProps } = useDropzone({
     onDrop,
     accept: {
       "image/jpeg": [],
       "image/png": [],
     },
-  });
+  }),
 
-  const resolvedPicture = picture ? resolveImageUrl(picture) : undefined;
+   resolvedPicture = picture ? resolveImageUrl(picture) : undefined;
 
   return (
     <Field>

@@ -13,8 +13,8 @@ const navbar = (
     projectLink="https://github.com/sigle/sigle"
     chatLink="https://app.sigle.io/discord"
   />
-);
-const footer = <Footer>MIT {new Date().getFullYear()} © Sigle.</Footer>;
+),
+ footer = <Footer>MIT {new Date().getFullYear()} © Sigle.</Footer>;
 
 export default async function RootLayout({ children }) {
   return (

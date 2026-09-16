@@ -18,26 +18,26 @@ interface UseMultiStepReturn<T extends string> {
 export function useMultiStep<T extends string>(
   options: UseMultiStepOptions<T>,
 ): UseMultiStepReturn<T> {
-  const { steps: stepDefinitions, onStepChange } = options;
-  const { setSteps, updateStep, reset } = useMultiStepToastStore();
+  const { steps: stepDefinitions, onStepChange } = options,
+   { setSteps, updateStep, reset } = useMultiStepToastStore(),
 
-  const initializeSteps = (): MultiStepToastStep[] => {
+   initializeSteps = (): MultiStepToastStep[] => {
     return stepDefinitions.map((step, index) => ({
       ...step,
       status: index === 0 ? ("pending" as const) : ("idle" as const),
     }));
-  };
+  },
 
-  const start = () => {
+   start = () => {
     const initialSteps = initializeSteps();
     setSteps(initialSteps);
     onStepChange?.(stepDefinitions[0].id, "pending");
-  };
+  },
 
-  const completeStep = (id: T) => {
-    const { steps } = useMultiStepToastStore.getState();
-    const currentIndex = steps.findIndex((s) => s.id === id);
-    const isLastStep = currentIndex === steps.length - 1;
+   completeStep = (id: T) => {
+    const { steps } = useMultiStepToastStore.getState(),
+     currentIndex = steps.findIndex((s) => s.id === id),
+     isLastStep = currentIndex === steps.length - 1;
 
     updateStep(id, { status: "success" });
     onStepChange?.(id, "success");
@@ -51,27 +51,27 @@ export function useMultiStep<T extends string>(
       updateStep(nextStep.id, { status: "pending" });
       onStepChange?.(nextStep.id as T, "pending");
     }
-  };
+  },
 
-  const setStepLoading = (id: T) => {
+   setStepLoading = (id: T) => {
     updateStep(id, { status: "pending" });
     onStepChange?.(id, "pending");
-  };
+  },
 
-  const setStepError = (id: T, errorMessage: string) => {
+   setStepError = (id: T, errorMessage: string) => {
     updateStep(id, { status: "error", errorMessage });
     onStepChange?.(id, "error");
-  };
+  },
 
-  const setAllComplete = () => {
+   setAllComplete = () => {
     const allCompleteSteps = stepDefinitions.map((step) => ({
       ...step,
       status: "success" as const,
     }));
     setSteps(allCompleteSteps);
-  };
+  },
 
-  const steps = useMultiStepToastStore((state) => state.steps);
+   steps = useMultiStepToastStore((state) => state.steps);
 
   return {
     steps,

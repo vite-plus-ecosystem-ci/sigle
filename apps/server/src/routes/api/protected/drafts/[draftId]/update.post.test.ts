@@ -86,9 +86,9 @@ describe("api/protected/drafts/[draftId]/update.post", () => {
       path: "/api/protected/drafts/draft-1/update",
       method: "POST",
       headers: {},
-    } as unknown as H3Event;
+    } as unknown as H3Event,
 
-    const result = await handler(mockEvent);
+     result = await handler(mockEvent);
 
     expect(result).toHaveProperty("id", "draft-1");
 

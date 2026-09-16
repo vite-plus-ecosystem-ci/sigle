@@ -16,24 +16,24 @@ interface ContractDeployState {
 }
 
 export function useContractDeploy(options: UseContractDeployOptions = {}) {
-  const { onSuccess, onError, onCancel } = options;
-  const [state, setState] = useState<ContractDeployState>({
+  const { onSuccess, onError, onCancel } = options,
+   [state, setState] = useState<ContractDeployState>({
     loading: false,
     error: null,
     success: false,
     txId: null,
-  });
+  }),
 
-  const reset = useCallback(() => {
+   reset = useCallback(() => {
     setState({
       loading: false,
       error: null,
       success: false,
       txId: null,
     });
-  }, []);
+  }, []),
 
-  const contractDeploy = useCallback(
+   contractDeploy = useCallback(
     async (parameters: Omit<DeployContractParams, "network" | "sponsored">) => {
       try {
         setState((prev) => ({

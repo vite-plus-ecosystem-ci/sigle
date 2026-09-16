@@ -66,9 +66,9 @@ export const SlashCommands = Extension.create<{
           props.command({ editor, range });
         },
         render: () => {
-          let reactRenderer: ReactRenderer<CommandListRef> | null = null;
-          let container: HTMLDivElement | null = null;
-          let cleanup: (() => void) | null = null;
+          let reactRenderer: ReactRenderer<CommandListRef> | null = null,
+           container: HTMLDivElement | null = null,
+           cleanup: (() => void) | null = null;
 
           const getVirtualElement = (
             clientRect: (() => DOMRect | null) | null | undefined,
@@ -88,9 +88,9 @@ export const SlashCommands = Extension.create<{
                 }
               );
             },
-          });
+          }),
 
-          const updatePosition = (
+           updatePosition = (
             clientRect: (() => DOMRect | null) | null | undefined,
           ) => {
             if (!container) return;

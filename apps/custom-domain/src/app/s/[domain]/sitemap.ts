@@ -6,9 +6,9 @@ import { sigleApiFetchClient } from "@/lib/sigle";
 
 export default async function sitemap() {
   // next.js sitemap function doesn't pass the params, so we use headers as a workaround
-  const headersList = await headers();
-  const domain = headersList.get("host") || "";
-  const { data: site } = await sigleApiFetchClient.GET("/api/sites/{domain}", {
+  const headersList = await headers(),
+   domain = headersList.get("host") || "",
+   { data: site } = await sigleApiFetchClient.GET("/api/sites/{domain}", {
     params: {
       path: {
         domain,
@@ -26,9 +26,9 @@ export default async function sitemap() {
         username: site.address,
       },
     },
-  });
+  }),
 
-  const sitemap: MetadataRoute.Sitemap = [
+   sitemap: MetadataRoute.Sitemap = [
     // Static pages
     {
       url: site.url,

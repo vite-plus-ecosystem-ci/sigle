@@ -31,24 +31,24 @@ interface ContractCallState {
 }
 
 export function useContractCall(options: UseContractCallOptions = {}) {
-  const { onSuccess, onError, onCancel } = options;
-  const [state, setState] = useState<ContractCallState>({
+  const { onSuccess, onError, onCancel } = options,
+   [state, setState] = useState<ContractCallState>({
     loading: false,
     error: null,
     success: false,
     txId: null,
-  });
+  }),
 
-  const reset = useCallback(() => {
+   reset = useCallback(() => {
     setState({
       loading: false,
       error: null,
       success: false,
       txId: null,
     });
-  }, []);
+  }, []),
 
-  const contractCall = useCallback(
+   contractCall = useCallback(
     async (
       parameters: Omit<CallContractParams, "network" | "sponsored">,
     ): Promise<
@@ -63,10 +63,10 @@ export function useContractCall(options: UseContractCallOptions = {}) {
           txId: null,
         }));
 
-        const response = await request("stx_callContract", parameters);
+        const response = await request("stx_callContract", parameters),
 
         // For some reason, from time to time the txId is returned without the 0x prefix
-        const txId = response.txid
+         txId = response.txid
           ? !response.txid.startsWith("0x")
             ? `0x${response.txid}`
             : response.txid

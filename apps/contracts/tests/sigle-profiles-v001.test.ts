@@ -2,16 +2,16 @@
 import { Cl } from "@stacks/transactions";
 import { describe, expect, it } from "vite-plus/test";
 
-const contract = "sigle-profiles-v001";
-const accounts = simnet.getAccounts();
-const wallet1 = accounts.get("wallet_1")!;
-const wallet2 = accounts.get("wallet_2")!;
+const contract = "sigle-profiles-v001",
+ accounts = simnet.getAccounts(),
+ wallet1 = accounts.get("wallet_1")!,
+ wallet2 = accounts.get("wallet_2")!;
 
 describe(contract, () => {
   describe("set-profile", () => {
     it("allows setting a profile URI", () => {
-      const uri = "https://example.com/profile";
-      const { result } = simnet.callPublicFn(
+      const uri = "https://example.com/profile",
+       { result } = simnet.callPublicFn(
         contract,
         "set-profile",
         [Cl.stringAscii(uri)],
@@ -30,8 +30,8 @@ describe(contract, () => {
     });
 
     it("allows updating an existing profile URI", () => {
-      const initialUri = "https://example.com/profile1";
-      const updatedUri = "https://example.com/profile2";
+      const initialUri = "https://example.com/profile1",
+       updatedUri = "https://example.com/profile2";
 
       // Set initial URI
       simnet.callPublicFn(
@@ -61,8 +61,8 @@ describe(contract, () => {
     });
 
     it("handles empty URI", () => {
-      const emptyUri = "";
-      const { result } = simnet.callPublicFn(
+      const emptyUri = "",
+       { result } = simnet.callPublicFn(
         contract,
         "set-profile",
         [Cl.stringAscii(emptyUri)],

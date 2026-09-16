@@ -25,8 +25,8 @@ export const executeIndexerInitMintDetailsJob = async (
         },
       },
     },
-  });
-  const post = collectible.post;
+  }),
+   post = collectible.post;
 
   let endBlock = BigInt(data.endBlock);
   // This is required, idk why the chainhook value has + 1 to MAX_UINT

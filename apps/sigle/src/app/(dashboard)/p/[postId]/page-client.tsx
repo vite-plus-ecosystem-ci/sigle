@@ -23,9 +23,9 @@ interface Props {
 }
 
 export function PostClientPage(props: Props) {
-  const params = use(props.params);
+  const params = use(props.params),
 
-  const { data: post } = sigleApiClient.useSuspenseQuery(
+   { data: post } = sigleApiClient.useSuspenseQuery(
     "get",
     "/api/posts/{postId}",
     {

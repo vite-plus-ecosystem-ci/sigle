@@ -10,22 +10,22 @@ import type { EditorPostFormData } from "../EditorFormProvider";
 import { useEditorStore } from "../store";
 
 export const EditorSave = () => {
-  const params = useParams();
-  const postId = params.postId as string;
-  const searchParams = useSearchParams();
-  const forceSave = searchParams.get("forceSave") === "true";
-  const [saveState, setSaveState] = useState<
+  const params = useParams(),
+   postId = params.postId as string,
+   searchParams = useSearchParams(),
+   forceSave = searchParams.get("forceSave") === "true",
+   [saveState, setSaveState] = useState<
     "idle" | "saving" | "error" | "saved"
-  >("idle");
-  const { watch, getValues } = useFormContext<EditorPostFormData>();
-  const type = watch("type");
-  const { mutate: updatePost } = sigleApiClient.useMutation(
+  >("idle"),
+   { watch, getValues } = useFormContext<EditorPostFormData>(),
+   type = watch("type"),
+   { mutate: updatePost } = sigleApiClient.useMutation(
     "post",
     "/api/protected/drafts/{draftId}/update",
-  );
-  const editor = useEditorStore((state) => state.editor);
+  ),
+   editor = useEditorStore((state) => state.editor),
 
-  const onAutoSave = useDebouncedCallback(
+   onAutoSave = useDebouncedCallback(
     () => {
       if (!editor) return;
       const values = getValues();

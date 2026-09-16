@@ -8,13 +8,13 @@ import { ShareSocial } from "./ShareSocial";
 const scrollToElement = (id: string, offset = 16): void => {
   const element = document.getElementById(id);
   if (element) {
-    const rect = element.getBoundingClientRect();
-    const top = rect.top + window.scrollY - offset;
+    const rect = element.getBoundingClientRect(),
+     top = rect.top + window.scrollY - offset;
     window.scrollTo({ top, behavior: "smooth" });
   }
-};
+},
 
-const useIntersectionObserver = (setActiveId: (id: string) => void) => {
+ useIntersectionObserver = (setActiveId: (id: string) => void) => {
   const headingElementsRef = useRef<Record<string, IntersectionObserverEntry>>(
     {},
   );
@@ -44,13 +44,13 @@ const useIntersectionObserver = (setActiveId: (id: string) => void) => {
         );
         setActiveId(sortedVisibleHeadings[0].target.id);
       }
-    };
+    },
 
-    const observer = new IntersectionObserver(callback, {
+     observer = new IntersectionObserver(callback, {
       rootMargin: "0px 0px -40% 0px",
-    });
+    }),
 
-    const headingElements = Array.from(
+     headingElements = Array.from(
       document.querySelectorAll("h2, h3"),
     ) as HTMLElement[];
 
@@ -71,8 +71,8 @@ interface TableOfContentsProps {
 }
 
 export const TableOfContents = ({ items, post }: TableOfContentsProps) => {
-  const router = useRouter();
-  const [activeId, setActiveId] = useState();
+  const router = useRouter(),
+   [activeId, setActiveId] = useState();
   // oxlint-disable-next-line typescript/no-explicit-any
   useIntersectionObserver(setActiveId as any);
 

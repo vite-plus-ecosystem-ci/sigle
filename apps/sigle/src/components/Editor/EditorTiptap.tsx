@@ -53,19 +53,19 @@ import { useEditorStore } from "./store";
 const lowlight = createLowlight(common);
 
 export const EditorTipTap = () => {
-  const params = useParams();
-  const postId = params.postId as string;
-  const posthog = usePostHog();
-  const { width } = useWindowSize();
-  const isMobile = width ? width < 768 : false;
-  const { setValue, getValues } = useFormContext<EditorPostFormData>();
-  const setEditor = useEditorStore((state) => state.setEditor);
-  const { mutateAsync: uploadMedia } = sigleApiClient.useMutation(
+  const params = useParams(),
+   postId = params.postId as string,
+   posthog = usePostHog(),
+   { width } = useWindowSize(),
+   isMobile = width ? width < 768 : false,
+   { setValue, getValues } = useFormContext<EditorPostFormData>(),
+   setEditor = useEditorStore((state) => state.setEditor),
+   { mutateAsync: uploadMedia } = sigleApiClient.useMutation(
     "post",
     "/api/protected/drafts/{draftId}/upload-media",
-  );
+  ),
 
-  const editor = useEditor({
+   editor = useEditor({
     immediatelyRender: true,
     extensions: [
       TipTapCharacterCount,

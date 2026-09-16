@@ -28,27 +28,27 @@ export const PostShareDialog = ({
   onOpenChange,
   post,
 }: PostShareDialogProps) => {
-  const [isCopied, setIsCopied] = useState(false);
-  const { data: session } = useSession();
-  const postLink = `${env.NEXT_PUBLIC_APP_URL}${Routes.post(
+  const [isCopied, setIsCopied] = useState(false),
+   { data: session } = useSession(),
+   postLink = `${env.NEXT_PUBLIC_APP_URL}${Routes.post(
     { postId: post.id },
     {
       search: {
         referral: post.collectible && session ? session.user.id : undefined,
       },
     },
-  )}`;
+  )}`,
 
-  const onCopy = () => {
+   onCopy = () => {
     navigator.clipboard.writeText(postLink).then(() => {
       setIsCopied(true);
       setTimeout(() => {
         setIsCopied(false);
       }, 2000);
     });
-  };
+  },
 
-  const metaTitleAttribute = post.metaTitle || post.title;
+   metaTitleAttribute = post.metaTitle || post.title;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

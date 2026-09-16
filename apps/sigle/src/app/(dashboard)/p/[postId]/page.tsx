@@ -11,9 +11,9 @@ interface Props {
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const params = await props.params;
+  const params = await props.params,
 
-  const { data: post } = await sigleApiFetchClient.GET("/api/posts/{postId}", {
+   { data: post } = await sigleApiFetchClient.GET("/api/posts/{postId}", {
     params: {
       path: {
         postId: params.postId,
@@ -24,8 +24,8 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     notFound();
   }
 
-  const title = post.metaTitle || post.title;
-  const description = post.metaDescription || post.excerpt;
+  const title = post.metaTitle || post.title,
+   description = post.metaDescription || post.excerpt;
 
   return {
     title: `${title} | Sigle`,

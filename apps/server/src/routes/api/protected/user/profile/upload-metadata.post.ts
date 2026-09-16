@@ -57,9 +57,9 @@ defineRouteMeta({
 });
 
 export default defineEventHandler(async (event) => {
-  const body = (await event.req.json()) as { metadata?: object };
+  const body = (await event.req.json()) as { metadata?: object },
 
-  const parsedMetadata = ProfileMetadataSchema.safeParse(
+   parsedMetadata = ProfileMetadataSchema.safeParse(
     body ? body.metadata : {},
   );
   if (!parsedMetadata.success) {

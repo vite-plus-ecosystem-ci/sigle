@@ -97,8 +97,8 @@ const Draft = ({
   draft: paths["/api/protected/drafts/list"]["get"]["responses"][200]["content"]["application/json"][0];
   refetchDrafts: () => Promise<unknown>;
 }) => {
-  const [isDeleting, setIsDeleting] = useState(false);
-  const { mutateAsync: deletePost } = sigleApiClient.useMutation(
+  const [isDeleting, setIsDeleting] = useState(false),
+   { mutateAsync: deletePost } = sigleApiClient.useMutation(
     "post",
     "/api/protected/drafts/{draftId}/delete",
     {
@@ -108,9 +108,9 @@ const Draft = ({
         });
       },
     },
-  );
+  ),
 
-  const onDelete = async () => {
+   onDelete = async () => {
     // oxlint-disable-next-line no-alert
     const ok = confirm("Are you sure you want to delete this draft?");
     if (!ok) return;
@@ -125,11 +125,11 @@ const Draft = ({
     });
     await refetchDrafts();
     toast.message("Draft deleted");
-  };
+  },
 
-  const isTxPending = draft.txStatus === "pending";
+   isTxPending = draft.txStatus === "pending",
 
-  const heading =
+   heading =
     draft.metaTitle || draft.title ? (
       <h3 className="line-clamp-2 text-lg font-medium">
         {draft.metaTitle || draft.title}

@@ -39,10 +39,10 @@ export const EmbedComponent = (props: NodeViewProps) => {
     formState: { errors },
   } = useForm({
     resolver: zodResolver(embedSchema),
-  });
+  }),
 
-  const url: string | undefined = props.node.attrs.url;
-  const embedType = useMemo(() => {
+   url: string | undefined = props.node.attrs.url,
+   embedType = useMemo(() => {
     if (!url) return undefined;
     if (isValidTwitterUrl(url)) return "twitter";
     if (isValidYoutubeUrl(url)) return "video";
@@ -64,10 +64,10 @@ export const EmbedComponent = (props: NodeViewProps) => {
     });
 
     props.editor.commands.createParagraphNear();
-  });
+  }),
 
   // Remove input if empty and user presses backspace or delete key
-  const onKeyDown = (event: React.KeyboardEvent) => {
+   onKeyDown = (event: React.KeyboardEvent) => {
     if (
       (!getValues().url && event.key === "Backspace") ||
       event.key === "Delete"

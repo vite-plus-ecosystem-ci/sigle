@@ -18,8 +18,8 @@ import {
 } from "../ui/empty";
 
 export const LatestPost = () => {
-  const { data: session } = useSession();
-  const { data: posts } = sigleApiClient.useSuspenseQuery(
+  const { data: session } = useSession(),
+   { data: posts } = sigleApiClient.useSuspenseQuery(
     "get",
     "/api/posts/list",
     {
@@ -30,8 +30,8 @@ export const LatestPost = () => {
         },
       },
     },
-  );
-  const post = posts.results[0];
+  ),
+   post = posts.results[0];
 
   return (
     <div>

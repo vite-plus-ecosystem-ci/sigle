@@ -33,11 +33,11 @@ interface EditorBubbleMenuProps {
 }
 
 export const EditorBubbleMenu = ({ editor }: EditorBubbleMenuProps) => {
-  const linkOpen = useBubbleMenuStore((state) => state.linkOpen);
-  const setLinkValue = useBubbleMenuStore((state) => state.setLinkValue);
-  const setLinkOpen = useBubbleMenuStore((state) => state.setLinkOpen);
+  const linkOpen = useBubbleMenuStore((state) => state.linkOpen),
+   setLinkValue = useBubbleMenuStore((state) => state.setLinkValue),
+   setLinkOpen = useBubbleMenuStore((state) => state.setLinkOpen),
 
-  const {
+   {
     isActiveBold,
     isActiveItalic,
     isActiveUnderline,
@@ -79,9 +79,9 @@ export const EditorBubbleMenu = ({ editor }: EditorBubbleMenuProps) => {
 
     setLinkOpen(true);
     setLinkValue(existingHref);
-  };
+  },
 
-  const resetLink = () => {
+   resetLink = () => {
     setLinkOpen(false);
     setLinkValue("");
   };
@@ -99,21 +99,21 @@ export const EditorBubbleMenu = ({ editor }: EditorBubbleMenuProps) => {
       shouldShow={({ editor, state, from, to, view, element }) => {
         // Take the initial implementation of the plugin and extends it
         // https://github.com/ueberdosis/tiptap/blob/main/packages/extension-bubble-menu/src/bubble-menu-plugin.ts#L195
-        const { doc, selection } = state;
-        const { empty } = selection;
+        const { doc, selection } = state,
+         { empty } = selection,
 
         // Sometime check for `empty` is not enough.
         // Doubleclick an empty paragraph returns a node size of 2.
         // So we check also for an empty text size.
-        const isEmptyTextBlock =
-          !doc.textBetween(from, to).length && isTextSelection(state.selection);
+         isEmptyTextBlock =
+          !doc.textBetween(from, to).length && isTextSelection(state.selection),
 
         // When clicking on a element inside the bubble menu the editor "blur" event
         // is called and the bubble menu item is focussed. In this case we should
         // consider the menu as part of the editor and keep showing the menu
-        const isChildOfMenu = element.contains(document.activeElement);
+         isChildOfMenu = element.contains(document.activeElement),
 
-        const hasEditorFocus = view.hasFocus() || isChildOfMenu;
+         hasEditorFocus = view.hasFocus() || isChildOfMenu;
 
         if (
           !hasEditorFocus ||

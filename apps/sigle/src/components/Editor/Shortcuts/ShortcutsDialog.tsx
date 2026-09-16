@@ -56,9 +56,9 @@ const essentials = [
     winCommand: ["Shift", "Enter"],
     macCommand: ["Shift", "Enter"],
   },
-];
+],
 
-const textFormatting = [
+ textFormatting = [
   {
     action: "Bold",
     winCommand: ["Control", "B"],
@@ -89,9 +89,9 @@ const textFormatting = [
     winCommand: ["Control", "K"],
     macCommand: ["Cmd", "K"],
   },
-];
+],
 
-const paragraphFormatting = [
+ paragraphFormatting = [
   {
     action: "Apply normal text style",
     winCommand: ["Control", "Alt", "0"],
@@ -127,9 +127,9 @@ const paragraphFormatting = [
     winCommand: ["Control", "Alt", "C"],
     macCommand: ["Cmd", "Alt", "C"],
   },
-];
+],
 
-const textSelection = [
+ textSelection = [
   {
     action: "Select all",
     winCommand: ["Control", "A"],
@@ -165,9 +165,9 @@ const textSelection = [
     winCommand: ["Control", "Shift", "↓"],
     macCommand: ["Cmd", "Shift", "↓"],
   },
-];
+],
 
-const shortcuts = [
+ shortcuts = [
   {
     value: "essentials",
     items: essentials,

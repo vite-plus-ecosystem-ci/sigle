@@ -32,14 +32,14 @@ const useSessionStore = create<SessionState>()((set) => ({
 }));
 
 export const useStacksLogin = () => {
-  const posthog = usePostHog();
-  const { user, setUser } = useSessionStore();
-  const { refetch: refetchSession } = useSession();
+  const posthog = usePostHog(),
+   { user, setUser } = useSessionStore(),
+   { refetch: refetchSession } = useSession();
 
   useEffect(() => {
     if (isConnected()) {
-      const data = getLocalStorage();
-      const stxAddress = data?.addresses.stx[0];
+      const data = getLocalStorage(),
+       stxAddress = data?.addresses.stx[0];
       if (!stxAddress) return;
       const user = {
         stxAddress: stxAddress.address,
@@ -56,9 +56,9 @@ export const useStacksLogin = () => {
         // TODO network is not working in xverse, it throws an error
         // see https://github.com/hirosystems/connect/issues/460
         // network: env.NEXT_PUBLIC_STACKS_ENV,
-      });
+      }),
 
-      const stxAddress = response.addresses.find((address) =>
+       stxAddress = response.addresses.find((address) =>
         env.NEXT_PUBLIC_STACKS_ENV === "mainnet"
           ? address.address.startsWith("SP")
           : address.address.startsWith("ST"),
@@ -78,9 +78,9 @@ export const useStacksLogin = () => {
       console.error(error);
       posthog.capture("user_login_cancel");
     }
-  };
+  },
 
-  const signMessage = async (user: UserData) => {
+   signMessage = async (user: UserData) => {
     posthog.capture("user_login_sign_message");
 
     const nonceData = await authClient.siws.nonce({ address: user.stxAddress });
@@ -128,9 +128,9 @@ export const useStacksLogin = () => {
     refetchSession();
     posthog.capture("user_login_sign_message_success");
     toast.success("You are now logged in");
-  };
+  },
 
-  const logout = async () => {
+   logout = async () => {
     posthog.capture("user_logout");
     disconnect();
     await signOut();

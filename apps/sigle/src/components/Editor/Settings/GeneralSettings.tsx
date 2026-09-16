@@ -5,39 +5,39 @@ import { cn } from "@/lib/cn";
 import type { EditorPostFormData } from "../EditorFormProvider";
 
 export const GeneralSettings = () => {
-  const { setValue, watch } = useFormContext<EditorPostFormData>();
-  const tags = watch("tags") || [];
+  const { setValue, watch } = useFormContext<EditorPostFormData>(),
+   tags = watch("tags") || [],
 
-  const handleDelete = (index: number) => {
+   handleDelete = (index: number) => {
     setValue(
       "tags",
       tags?.filter((_, i) => i !== index),
     );
-  };
+  },
 
-  const handleTagUpdate = (index: number, newTag: Tag) => {
+   handleTagUpdate = (index: number, newTag: Tag) => {
     const updatedTags = [...tags];
     updatedTags.splice(index, 1, newTag.id);
     setValue("tags", updatedTags);
-  };
+  },
 
-  const handleAddition = (tag: Tag) => {
+   handleAddition = (tag: Tag) => {
     setValue("tags", [...tags, tag.id]);
-  };
+  },
 
-  const handleDrag = (tag: Tag, currPos: number, newPos: number) => {
+   handleDrag = (tag: Tag, currPos: number, newPos: number) => {
     const newTags = tags.slice();
     newTags.splice(currPos, 1);
     newTags.splice(newPos, 0, tag.id);
     // re-render
     setValue("tags", newTags);
-  };
+  },
 
-  const handleClearAll = () => {
+   handleClearAll = () => {
     setValue("tags", []);
-  };
+  },
 
-  const formattedTags = tags.map((tag) => ({
+   formattedTags = tags.map((tag) => ({
     id: tag,
     text: tag,
     className: "",

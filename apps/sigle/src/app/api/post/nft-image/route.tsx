@@ -17,9 +17,9 @@ const size = {
 };
 
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
+  const { searchParams } = new URL(request.url),
 
-  const validationResult = paramsSchema.safeParse({
+   validationResult = paramsSchema.safeParse({
     title: searchParams.get("title"),
     username: searchParams.get("username"),
     coverImage: searchParams.get("coverImage") || undefined,
@@ -48,13 +48,13 @@ export async function GET(request: Request) {
     return Response.json({ error: "User not found" }, { status: 404 });
   }
 
-  const title = validationResult.data.title;
-  const avatar = user.profile?.pictureUri
+  const title = validationResult.data.title,
+   avatar = user.profile?.pictureUri
     ? resolveImageUrl(user.profile.pictureUri.id)
-    : undefined;
-  const username = user.profile?.displayName;
-  const handle = user.id;
-  const coverImage = validationResult.data.coverImage
+    : undefined,
+   username = user.profile?.displayName,
+   handle = user.id,
+   coverImage = validationResult.data.coverImage
     ? resolveImageUrl(validationResult.data.coverImage)
     : undefined;
 

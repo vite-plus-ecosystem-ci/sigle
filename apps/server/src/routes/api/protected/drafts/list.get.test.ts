@@ -62,9 +62,9 @@ describe("api/protected/drafts/list.get", () => {
       path: "/api/protected/drafts",
       method: "GET",
       headers: {},
-    } as unknown as H3Event;
+    } as unknown as H3Event,
 
-    const result = await handler(mockEvent);
+     result = await handler(mockEvent);
 
     expect(result).toHaveLength(2);
   });
@@ -79,9 +79,9 @@ describe("api/protected/drafts/list.get", () => {
       path: "/api/protected/drafts",
       method: "GET",
       headers: {},
-    } as unknown as H3Event;
+    } as unknown as H3Event,
 
-    const result = await handler(mockEvent);
+     result = await handler(mockEvent);
 
     expect(result).toHaveLength(0);
   });
@@ -99,9 +99,9 @@ describe("api/protected/drafts/list.get", () => {
       path: "/api/protected/drafts",
       method: "GET",
       headers: {},
-    } as unknown as H3Event;
+    } as unknown as H3Event,
 
-    const result = await handler(mockEvent);
+     result = await handler(mockEvent);
 
     expect(result).toHaveLength(2);
   });

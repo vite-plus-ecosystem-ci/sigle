@@ -53,19 +53,19 @@ describe(executeNewPostJob, () => {
   it("creates a new post and creates its initial PostRevision", async () => {
     await createTestUser({ id: userId });
 
-    const baseTokenUri = "ar://tx-metadata-id";
-    const postId = "post-123";
-    const txId = "tx-456";
+    const baseTokenUri = "ar://tx-metadata-id",
+     postId = "post-123",
+     txId = "tx-456",
 
-    const { contract } = sigleClient.generatePostContract({
+     { contract } = sigleClient.generatePostContract({
       metadata: baseTokenUri,
       collectInfo: {
         amount: 1000n,
         maxSupply: BigInt(MAX_UINT),
       },
-    });
+    }),
 
-    const mockPostMetadata = {
+     mockPostMetadata = {
       $schema: "https://json-schemas.sigle.io/posts/1.0.0.json",
       content: {
         id: postId,

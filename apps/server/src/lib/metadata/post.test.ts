@@ -20,9 +20,9 @@ const mockFetch = vi.fn();
 
 vi.stubGlobal("fetch", mockFetch);
 
-const { getMetadataFromUri } = await import("./post");
+const { getMetadataFromUri } = await import("./post"),
 
-const validMetadata = {
+ validMetadata = {
   $schema: PostMetadataSchemaId.LATEST,
   signature: "mock-signature",
   content: {

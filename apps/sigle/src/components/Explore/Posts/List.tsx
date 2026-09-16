@@ -19,13 +19,13 @@ export const ExplorePostsList = () => {
         },
       },
     },
-  );
+  ),
 
-  const [posts, setPosts] = useState(initialPosts.results || []);
-  const [page, setPage] = useState(2); // Start from page 2 since page 1 is already fetched
-  const [isLoading, setIsLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
-  const { ref, inView } = useInView({
+   [posts, setPosts] = useState(initialPosts.results || []),
+   [page, setPage] = useState(2), // Start from page 2 since page 1 is already fetched
+   [isLoading, setIsLoading] = useState(false),
+   [hasMore, setHasMore] = useState(true),
+   { ref, inView } = useInView({
     threshold: 1.0,
   });
 
@@ -41,8 +41,8 @@ export const ExplorePostsList = () => {
               page,
             },
           },
-        });
-        const newPosts = response.data?.results || [];
+        }),
+         newPosts = response.data?.results || [];
         setPosts((prevPosts) => [...prevPosts, ...newPosts]);
         setHasMore(newPosts.length > 0); // If no more posts, stop loading
       } catch (error) {

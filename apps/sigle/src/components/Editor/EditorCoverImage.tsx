@@ -21,19 +21,19 @@ import { sigleApiClient } from "@/lib/sigle";
 import type { EditorPostFormData } from "./EditorFormProvider";
 
 export const EditorCoverImage = () => {
-  const params = useParams();
-  const postId = params.postId as string;
-  const posthog = usePostHog();
-  const [preview, setPreview] = useState<string | null>(null);
-  const { setValue, watch } = useFormContext<EditorPostFormData>();
-  const watchCoverImage = watch("coverImage");
-  const { mutateAsync: uploadMedia, isPending: loadingUploadImage } =
+  const params = useParams(),
+   postId = params.postId as string,
+   posthog = usePostHog(),
+   [preview, setPreview] = useState<string | null>(null),
+   { setValue, watch } = useFormContext<EditorPostFormData>(),
+   watchCoverImage = watch("coverImage"),
+   { mutateAsync: uploadMedia, isPending: loadingUploadImage } =
     sigleApiClient.useMutation(
       "post",
       "/api/protected/drafts/{draftId}/upload-media",
-    );
+    ),
 
-  const onDrop = useCallback(
+   onDrop = useCallback(
     async (acceptedFiles: File[]) => {
       const file = acceptedFiles[0];
       if (!file) return;
@@ -84,9 +84,9 @@ export const EditorCoverImage = () => {
   useEffect(() => {
     const autoUploadImage = async () => {
       if (watchCoverImage?.startsWith("https://gaia.blockstack.org/hub/")) {
-        const response = await fetch(watchCoverImage);
-        const blob = await response.blob();
-        const file = new File([blob], "cover-image", { type: blob.type });
+        const response = await fetch(watchCoverImage),
+         blob = await response.blob(),
+         file = new File([blob], "cover-image", { type: blob.type });
         onDrop([file]);
       }
     };
@@ -100,9 +100,9 @@ export const EditorCoverImage = () => {
       "image/jpeg": [],
       "image/png": [],
     },
-  });
+  }),
 
-  const onRemove: MouseEventHandler<HTMLButtonElement> = (e) => {
+   onRemove: MouseEventHandler<HTMLButtonElement> = (e) => {
     // Prevent the form from submitting
     e.preventDefault();
     e.stopPropagation();
@@ -110,9 +110,9 @@ export const EditorCoverImage = () => {
     posthog.capture("cover_image_removed", {
       postId,
     });
-  };
+  },
 
-  const resolvedWatchCoverImage = watchCoverImage
+   resolvedWatchCoverImage = watchCoverImage
     ? resolveImageUrl(watchCoverImage, { gateway: true })
     : null;
 

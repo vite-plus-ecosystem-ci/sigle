@@ -70,9 +70,9 @@ describe("api/protected/drafts/[draftId]/delete.post", () => {
       path: "/api/protected/drafts/draft-1/delete",
       method: "POST",
       headers: {},
-    } as unknown as H3Event;
+    } as unknown as H3Event,
 
-    const result = await handler(mockEvent);
+     result = await handler(mockEvent);
 
     expect(result).toBe(true);
 

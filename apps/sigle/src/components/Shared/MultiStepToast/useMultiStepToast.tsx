@@ -19,10 +19,10 @@ interface UseMultiStepToastReturn<T extends string> {
 export function useMultiStepToast<T extends string>(
   options: UseMultiStepToastOptions<T>,
 ): UseMultiStepToastReturn<T> {
-  const { steps: stepDefinitions, successMessage, onError } = options;
-  const toastId = "multi-step-toast";
+  const { steps: stepDefinitions, successMessage, onError } = options,
+   toastId = "multi-step-toast",
 
-  const multiStep = useMultiStep({
+   multiStep = useMultiStep({
     steps: stepDefinitions,
     onStepChange: () => {
       const { steps } = useMultiStepToastStore.getState();
@@ -30,9 +30,9 @@ export function useMultiStepToast<T extends string>(
         id: toastId,
       });
     },
-  });
+  }),
 
-  const start = () => {
+   start = () => {
     multiStep.start();
     const { steps } = useMultiStepToastStore.getState();
 
@@ -41,12 +41,12 @@ export function useMultiStepToast<T extends string>(
       duration: Infinity,
       closeButton: false,
     });
-  };
+  },
 
-  const completeStep = (id: T) => {
-    const { steps } = useMultiStepToastStore.getState();
-    const currentIndex = steps.findIndex((s) => s.id === id);
-    const isLastStep = currentIndex === steps.length - 1;
+   completeStep = (id: T) => {
+    const { steps } = useMultiStepToastStore.getState(),
+     currentIndex = steps.findIndex((s) => s.id === id),
+     isLastStep = currentIndex === steps.length - 1;
 
     multiStep.completeStep(id);
 
@@ -62,9 +62,9 @@ export function useMultiStepToast<T extends string>(
     toast(() => <MultiStepToast steps={updatedSteps} />, {
       id: toastId,
     });
-  };
+  },
 
-  const setStepError = (id: T, errorMessage: string) => {
+   setStepError = (id: T, errorMessage: string) => {
     multiStep.setStepError(id, errorMessage);
     const { steps } = useMultiStepToastStore.getState();
 
@@ -75,9 +75,9 @@ export function useMultiStepToast<T extends string>(
     });
 
     onError?.(new Error(errorMessage), id);
-  };
+  },
 
-  const dismiss = () => {
+   dismiss = () => {
     multiStep.reset();
     toast.dismiss(toastId);
   };

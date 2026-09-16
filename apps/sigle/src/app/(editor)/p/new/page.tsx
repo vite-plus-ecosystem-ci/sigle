@@ -9,8 +9,8 @@ import { sigleApiClient } from "@/lib/sigle";
 import { PageEditorSkeleton } from "./loading";
 
 export default function PostCreate() {
-  const router = useRouter();
-  const { mutate: createPost } = sigleApiClient.useMutation(
+  const router = useRouter(),
+   { mutate: createPost } = sigleApiClient.useMutation(
     "post",
     "/api/protected/drafts/create",
     {

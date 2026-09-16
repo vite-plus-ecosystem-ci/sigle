@@ -60,9 +60,9 @@ describe("api/protected/drafts/create.post", () => {
       path: "/api/protected/drafts/create",
       method: "POST",
       headers: {},
-    } as unknown as H3Event;
+    } as unknown as H3Event,
 
-    const result = await handler(mockEvent);
+     result = await handler(mockEvent);
 
     expect(result).toHaveProperty("id");
   });

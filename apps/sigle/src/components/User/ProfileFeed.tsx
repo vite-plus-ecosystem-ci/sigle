@@ -14,9 +14,9 @@ interface ProfileFeedProps {
 }
 
 export const ProfileFeed = ({ user }: ProfileFeedProps) => {
-  const { data: session } = useSession();
+  const { data: session } = useSession(),
   // TODO useSuspenseQuery or load more button to decide
-  const { data: posts } = sigleApiClient.useSuspenseQuery(
+   { data: posts } = sigleApiClient.useSuspenseQuery(
     "get",
     "/api/posts/list",
     {

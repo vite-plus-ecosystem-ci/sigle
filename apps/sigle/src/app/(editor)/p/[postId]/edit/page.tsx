@@ -15,9 +15,9 @@ interface PostEditPageProps {
 }
 
 export default function PostEditPage(props: PostEditPageProps) {
-  const params = use(props.params);
+  const params = use(props.params),
 
-  const { data: post } = sigleApiClient.useSuspenseQuery(
+   { data: post } = sigleApiClient.useSuspenseQuery(
     "get",
     "/api/protected/drafts/{draftId}",
     {

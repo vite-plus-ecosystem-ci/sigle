@@ -52,9 +52,9 @@ describe("api/protected/user/whitelisted.get", () => {
       path: "/api/protected/user/whitelisted",
       method: "GET",
       headers: {},
-    } as unknown as H3Event;
+    } as unknown as H3Event,
 
-    const result = await handler(mockEvent);
+     result = await handler(mockEvent);
 
     expect(result).toStrictEqual({ whitelisted: true });
   });
@@ -69,9 +69,9 @@ describe("api/protected/user/whitelisted.get", () => {
       path: "/api/protected/user/whitelisted",
       method: "GET",
       headers: {},
-    } as unknown as H3Event;
+    } as unknown as H3Event,
 
-    const result = await handler(mockEvent);
+     result = await handler(mockEvent);
 
     expect(result).toStrictEqual({ whitelisted: false });
   });

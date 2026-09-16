@@ -85,8 +85,8 @@ export async function waitForTransaction(options: {
     pollingInterval = 2_000,
     timeout = 180_000,
     retryErrorDelay = 10_000,
-  } = options;
-  const startTime = Date.now();
+  } = options,
+   startTime = Date.now();
 
   while (Date.now() - startTime < timeout) {
     const txResult = await getStacksTransaction(txId);

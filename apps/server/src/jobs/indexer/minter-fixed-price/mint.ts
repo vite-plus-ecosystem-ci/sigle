@@ -37,12 +37,12 @@ export const executeIndexerMintJob = async (
     select: {
       id: true,
     },
-  });
+  }),
 
-  const existingUserIds = new Set(existingUsers.map((user) => user.id));
+   existingUserIds = new Set(existingUsers.map((user) => user.id)),
 
   // Create any users that don't exist yet
-  const usersToCreate = Array.from(userAddresses)
+   usersToCreate = Array.from(userAddresses)
     .filter((address) => !existingUserIds.has(address))
     .map((address) => ({
       id: address,
@@ -71,8 +71,8 @@ export const executeIndexerMintJob = async (
         },
       },
     },
-  });
-  const updatedPost = updatedCollectible.post;
+  }),
+   updatedPost = updatedCollectible.post;
 
   for (const event of data.nftMintEvents) {
     const postNftData = {

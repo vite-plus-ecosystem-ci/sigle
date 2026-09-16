@@ -15,9 +15,9 @@ const filterCommands = (
         ),
     )
     .slice(0, query.length > 0 ? 10 : 20);
-};
+},
 
-const mockCommands: SlashCommandsCommand[] = [
+ mockCommands: SlashCommandsCommand[] = [
   {
     title: "Plain Text",
     description: "Normal paragraph style",

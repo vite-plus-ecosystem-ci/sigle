@@ -27,8 +27,8 @@ vi.mock<typeof import("..")>(
     }) as unknown as typeof import(".."),
 );
 
-const mockStacksApiClientGET = vi.fn();
-const mockGetStacksTransaction = vi.fn();
+const mockStacksApiClientGET = vi.fn(),
+ mockGetStacksTransaction = vi.fn();
 
 // oxlint-disable-next-line consistent-type-imports
 vi.mock<typeof import("@/lib/stacks")>(
@@ -113,9 +113,9 @@ describe("executeIndexerIndexProfilesJob", () => {
         },
       },
     };
-  };
+  },
 
-  const createSuccessTransaction = (
+   createSuccessTransaction = (
     txId: string,
     blockHeight: number,
     timestamp: number,
@@ -412,8 +412,8 @@ describe("executeIndexerIndexProfilesJob", () => {
         userId,
         `https://example.com/profile-${i}`,
       ),
-    );
-    const eventsPage2 = [
+    ),
+     eventsPage2 = [
       createSetProfileEvent("0xtx50", userId, "https://example.com/profile-50"),
       createSetProfileEvent("0xtx51", userId, "https://example.com/profile-51"),
     ];
@@ -478,8 +478,8 @@ describe("executeIndexerIndexProfilesJob", () => {
       const heights: Record<string, number> = {
         "0xtx1": 100,
         "0xtx2": 101,
-      };
-      const timestamps: Record<string, number> = {
+      },
+       timestamps: Record<string, number> = {
         "0xtx1": 1700000000,
         "0xtx2": 1700000010,
       };
@@ -524,15 +524,15 @@ describe("executeIndexerIndexProfilesJob", () => {
         userId,
         `https://example.com/profile-${i}`,
       ),
-    );
-    const eventsPage2 = Array.from({ length: 50 }, (_, i) =>
+    ),
+     eventsPage2 = Array.from({ length: 50 }, (_, i) =>
       createSetProfileEvent(
         `0xtx${50 + i}`,
         userId,
         `https://example.com/profile-${50 + i}`,
       ),
-    );
-    const eventsPage3 = [
+    ),
+     eventsPage3 = [
       createSetProfileEvent(
         "0xtx100",
         userId,

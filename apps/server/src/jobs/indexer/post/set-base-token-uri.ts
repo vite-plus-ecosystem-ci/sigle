@@ -15,9 +15,9 @@ export const indexerSetBaseTokenUriSchema = z.object({
 export const executeIndexerSetBaseTokenUriJob = async (
   data: z.TypeOf<typeof indexerSetBaseTokenUriSchema>["data"],
 ) => {
-  const metadata = await getMetadataFromUri(data.uri);
+  const metadata = await getMetadataFromUri(data.uri),
 
-  const collectible = await prisma.collectible.findUnique({
+   collectible = await prisma.collectible.findUnique({
     select: {
       post: {
         select: {

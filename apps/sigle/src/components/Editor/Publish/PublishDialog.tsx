@@ -31,33 +31,33 @@ interface PublishDialogProps {
 }
 
 export const PublishDialog = ({ postId }: PublishDialogProps) => {
-  const { data: session } = useSession();
-  const posthog = usePostHog();
-  const router = useRouter();
-  const { handleSubmit, watch } = useFormContext<EditorPostFormData>();
-  const type = watch("type");
-  const editor = useEditorStore((state) => state.editor);
-  const publishOpen = useEditorStore((state) => state.publishOpen);
-  const setPublishOpen = useEditorStore((state) => state.setPublishOpen);
-  const [publishingLoading, setPublishingLoading] = useState(false);
-  const { mutateAsync: uploadMetadata } = sigleApiClient.useMutation(
+  const { data: session } = useSession(),
+   posthog = usePostHog(),
+   router = useRouter(),
+   { handleSubmit, watch } = useFormContext<EditorPostFormData>(),
+   type = watch("type"),
+   editor = useEditorStore((state) => state.editor),
+   publishOpen = useEditorStore((state) => state.publishOpen),
+   setPublishOpen = useEditorStore((state) => state.setPublishOpen),
+   [publishingLoading, setPublishingLoading] = useState(false),
+   { mutateAsync: uploadMetadata } = sigleApiClient.useMutation(
     "post",
     "/api/protected/drafts/{draftId}/upload-metadata",
-  );
+  ),
 
-  const { steps, start, completeStep, setStepError, reset } = useMultiStep({
+   { steps, start, completeStep, setStepError, reset } = useMultiStep({
     steps: [
       { id: "preparing", title: "Preparing metadata & cover image" },
       { id: "signature", title: "Signing with Stacks wallet" },
       { id: "arweave", title: "Uploading data to Arweave" },
     ] as const,
-  });
+  }),
 
-  const hasError = steps.some((step) => step.status === "error");
-  const isSignaturePending =
-    steps.find((s) => s.id === "signature")?.status === "pending";
+   hasError = steps.some((step) => step.status === "error"),
+   isSignaturePending =
+    steps.find((s) => s.id === "signature")?.status === "pending",
 
-  const onSubmit = () => {
+   onSubmit = () => {
     handleSubmit(
       async (data) => {
         if (!session) return;
@@ -109,9 +109,9 @@ export const PublishDialog = ({ postId }: PublishDialogProps) => {
 
         let signature = "";
         try {
-          const { signature: _, ...metadataToSign } = metadata;
-          const message = JSON.stringify(metadataToSign);
-          const response = await request("stx_signMessage", {
+          const { signature: _, ...metadataToSign } = metadata,
+           message = JSON.stringify(metadataToSign),
+           response = await request("stx_signMessage", {
             message,
           });
           signature = response.signature;
@@ -190,14 +190,14 @@ export const PublishDialog = ({ postId }: PublishDialogProps) => {
         });
       },
     )();
-  };
+  },
 
-  const handleBackToReview = () => {
+   handleBackToReview = () => {
     setPublishingLoading(false);
     reset();
-  };
+  },
 
-  const onOpenChange = (open: boolean) => {
+   onOpenChange = (open: boolean) => {
     if (!publishingLoading) {
       setPublishOpen(open);
     }

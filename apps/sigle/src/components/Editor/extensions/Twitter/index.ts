@@ -89,8 +89,8 @@ const Embed = Node.create({
       {
         tag: "div[data-embed]",
         getAttrs: (element) => {
-          const url = (element as HTMLElement).getAttribute("data-embed");
-          const embedType =
+          const url = (element as HTMLElement).getAttribute("data-embed"),
+           embedType =
             (element as HTMLElement).getAttribute("data-embed-type") ||
             "twitter";
           return { url, embedType };

@@ -32,10 +32,10 @@ export async function checkUploadQuota(
       },
       _sum: { sizeBytes: true },
     }),
-  ]);
+  ]),
 
-  const currentTotal = totalAgg._sum.sizeBytes ?? 0;
-  const currentDaily = dailyAgg._sum.sizeBytes ?? 0;
+   currentTotal = totalAgg._sum.sizeBytes ?? 0,
+   currentDaily = dailyAgg._sum.sizeBytes ?? 0;
 
   if (currentDaily + sizeBytes > env.UPLOAD_QUOTA_DAILY_BYTES) {
     return Result.err(

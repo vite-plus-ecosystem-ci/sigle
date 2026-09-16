@@ -137,10 +137,10 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const draftId = getRouterParam(event, "draftId");
-  const body = await readValidatedBodyZod(event, updateDraftSchema);
+  const draftId = getRouterParam(event, "draftId"),
+   body = await readValidatedBodyZod(event, updateDraftSchema),
 
-  const updatedDraft = await prisma.draft.update({
+   updatedDraft = await prisma.draft.update({
     where: {
       id: draftId,
       userId: event.context.user.id,

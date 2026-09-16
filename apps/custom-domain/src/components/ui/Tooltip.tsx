@@ -4,13 +4,13 @@ import { Tooltip as TooltipPrimitive } from "@base-ui/react/tooltip";
 import * as React from "react";
 import { cn } from "@/lib/cn";
 
-const TooltipProvider = TooltipPrimitive.Provider;
+const TooltipProvider = TooltipPrimitive.Provider,
 
-const Tooltip = TooltipPrimitive.Root;
+ Tooltip = TooltipPrimitive.Root,
 
-const TooltipTrigger = TooltipPrimitive.Trigger;
+ TooltipTrigger = TooltipPrimitive.Trigger,
 
-const TooltipContent = React.forwardRef<
+ TooltipContent = React.forwardRef<
   HTMLDivElement,
   TooltipPrimitive.Popup.Props &
     Pick<

@@ -53,8 +53,8 @@ describe("api/posts/[postId]/index.get", () => {
   });
 
   it("returns post by id", async () => {
-    const user = await createTestUser({ id: userId });
-    const post = await createTestPost({
+    const user = await createTestUser({ id: userId }),
+     post = await createTestPost({
       id: "post-1",
       userId: user.id,
       title: "Test Post",
@@ -67,9 +67,9 @@ describe("api/posts/[postId]/index.get", () => {
       path: "/api/posts/post-1",
       method: "GET",
       headers: {},
-    } as unknown as H3Event;
+    } as unknown as H3Event,
 
-    const result = await handler(mockEvent);
+     result = await handler(mockEvent);
 
     expect(result).toMatchObject({
       id: post.id,
@@ -99,23 +99,23 @@ describe("api/posts/[postId]/index.get", () => {
       path: "/api/posts/non-existent-post",
       method: "GET",
       headers: {},
-    } as unknown as H3Event;
+    } as unknown as H3Event,
 
-    const result = await handler(mockEvent);
+     result = await handler(mockEvent);
 
     expect(result).toStrictEqual({ collectorsCount: 0 });
   });
 
   it("returns collectors count", async () => {
-    const user = await createTestUser({ id: userId });
-    const post = await createTestPost({
+    const user = await createTestUser({ id: userId }),
+     post = await createTestPost({
       id: "post-1",
       userId: user.id,
       title: "Test Post",
-    });
+    }),
 
     // Create NFT with a different minter
-    const minter1 = await createTestUser({ id: "minter1" });
+     minter1 = await createTestUser({ id: "minter1" });
 
     await testDb.db.postNft.create({
       data: {
@@ -134,9 +134,9 @@ describe("api/posts/[postId]/index.get", () => {
       path: "/api/posts/post-1",
       method: "GET",
       headers: {},
-    } as unknown as H3Event;
+    } as unknown as H3Event,
 
-    const result = await handler(mockEvent);
+     result = await handler(mockEvent);
 
     expect(result?.collectorsCount).toBe(1);
   });

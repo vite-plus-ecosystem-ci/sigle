@@ -68,11 +68,11 @@ const routeConfigs: RouteConfig[] = [
       duration: 60,
     },
   },
-];
+],
 
-const router = createRouter<RouteConfig>();
+ router = createRouter<RouteConfig>(),
 
-const rateLimiters = new Map<string, RateLimiterPrisma>();
+ rateLimiters = new Map<string, RateLimiterPrisma>();
 
 for (const routeConfig of routeConfigs) {
   const { path, method, config } = routeConfig;
@@ -99,17 +99,17 @@ function getClientIdentifier(event: H3Event): string {
 }
 
 export default defineEventHandler(async (event) => {
-  const path = event.req.url || "/";
-  const method = event.req.method || "GET";
+  const path = event.req.url || "/",
+   method = event.req.method || "GET",
 
-  const match = findRoute<RouteConfig>(router, method, path);
+   match = findRoute<RouteConfig>(router, method, path);
 
   // No rate limit for this route
   if (!match) return;
 
-  const config = match.data.config;
-  const routePath = match.data.path;
-  const rateLimiter = rateLimiters.get(routePath);
+  const config = match.data.config,
+   routePath = match.data.path,
+   rateLimiter = rateLimiters.get(routePath);
 
   if (!rateLimiter) return;
 

@@ -101,9 +101,9 @@ describe("api/users/[username]/index.get", () => {
       path: "/api/users/ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM",
       method: "GET",
       headers: {},
-    } as unknown as H3Event;
+    } as unknown as H3Event,
 
-    const result = await handler(mockEvent);
+     result = await handler(mockEvent);
 
     expect(result).toStrictEqual({
       id: userId,

@@ -29,17 +29,17 @@ interface PaginationProps {
 }
 
 export function Pagination({ page, total, itemsPerPage }: PaginationProps) {
-  const router = useRouter();
+  const router = useRouter(),
 
-  const totalPages = Math.ceil(total / itemsPerPage);
+   totalPages = Math.ceil(total / itemsPerPage),
 
-  const handlePageChange = (newPage: number) => {
+   handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages) {
       router.push(newPage === 1 ? "/" : `/?page=${newPage}`);
     }
-  };
+  },
 
-  const renderPageItem = (pageNum: number) => (
+   renderPageItem = (pageNum: number) => (
     <button
       key={pageNum}
       onClick={() => handlePageChange(pageNum)}
@@ -49,14 +49,14 @@ export function Pagination({ page, total, itemsPerPage }: PaginationProps) {
     >
       {pageNum}
     </button>
-  );
+  ),
 
-  const renderDots = () => <span className="mx-2">...</span>;
+   renderDots = () => <span className="mx-2">...</span>,
 
-  const renderPageItems = () => {
-    const maxPagesToShow = 4;
-    const items = [];
-    const sidePagesToShow = Math.floor(maxPagesToShow / 2);
+   renderPageItems = () => {
+    const maxPagesToShow = 4,
+     items = [],
+     sidePagesToShow = Math.floor(maxPagesToShow / 2);
 
     if (page <= sidePagesToShow + 1) {
       for (let i = 1; i <= Math.min(maxPagesToShow, totalPages); i++) {

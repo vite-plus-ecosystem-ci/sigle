@@ -27,9 +27,9 @@ const mockGetRouterParam = vi.fn((event: unknown, name: string) => {
     return (event as { draftId?: string }).draftId ?? undefined;
   }
   return undefined;
-});
+}),
 
-const mockReadValidatedBodyZod = vi.fn();
+ mockReadValidatedBodyZod = vi.fn();
 
 vi.mock<typeof import("nitro/h3")>(import("nitro/h3"), async () => {
   const actual = await vi.importActual("nitro/h3");
@@ -151,9 +151,9 @@ describe("api/protected/drafts/[draftId]/upload-metadata.post", () => {
       path: "/api/protected/drafts/draft-1/upload-metadata",
       method: "POST",
       headers: {},
-    } as unknown as H3Event;
+    } as unknown as H3Event,
 
-    const result = await handler(mockEvent);
+     result = await handler(mockEvent);
 
     expect(result).toStrictEqual({
       id: "arweave-tx-draft",
@@ -183,8 +183,8 @@ describe("api/protected/drafts/[draftId]/upload-metadata.post", () => {
   });
 
   it("edits existing post, adds Root-TX tag, increments revisionsCount, and creates new PostRevision", async () => {
-    const user = await createTestUser({ id: userId });
-    const originalPost = await createTestPost({
+    const user = await createTestUser({ id: userId }),
+     originalPost = await createTestPost({
       id: "original-post-id",
       txId: "original-post-id",
       userId: user.id,
@@ -229,9 +229,9 @@ describe("api/protected/drafts/[draftId]/upload-metadata.post", () => {
       path: `/api/protected/drafts/${originalPost.id}/upload-metadata`,
       method: "POST",
       headers: {},
-    } as unknown as H3Event;
+    } as unknown as H3Event,
 
-    const result = await handler(mockEvent);
+     result = await handler(mockEvent);
 
     expect(result).toStrictEqual({
       id: originalPost.id,

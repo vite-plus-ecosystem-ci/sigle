@@ -34,19 +34,19 @@ export const ipfsUploadFile = async (
 ): Promise<Result<{ cid: string }, IpfsUploadFailedError>> => {
   return Result.tryPromise({
     try: async () => {
-      const computedCid = await createCIDv1FromBuffer(content);
-      const Key = `u/${event.context.user.id}/${computedCid}`;
+      const computedCid = await createCIDv1FromBuffer(content),
+       Key = `u/${event.context.user.id}/${computedCid}`,
 
-      const response = await s3Client.send(
+       response = await s3Client.send(
         new PutObjectCommand({
           Bucket: env.S3_BUCKET,
           Key,
           Body: content,
           ContentType: contentType,
         }),
-      );
+      ),
 
-      const serverCid = (
+       serverCid = (
         response.$metadata as { httpHeaders?: Record<string, string> }
       ).httpHeaders?.["x-amz-meta-cid"];
 

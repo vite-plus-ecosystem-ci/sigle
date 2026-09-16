@@ -14,10 +14,10 @@ export async function generateMetadata({
 }: {
   params: Promise<{ domain: string; id: string }>;
 }): Promise<Metadata> {
-  const { domain: domainUnsafe, id } = await params;
-  const domain = decodeURIComponent(domainUnsafe);
+  const { domain: domainUnsafe, id } = await params,
+   domain = decodeURIComponent(domainUnsafe),
 
-  const { data: site } = await sigleApiFetchClient.GET("/api/sites/{domain}", {
+   { data: site } = await sigleApiFetchClient.GET("/api/sites/{domain}", {
     params: {
       path: {
         domain,
@@ -39,9 +39,9 @@ export async function generateMetadata({
     notFound();
   }
 
-  const title = post.metaTitle || post.title;
-  const description = post.metaDescription;
-  const seoImage = post.coverImage
+  const title = post.metaTitle || post.title,
+   description = post.metaDescription,
+   seoImage = post.coverImage
     ? resolveImageUrl(post.coverImage.id)
     : site.user.profile?.pictureUri
       ? resolveImageUrl(site.user.profile.pictureUri.id)
@@ -77,10 +77,10 @@ export default async function Post({
 }: {
   params: Promise<{ domain: string; id: string }>;
 }) {
-  const { domain: domainUnsafe, id } = await params;
-  const domain = decodeURIComponent(domainUnsafe);
+  const { domain: domainUnsafe, id } = await params,
+   domain = decodeURIComponent(domainUnsafe),
 
-  const { data: site } = await sigleApiFetchClient.GET("/api/sites/{domain}", {
+   { data: site } = await sigleApiFetchClient.GET("/api/sites/{domain}", {
     params: {
       path: {
         domain,
@@ -109,14 +109,14 @@ export default async function Post({
         limit: 4,
       },
     },
-  });
+  }),
 
-  const tableOfContent = post.content
+   tableOfContent = post.content
     ? extractTableOfContents(post.content)
-    : [];
-  const posthtml = post.content ? addIdsToHeadings(post.content) : "";
+    : [],
+   posthtml = post.content ? addIdsToHeadings(post.content) : "",
 
-  const filteredPosts =
+   filteredPosts =
     posts?.results.filter((p) => p.id !== post.id).slice(0, 3) || [];
 
   return (

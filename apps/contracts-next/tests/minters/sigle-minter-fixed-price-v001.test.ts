@@ -4,14 +4,14 @@ import { STACKS_MOCKNET } from "@stacks/network";
 import { Cl } from "@stacks/transactions";
 import { beforeEach, describe, expect, it } from "vite-plus/test";
 
-const contract = "sigle-minter-fixed-price-v001";
-const accounts = simnet.getAccounts();
-const deployer = accounts.get("deployer")!;
-const wallet1 = accounts.get("wallet_1")!;
-const wallet2 = accounts.get("wallet_2")!;
-const wallet3 = accounts.get("wallet_3")!;
+const contract = "sigle-minter-fixed-price-v001",
+ accounts = simnet.getAccounts(),
+ deployer = accounts.get("deployer")!,
+ wallet1 = accounts.get("wallet_1")!,
+ wallet2 = accounts.get("wallet_2")!,
+ wallet3 = accounts.get("wallet_3")!,
 
-const sigleClient = createClient({
+ sigleClient = createClient({
   network: STACKS_MOCKNET,
   networkName: "mocknet",
 });
@@ -23,8 +23,8 @@ describe(contract, () => {
       maxSupply: 100,
     },
     metadata: "ipfs://anything",
-  });
-  const defaultContractName = `${wallet1}.default-contract`;
+  }),
+   defaultContractName = `${wallet1}.default-contract`;
 
   describe("update-fees", () => {
     describe("update-fees", () => {
@@ -68,9 +68,9 @@ describe(contract, () => {
     });
 
     it("allows minting within valid parameters", () => {
-      const quantity = 1;
+      const quantity = 1,
 
-      const { result } = simnet.callPublicFn(
+       { result } = simnet.callPublicFn(
         contract,
         "mint",
         [
@@ -182,8 +182,8 @@ describe(contract, () => {
           maxSupply: 100,
         },
         metadata: "ipfs://anything",
-      });
-      const defaultContractName = `${wallet1}.default-contract`;
+      }),
+       defaultContractName = `${wallet1}.default-contract`;
 
       simnet.deployContract(
         defaultContractName.split(".")[1],
@@ -258,8 +258,8 @@ describe(contract, () => {
           createReferrer: wallet3,
         },
         metadata: "ipfs://anything",
-      });
-      const defaultContractName = `${wallet1}.default-contract`;
+      }),
+       defaultContractName = `${wallet1}.default-contract`;
 
       simnet.deployContract(
         defaultContractName.split(".")[1],

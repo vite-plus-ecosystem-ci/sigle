@@ -10,10 +10,10 @@ interface EditorBottomInfoProps {
 }
 
 export const EditorBottomInfo = ({ editor }: EditorBottomInfoProps) => {
-  const [showShortcutsDialog, setShowShortcutsDialog] = useState(false);
-  const { resolvedTheme, setTheme } = useTheme();
+  const [showShortcutsDialog, setShowShortcutsDialog] = useState(false),
+   { resolvedTheme, setTheme } = useTheme(),
 
-  const { wordsCount } = useEditorState({
+   { wordsCount } = useEditorState({
     editor,
     selector: (context) => ({
       wordsCount: context.editor.storage.characterCount?.words() || 0,

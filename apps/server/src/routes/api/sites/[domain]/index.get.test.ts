@@ -80,9 +80,9 @@ describe("api/sites/[domain]/index.get", () => {
       path: "/api/sites/blog.sigle.io",
       method: "GET",
       headers: {},
-    } as unknown as H3Event;
+    } as unknown as H3Event,
 
-    const result = await handler(mockEvent);
+     result = await handler(mockEvent);
 
     expect(result).toMatchObject({
       address: siteAddress,
@@ -147,9 +147,9 @@ describe("api/sites/[domain]/index.get", () => {
       path: "/api/sites/blog.sigle.io",
       method: "GET",
       headers: {},
-    } as unknown as H3Event;
+    } as unknown as H3Event,
 
-    const result = await handler(mockEvent);
+     result = await handler(mockEvent);
 
     expect(result?.address).toBe(siteAddress);
   });

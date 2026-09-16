@@ -88,26 +88,26 @@ export default function MigrationPage() {
   const [username, setUsername] = useState<{ value: string; ready: boolean }>({
     value: "",
     ready: false,
-  });
-  const [loadingPostId, setLoadingPostId] = useState<string | null>(null);
+  }),
+   [loadingPostId, setLoadingPostId] = useState<string | null>(null),
 
-  const fetchPosts = async (): Promise<SubsetStory[]> => {
-    const res = await fetch(`/api/migration/list?username=${username.value}`);
-    const data = await res.json();
+   fetchPosts = async (): Promise<SubsetStory[]> => {
+    const res = await fetch(`/api/migration/list?username=${username.value}`),
+     data = await res.json();
     if (!res.ok) {
       throw new Error(data.message);
     }
     return data;
-  };
+  },
 
-  const handleMigrate = async (id: string) => {
+   handleMigrate = async (id: string) => {
     setLoadingPostId(id);
     try {
       // 1. Fetch the post from old API
       const res = await fetch(
         `/api/migration/${id}?username=${username.value}`,
-      );
-      const data: Story = await res.json();
+      ),
+       data: Story = await res.json();
       console.log("handleMigrate", data);
 
       // 2. Create a new draft
@@ -172,9 +172,9 @@ export default function MigrationPage() {
     } finally {
       setLoadingPostId(null);
     }
-  };
+  },
 
-  const {
+   {
     data: posts,
     isLoading,
     error,

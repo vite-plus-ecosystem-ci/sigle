@@ -50,9 +50,9 @@ export const UpdateProfileMetadata = ({
   profile,
   setEditingProfileMetadata,
 }: UpdateProfileMetadataProps) => {
-  const { data: session } = useSession();
+  const { data: session } = useSession(),
 
-  const {
+   {
     start: startToast,
     completeStep,
     setStepError,
@@ -63,21 +63,21 @@ export const UpdateProfileMetadata = ({
       { id: "index", title: "Indexing profile" },
     ],
     successMessage: "Profile updated!",
-  });
+  }),
 
-  const uploadProfileMetadata = sigleApiClient.useMutation(
+   uploadProfileMetadata = sigleApiClient.useMutation(
     "post",
     "/api/protected/user/profile/upload-metadata",
-  );
+  ),
 
-  const triggerIndexing = sigleApiClient.useMutation(
+   triggerIndexing = sigleApiClient.useMutation(
     "post",
     "/api/protected/user/profile/trigger-indexing",
-  );
+  ),
 
-  const userId = session?.user.id;
+   userId = session?.user.id,
 
-  const refetchProfile = sigleApiClient.useQuery(
+   refetchProfile = sigleApiClient.useQuery(
     "get",
     "/api/users/{username}",
     {
@@ -90,11 +90,11 @@ export const UpdateProfileMetadata = ({
     {
       enabled: false,
     },
-  );
+  ),
 
-  const { contractCall } = useContractCall();
+   { contractCall } = useContractCall(),
 
-  const {
+   {
     register,
     handleSubmit,
     setValue,
@@ -110,9 +110,9 @@ export const UpdateProfileMetadata = ({
       website: profile?.website || undefined,
       twitter: profile?.twitter || undefined,
     },
-  });
+  }),
 
-  const onSubmit = handleSubmit(async (formValues) => {
+   onSubmit = handleSubmit(async (formValues) => {
     startToast();
 
     const metadata = createProfileMetadata({
@@ -126,9 +126,9 @@ export const UpdateProfileMetadata = ({
         picture: formValues.picture || undefined,
         coverPicture: formValues.coverPicture || undefined,
       },
-    });
+    }),
 
-    const data = await uploadProfileMetadata
+     data = await uploadProfileMetadata
       .mutateAsync({
         body: {
           metadata: metadata as unknown as Record<string, never>,
@@ -147,16 +147,16 @@ export const UpdateProfileMetadata = ({
 
     const { parameters } = sigleClient.setProfile({
       metadata: `ar://${data.value.id}`,
-    });
+    }),
 
-    const contractCallResult = await contractCall(parameters);
+     contractCallResult = await contractCall(parameters);
     if (contractCallResult.isErr()) {
       setStepError("transaction", contractCallResult.error.message);
       return;
     }
 
-    const txId = contractCallResult.value;
-    const transactionResult = await waitForTransaction({ txId });
+    const txId = contractCallResult.value,
+     transactionResult = await waitForTransaction({ txId });
     if (transactionResult.isErr()) {
       setStepError("transaction", transactionResult.error.message);
       return;
@@ -177,9 +177,9 @@ export const UpdateProfileMetadata = ({
       return;
     }
 
-    const pollingInterval = 2_000;
-    const timeout = 180_000;
-    const startTime = Date.now();
+    const pollingInterval = 2_000,
+     timeout = 180_000,
+     startTime = Date.now();
 
     let isIndexed = false;
     while (Date.now() - startTime < timeout) {
@@ -206,9 +206,9 @@ export const UpdateProfileMetadata = ({
 
     completeStep("index");
     setEditingProfileMetadata(false);
-  });
+  }),
 
-  const handleXChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+   handleXChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     let value = event.target.value;
     // If user pastes a full url, extract the username
     if (value.startsWith("http")) {

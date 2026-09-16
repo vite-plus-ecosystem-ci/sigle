@@ -7,11 +7,11 @@ const options: {
   computeScrollTop?: () => number;
   delay?: number;
   debugMode?: boolean;
-} = {};
-const DEFAULT_DELAY = 10;
-const DEFAULT_OFFSET_BOTTOM = 80;
-const DEFAULT_OFFEST_TOP = 0;
-const DEFAULT_SCROLL_DISTANCE = 56;
+} = {},
+ DEFAULT_DELAY = 10,
+ DEFAULT_OFFSET_BOTTOM = 80,
+ DEFAULT_OFFEST_TOP = 0,
+ DEFAULT_SCROLL_DISTANCE = 56;
 let timeoutScroll: ReturnType<typeof setTimeout> | null = null;
 
 const MobileScroll = Extension.create({
@@ -21,10 +21,10 @@ const MobileScroll = Extension.create({
         key: new PluginKey("mobile-scroll"),
         props: {
           handleScrollToSelection(view) {
-            const offsetBottom = DEFAULT_OFFSET_BOTTOM;
-            const offsetTop = DEFAULT_OFFEST_TOP;
-            const scrollDistance = DEFAULT_SCROLL_DISTANCE;
-            const scrollerHeight = window.innerHeight;
+            const offsetBottom = DEFAULT_OFFSET_BOTTOM,
+             offsetTop = DEFAULT_OFFEST_TOP,
+             scrollDistance = DEFAULT_SCROLL_DISTANCE,
+             scrollerHeight = window.innerHeight;
 
             if (scrollerHeight <= offsetBottom + offsetTop + scrollDistance) {
               return false;
@@ -34,9 +34,9 @@ const MobileScroll = Extension.create({
             timeoutScroll = setTimeout(() => {
               const top =
                 view.coordsAtPos(view.state.selection.$head.pos).top -
-                (options?.scrollerElement?.getBoundingClientRect().top ?? 0);
+                (options?.scrollerElement?.getBoundingClientRect().top ?? 0),
 
-              const scrollTop = options?.computeScrollTop
+               scrollTop = options?.computeScrollTop
                 ? options.computeScrollTop()
                 : (options?.scrollerElement?.scrollTop ??
                   (window.pageYOffset ||

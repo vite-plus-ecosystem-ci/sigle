@@ -39,9 +39,9 @@ export const executePublishPostJob = async (
     });
     return;
   }
-  const metadata = metadataResult.value;
+  const metadata = metadataResult.value,
 
-  const existingPostWithSignature = await prisma.post.findUnique({
+   existingPostWithSignature = await prisma.post.findUnique({
     select: {
       id: true,
       txId: true,
@@ -69,8 +69,8 @@ export const executePublishPostJob = async (
   const targetPostId = data.rootTxId || data.txId;
 
   await prisma.$transaction(async (tx) => {
-    const userId = data.author;
-    const post = await tx.post.findUnique({
+    const userId = data.author,
+     post = await tx.post.findUnique({
       select: {
         id: true,
         txId: true,
@@ -80,9 +80,9 @@ export const executePublishPostJob = async (
       where: {
         id: targetPostId,
       },
-    });
+    }),
 
-    const user = await tx.user.findUnique({
+     user = await tx.user.findUnique({
       select: {
         id: true,
       },

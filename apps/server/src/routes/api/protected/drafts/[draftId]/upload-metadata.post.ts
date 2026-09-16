@@ -94,9 +94,9 @@ export default defineEventHandler(async (event) => {
       message: "Bad Request",
     });
   }
-  const body = await readValidatedBodyZod(event, uploadMetadataDraftSchema);
+  const body = await readValidatedBodyZod(event, uploadMetadataDraftSchema),
 
-  const parsedMetadata = PostMetadataSchema.safeParse(body.metadata);
+   parsedMetadata = PostMetadataSchema.safeParse(body.metadata);
   if (!parsedMetadata.success) {
     throw new HTTPError({
       status: 400,
@@ -192,31 +192,31 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const { id } = uploadResult.value;
+  const { id } = uploadResult.value,
 
-  const postData = parsedMetadata.data;
-  const metaTitle = postData.content.attributes?.find(
+   postData = parsedMetadata.data,
+   metaTitle = postData.content.attributes?.find(
     (attribute) => attribute.key === "meta-title",
-  )?.value;
-  const metaDescription = postData.content.attributes?.find(
+  )?.value,
+   metaDescription = postData.content.attributes?.find(
     (attribute) => attribute.key === "meta-description",
-  )?.value;
-  const excerpt = postData.content.attributes?.find(
+  )?.value,
+   excerpt = postData.content.attributes?.find(
     (attribute) => attribute.key === "excerpt",
-  )?.value;
-  const canonicalUri = postData.content.attributes?.find(
+  )?.value,
+   canonicalUri = postData.content.attributes?.find(
     (attribute) => attribute.key === "canonical-uri",
-  )?.value;
+  )?.value,
 
-  const versionSplit = postData.$schema.split("/");
-  const version = versionSplit[versionSplit.length - 1].replace(".json", "");
+   versionSplit = postData.$schema.split("/"),
+   version = versionSplit[versionSplit.length - 1].replace(".json", ""),
 
-  const targetPostId = body.type === "published" ? draftId : id;
+   targetPostId = body.type === "published" ? draftId : id;
 
   await prisma.$transaction(async (tx) => {
-    const userId = event.context.user.id;
+    const userId = event.context.user.id,
 
-    const existingPost = await tx.post.findUnique({
+     existingPost = await tx.post.findUnique({
       select: {
         id: true,
         txId: true,
@@ -253,9 +253,9 @@ export default defineEventHandler(async (event) => {
       excerpt: excerpt || "",
       tags: postData.content.tags,
       canonicalUri: canonicalUri ?? null,
-    };
+    },
 
-    const updatedPost = existingPost
+     updatedPost = existingPost
       ? await tx.post.update({
           where: {
             id: targetPostId,

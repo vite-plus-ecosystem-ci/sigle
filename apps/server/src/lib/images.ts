@@ -14,9 +14,9 @@ export const resolveImageUrl = (image: string) => {
   return image;
 };
 
-const WEBP = "image/webp";
-const PNG = "image/png";
-const JPEG = "image/jpeg";
+const WEBP = "image/webp",
+ PNG = "image/png",
+ JPEG = "image/jpeg";
 export const allowedFormats = [WEBP, PNG, JPEG] as const;
 
 export class ImageOptimizationFailedError extends TaggedError(

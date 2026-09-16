@@ -94,9 +94,9 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const query = await getValidatedQueryZod(event, listQuerySchema);
+  const query = await getValidatedQueryZod(event, listQuerySchema),
 
-  const draftsList = await prisma.draft.findMany({
+   draftsList = await prisma.draft.findMany({
     select: {
       id: true,
       title: true,

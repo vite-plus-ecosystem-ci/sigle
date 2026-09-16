@@ -16,22 +16,22 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import type { EditorPostFormData } from "../../EditorFormProvider";
 
 export const CollectEdition = () => {
-  const { setValue, watch, register } = useFormContext<EditorPostFormData>();
-  const type = watch("type");
-  const watchCollectLimitType = watch("collect.collectLimit.type");
-  const watchCollectLimitLimit = watch("collect.collectLimit.limit");
-  const { errors } = useFormState<EditorPostFormData>({
+  const { setValue, watch, register } = useFormContext<EditorPostFormData>(),
+   type = watch("type"),
+   watchCollectLimitType = watch("collect.collectLimit.type"),
+   watchCollectLimitLimit = watch("collect.collectLimit.limit"),
+   { errors } = useFormState<EditorPostFormData>({
     name: ["collect.collectLimit.type", "collect.collectLimit.limit"],
-  });
+  }),
 
-  const onEditionChange = (value: typeof watchCollectLimitType) => {
+   onEditionChange = (value: typeof watchCollectLimitType) => {
     setValue("collect.collectLimit.type", value, {
       shouldValidate: true,
     });
-  };
+  },
 
   // oxlint-disable-next-line typescript/no-explicit-any
-  const limitErrorMessage = (errors?.collect?.collectLimit as any)?.limit
+   limitErrorMessage = (errors?.collect?.collectLimit as any)?.limit
     ?.message;
 
   return (

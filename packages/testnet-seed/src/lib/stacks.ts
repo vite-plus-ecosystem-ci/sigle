@@ -11,16 +11,16 @@ import { readFileSync } from "node:fs";
 import { parse } from "smol-toml";
 import { sigleClient } from "./sigle.js";
 
-const network = STACKS_TESTNET;
+const network = STACKS_TESTNET,
 
-const apiClient = createClient({
+ apiClient = createClient({
   baseUrl: clientFromNetwork(network).baseUrl,
-});
+}),
 
-const TX_POLL_INTERVAL_MS = 500;
-const TX_MAX_POLL_COUNT = 120;
+ TX_POLL_INTERVAL_MS = 500,
+ TX_MAX_POLL_COUNT = 120,
 
-const waitForTransaction = async (txId: string) => {
+ waitForTransaction = async (txId: string) => {
   let pollCount = 0;
   while (pollCount < TX_MAX_POLL_COUNT) {
     const tx = await apiClient.GET("/extended/v1/tx/{tx_id}", {
@@ -43,15 +43,15 @@ const waitForTransaction = async (txId: string) => {
   throw new Error(
     `Transaction ${txId} timed out after ${TX_MAX_POLL_COUNT} polls`,
   );
-};
+},
 
-const configFile = readFileSync(
+ configFile = readFileSync(
   "../../apps/contracts/settings/Testnet.toml",
   "utf-8",
-);
-const config = parse(configFile);
+),
+ config = parse(configFile),
 // @ts-expect-error Not typed properly
-const mnemonic = config.accounts.deployer.mnemonic;
+ mnemonic = config.accounts.deployer.mnemonic;
 
 let wallet = await generateWallet({
   secretKey: mnemonic,
@@ -71,15 +71,15 @@ export const deployContract = async ({
   codeBody: string;
   accountIndex: number;
 }) => {
-  const privateKey = wallet.accounts[accountIndex].stxPrivateKey;
+  const privateKey = wallet.accounts[accountIndex].stxPrivateKey,
 
-  const transaction = await makeContractDeploy({
+   transaction = await makeContractDeploy({
     contractName,
     codeBody,
     senderKey: privateKey,
     network,
-  });
-  const broadcastResponse = await broadcastTransaction({ transaction });
+  }),
+   broadcastResponse = await broadcastTransaction({ transaction });
   console.log("submitted tx", broadcastResponse);
 };
 
@@ -90,21 +90,21 @@ export const publishPost = async ({
   metadataUri: string;
   accountIndex: number;
 }) => {
-  const privateKey = wallet.accounts[accountIndex].stxPrivateKey;
+  const privateKey = wallet.accounts[accountIndex].stxPrivateKey,
 
-  const { parameters } = sigleClient.publishPost({
+   { parameters } = sigleClient.publishPost({
     metadataUri,
-  });
+  }),
 
-  const transaction = await makeContractCall({
+   transaction = await makeContractCall({
     ...parameters,
     contractAddress: parameters.contract.split(".")[0],
     contractName: parameters.contract.split(".")[1],
     functionArgs: parameters.functionArgs as ClarityValue[],
     network,
     senderKey: privateKey,
-  });
-  const broadcastResponse = await broadcastTransaction({ transaction });
+  }),
+   broadcastResponse = await broadcastTransaction({ transaction });
   console.log("submitted tx", broadcastResponse);
 
   await waitForTransaction(broadcastResponse.txid);

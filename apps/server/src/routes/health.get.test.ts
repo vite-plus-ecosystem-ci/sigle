@@ -10,9 +10,9 @@ const { default: handler } = await import("./health.get");
 
 describe("health.get", () => {
   it("returns success true", async () => {
-    const mockEvent = {} as unknown as H3Event;
+    const mockEvent = {} as unknown as H3Event,
 
-    const result = handler(mockEvent);
+     result = handler(mockEvent);
 
     expect(result).toStrictEqual({ success: true });
   });

@@ -9,12 +9,12 @@ export default async function Page(params: {
   params: Promise<{ domain: string }>;
   searchParams: Promise<{ page?: string }>;
 }) {
-  const { domain: domainUnsafe } = await params.params;
-  const domain = decodeURIComponent(domainUnsafe);
-  const searchParams = await params.searchParams;
-  const page = Number.parseInt(searchParams.page || "1", 10);
+  const { domain: domainUnsafe } = await params.params,
+   domain = decodeURIComponent(domainUnsafe),
+   searchParams = await params.searchParams,
+   page = Number.parseInt(searchParams.page || "1", 10),
 
-  const { data: site } = await sigleApiFetchClient.GET("/api/sites/{domain}", {
+   { data: site } = await sigleApiFetchClient.GET("/api/sites/{domain}", {
     params: {
       path: {
         domain,

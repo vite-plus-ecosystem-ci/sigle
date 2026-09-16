@@ -15,14 +15,14 @@ import type { EditorPostFormData } from "../EditorFormProvider";
 import { useEditorStore } from "../store";
 
 export const PublishReviewGeneral = () => {
-  const { getValues } = useFormContext<EditorPostFormData>();
-  const setMenuOpen = useEditorStore((state) => state.setMenuOpen);
-  const setPublishOpen = useEditorStore((state) => state.setPublishOpen);
-  const data = getValues();
+  const { getValues } = useFormContext<EditorPostFormData>(),
+   setMenuOpen = useEditorStore((state) => state.setMenuOpen),
+   setPublishOpen = useEditorStore((state) => state.setPublishOpen),
+   data = getValues(),
 
-  const isMetaConfigured = data.metaTitle && data.metaDescription;
+   isMetaConfigured = data.metaTitle && data.metaDescription,
 
-  const openMetaSettings = () => {
+   openMetaSettings = () => {
     setPublishOpen(false);
     setMenuOpen("meta");
   };

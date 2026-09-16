@@ -17,12 +17,12 @@ export const ShareSocial = ({
     title: string;
   };
 }) => {
-  const [isCopied, setIsCopied] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isCopied, setIsCopied] = useState(false),
+   [isOpen, setIsOpen] = useState(false),
 
-  const websiteUrl = typeof window !== "undefined" ? window.location.href : "";
+   websiteUrl = typeof window !== "undefined" ? window.location.href : "",
 
-  const handleClickCopy = (e: React.MouseEvent<HTMLAnchorElement>) => {
+   handleClickCopy = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     navigator.clipboard.writeText(websiteUrl).then(() => {
       setIsCopied(true);

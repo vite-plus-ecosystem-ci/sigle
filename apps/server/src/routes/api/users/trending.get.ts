@@ -45,14 +45,14 @@ export default defineCachedHandler(
           some: {},
         },
       },
-    });
+    }),
 
     // Calculate random offset
-    const randomSkip = Math.floor(
+     randomSkip = Math.floor(
       Math.random() * Math.max(0, totalUsers - NUMBER_OF_USERS),
-    );
+    ),
 
-    const users = await prisma.user.findMany({
+     users = await prisma.user.findMany({
       select: {
         ...SELECT_PUBLIC_USER_FIELDS,
         _count: {

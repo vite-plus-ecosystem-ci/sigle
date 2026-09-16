@@ -25,21 +25,21 @@ interface ProfileHeaderProps {
 }
 
 export const ProfileHeader = ({ user }: ProfileHeaderProps) => {
-  const posthog = usePostHog();
-  const { copyToClipboard } = useCopyToClipboard();
-  const { data: session } = useSession();
+  const posthog = usePostHog(),
+   { copyToClipboard } = useCopyToClipboard(),
+   { data: session } = useSession(),
 
-  const onCopyLink = () => {
+   onCopyLink = () => {
     copyToClipboard(
       `${env.NEXT_PUBLIC_APP_URL}${Routes.userProfile({ username: user.id })}`,
     );
     posthog.capture("profile_link_copied", {
       profileId: user.id,
     });
-  };
+  },
 
-  const isCurrentUser = session?.user.id === user.id;
-  const hasBanner = user?.profile?.coverPictureUri;
+   isCurrentUser = session?.user.id === user.id,
+   hasBanner = user?.profile?.coverPictureUri;
 
   return (
     <>

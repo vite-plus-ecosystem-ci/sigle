@@ -53,15 +53,15 @@ const generateMetadataAttributesFromForm = ({
   }
 
   return attributes;
-};
+},
 
-const getImageMediaMetadata = async (
+ getImageMediaMetadata = async (
   url: string,
 ): Promise<MediaImageMetadata> => {
-  const response = await fetch(resolveImageUrl(url, { gateway: true }));
-  const arrayBuffer = await response.arrayBuffer();
-  const buffer = Buffer.from(arrayBuffer);
-  const contentType = await fileTypeFromBuffer(buffer);
+  const response = await fetch(resolveImageUrl(url, { gateway: true })),
+   arrayBuffer = await response.arrayBuffer(),
+   buffer = Buffer.from(arrayBuffer),
+   contentType = await fileTypeFromBuffer(buffer);
   let type: MediaImageMimeType | null = null;
   switch (contentType?.mime) {
     case "image/jpeg":
@@ -80,9 +80,9 @@ const getImageMediaMetadata = async (
     url,
     type,
   };
-};
+},
 
-const uploadNftImage = async (
+ uploadNftImage = async (
   {
     postId,
     type,
@@ -141,12 +141,12 @@ export const generateSigleMetadataFromForm = async ({
   postId: string;
   post: EditorPostFormData;
 }): Promise<PostMetadata> => {
-  const editorText = editor?.getText() || "";
-  const metadataAttributes = generateMetadataAttributesFromForm({
+  const editorText = editor?.getText() || "",
+   metadataAttributes = generateMetadataAttributesFromForm({
     editorText,
     post,
-  });
-  const coverImage = post.coverImage
+  }),
+   coverImage = post.coverImage
     ? await getImageMediaMetadata(post.coverImage)
     : undefined;
 

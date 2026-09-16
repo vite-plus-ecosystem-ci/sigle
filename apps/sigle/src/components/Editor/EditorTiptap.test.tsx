@@ -58,19 +58,19 @@ vi.mock(import("./BottomInfo"), () => ({
 }));
 
 const getMarkdownOutput = (): string => {
-  const store = useEditorStore.getState();
-  const editor = store.editor;
+  const store = useEditorStore.getState(),
+   editor = store.editor;
   expect(editor).toBeDefined();
   return editor?.getMarkdown() ?? "";
-};
+},
 
-const waitForEditor = async () => {
+ waitForEditor = async () => {
   await waitFor(() => {
     expect(useEditorStore.getState().editor).not.toBeNull();
   });
-};
+},
 
-const defaultPost = {
+ defaultPost = {
   type: "draft" as const,
   title: "",
   content: "",

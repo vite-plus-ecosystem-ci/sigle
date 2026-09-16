@@ -10,10 +10,10 @@ export async function generateMetadata({
 }: {
   params: Promise<{ domain: string }>;
 }): Promise<Metadata | null> {
-  const { domain: domainUnsafe } = await params;
-  const domain = decodeURIComponent(domainUnsafe);
+  const { domain: domainUnsafe } = await params,
+   domain = decodeURIComponent(domainUnsafe),
 
-  const { data: site } = await sigleApiFetchClient.GET("/api/sites/{domain}", {
+   { data: site } = await sigleApiFetchClient.GET("/api/sites/{domain}", {
     params: {
       path: {
         domain,
@@ -24,9 +24,9 @@ export async function generateMetadata({
     notFound();
   }
 
-  const title = `${site.user.profile?.displayName} | Blog`;
-  const description = site.user.profile?.description;
-  const image = site.user.profile?.pictureUri
+  const title = `${site.user.profile?.displayName} | Blog`,
+   description = site.user.profile?.description,
+   image = site.user.profile?.pictureUri
     ? resolveImageUrl(site.user.profile.pictureUri.id)
     : undefined;
 
@@ -61,10 +61,10 @@ export default async function PageLayout({
   children: React.ReactNode;
   params: Promise<{ domain: string }>;
 }) {
-  const { domain: domainUnsafe } = await params;
-  const domain = decodeURIComponent(domainUnsafe);
+  const { domain: domainUnsafe } = await params,
+   domain = decodeURIComponent(domainUnsafe),
 
-  const { data: site } = await sigleApiFetchClient.GET("/api/sites/{domain}", {
+   { data: site } = await sigleApiFetchClient.GET("/api/sites/{domain}", {
     params: {
       path: {
         domain,

@@ -75,10 +75,10 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const draftId = getRouterParam(event, "draftId");
-  const formData = await readFormData(event, "5mb");
+  const draftId = getRouterParam(event, "draftId"),
+   formData = await readFormData(event, "5mb"),
 
-  const file = formData.get("file");
+   file = formData.get("file");
   if (!file || !(file instanceof File)) {
     throw new HTTPError({
       status: 400,
@@ -127,9 +127,9 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const optimizedBuffer = optimizeResult.value;
+  const optimizedBuffer = optimizeResult.value,
 
-  const quotaResult = await checkUploadQuota(
+   quotaResult = await checkUploadQuota(
     event.context.user.id,
     optimizedBuffer.length,
   );
