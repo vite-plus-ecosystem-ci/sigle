@@ -18,20 +18,18 @@ export const ShareSocial = ({
   };
 }) => {
   const [isCopied, setIsCopied] = useState(false),
-   [isOpen, setIsOpen] = useState(false),
-
-   websiteUrl = typeof window !== "undefined" ? window.location.href : "",
-
-   handleClickCopy = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    navigator.clipboard.writeText(websiteUrl).then(() => {
-      setIsCopied(true);
-      setTimeout(() => {
-        setIsCopied(false);
-      }, 2000);
-      setIsOpen(true);
-    });
-  };
+    [isOpen, setIsOpen] = useState(false),
+    websiteUrl = typeof window !== "undefined" ? window.location.href : "",
+    handleClickCopy = (e: React.MouseEvent<HTMLAnchorElement>) => {
+      e.preventDefault();
+      navigator.clipboard.writeText(websiteUrl).then(() => {
+        setIsCopied(true);
+        setTimeout(() => {
+          setIsCopied(false);
+        }, 2000);
+        setIsOpen(true);
+      });
+    };
 
   return (
     <TooltipProvider>

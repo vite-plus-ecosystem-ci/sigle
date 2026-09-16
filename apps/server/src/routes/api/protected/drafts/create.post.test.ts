@@ -51,18 +51,17 @@ describe("api/protected/drafts/create.post", () => {
     mockGetValidatedQueryZod.mockResolvedValue({});
 
     const mockEvent = {
-      context: {
-        user: { id: userId },
-        $posthog: {
-          capture: vi.fn(),
+        context: {
+          user: { id: userId },
+          $posthog: {
+            capture: vi.fn(),
+          },
         },
-      },
-      path: "/api/protected/drafts/create",
-      method: "POST",
-      headers: {},
-    } as unknown as H3Event,
-
-     result = await handler(mockEvent);
+        path: "/api/protected/drafts/create",
+        method: "POST",
+        headers: {},
+      } as unknown as H3Event,
+      result = await handler(mockEvent);
 
     expect(result).toHaveProperty("id");
   });

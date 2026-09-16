@@ -52,7 +52,7 @@ export async function fetchArweavePostTransactions({
   afterCursor?: string;
 }): Promise<Result<ArweavePostEdge[], FetchArweaveTransactionsFailedError>> {
   const afterParam = afterCursor ? `, after: "${afterCursor}"` : "",
-   query = `
+    query = `
     query {
       transactions(
         tags: [
@@ -123,26 +123,25 @@ export const executeIndexerIndexPostsJob = async (
   _data: z.TypeOf<typeof indexerIndexPostsSchema>["data"],
 ) => {
   const latestMinedPost = await prisma.post.findFirst({
-    select: {
-      blockHeight: true,
-    },
-    where: {
-      blockHeight: {
-        gt: 0,
+      select: {
+        blockHeight: true,
       },
-    },
-    orderBy: {
-      blockHeight: "desc",
-    },
-  }),
-
-   minBlockHeight = latestMinedPost ? latestMinedPost.blockHeight : 0;
+      where: {
+        blockHeight: {
+          gt: 0,
+        },
+      },
+      orderBy: {
+        blockHeight: "desc",
+      },
+    }),
+    minBlockHeight = latestMinedPost ? latestMinedPost.blockHeight : 0;
   consola.info("Starting indexer run from block height", { minBlockHeight });
 
   let toProcess = 0,
-   currentCursor = "",
-   hasMore = true,
-   maxBlockHeightSeen = minBlockHeight;
+    currentCursor = "",
+    hasMore = true,
+    maxBlockHeightSeen = minBlockHeight;
 
   while (hasMore) {
     consola.info("Fetching events from Arweave GraphQL", {
@@ -177,16 +176,15 @@ export const executeIndexerIndexPostsJob = async (
 
     for (const edge of edges) {
       const txId = edge.node.id,
-
-      // Check if post already exists in database
-       postExists = await prisma.post.findUnique({
-        select: {
-          id: true,
-        },
-        where: {
-          txId,
-        },
-      });
+        // Check if post already exists in database
+        postExists = await prisma.post.findUnique({
+          select: {
+            id: true,
+          },
+          where: {
+            txId,
+          },
+        });
 
       if (postExists) {
         // oxlint-disable-next-line no-continue
@@ -194,7 +192,7 @@ export const executeIndexerIndexPostsJob = async (
       }
 
       const uri = `ar://${txId}`,
-       metadataResult = await getMetadataFromUri(uri);
+        metadataResult = await getMetadataFromUri(uri);
       if (metadataResult.isErr()) {
         consola.error("Failed to fetch/validate metadata for transaction", {
           txId,
@@ -205,15 +203,15 @@ export const executeIndexerIndexPostsJob = async (
       }
 
       const metadata = metadataResult.value,
-       signatureExists = await prisma.post.findUnique({
-        select: {
-          id: true,
-          txId: true,
-        },
-        where: {
-          signature: metadata.signature,
-        },
-      });
+        signatureExists = await prisma.post.findUnique({
+          select: {
+            id: true,
+            txId: true,
+          },
+          where: {
+            signature: metadata.signature,
+          },
+        });
 
       if (signatureExists && signatureExists.txId !== txId) {
         consola.warn("Skipping indexing replayed signed metadata", {
@@ -226,13 +224,12 @@ export const executeIndexerIndexPostsJob = async (
       }
 
       const blockHeight = edge.node.block ? edge.node.block.height : 0,
-       createdAt = edge.node.block
-        ? new Date(edge.node.block.timestamp * 1000)
-        : new Date(),
-
-       rootTxTag = edge.node.tags?.find((t) => t.name === "Root-TX"),
-       rootTxId = rootTxTag?.value,
-       arweaveL1TxId = edge.node.bundledIn?.id;
+        createdAt = edge.node.block
+          ? new Date(edge.node.block.timestamp * 1000)
+          : new Date(),
+        rootTxTag = edge.node.tags?.find((t) => t.name === "Root-TX"),
+        rootTxId = rootTxTag?.value,
+        arweaveL1TxId = edge.node.bundledIn?.id;
 
       await indexerJob.emit({
         action: "indexer-publish-post",

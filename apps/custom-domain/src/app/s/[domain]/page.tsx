@@ -10,17 +10,16 @@ export default async function Page(params: {
   searchParams: Promise<{ page?: string }>;
 }) {
   const { domain: domainUnsafe } = await params.params,
-   domain = decodeURIComponent(domainUnsafe),
-   searchParams = await params.searchParams,
-   page = Number.parseInt(searchParams.page || "1", 10),
-
-   { data: site } = await sigleApiFetchClient.GET("/api/sites/{domain}", {
-    params: {
-      path: {
-        domain,
+    domain = decodeURIComponent(domainUnsafe),
+    searchParams = await params.searchParams,
+    page = Number.parseInt(searchParams.page || "1", 10),
+    { data: site } = await sigleApiFetchClient.GET("/api/sites/{domain}", {
+      params: {
+        path: {
+          domain,
+        },
       },
-    },
-  });
+    });
   if (!site) {
     notFound();
   }

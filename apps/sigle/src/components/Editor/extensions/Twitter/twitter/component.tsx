@@ -4,7 +4,7 @@ import { getTweetIdFromUrl } from "./twitter";
 
 export const TwitterComponent = (props: NodeViewProps) => {
   const url: string = props.node.attrs.url,
-   tweetId = getTweetIdFromUrl(url);
+    tweetId = getTweetIdFromUrl(url);
   if (!tweetId) return null;
 
   return (

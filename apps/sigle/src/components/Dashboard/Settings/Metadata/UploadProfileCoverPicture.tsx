@@ -20,50 +20,47 @@ export const UploadProfileCoverPicture = ({
   setPicture,
 }: UploadProfileCoverPictureProps) => {
   const posthog = usePostHog(),
-   { mutate: uploadImage, isPending: loadingUploadImage } =
-    sigleApiClient.useMutation(
-      "post",
-      "/api/protected/user/profile/upload-cover",
+    { mutate: uploadImage, isPending: loadingUploadImage } =
+      sigleApiClient.useMutation(
+        "post",
+        "/api/protected/user/profile/upload-cover",
+      ),
+    onDrop = useCallback(
+      async (acceptedFiles: File[]) => {
+        const file = acceptedFiles[0];
+        if (!file) return;
+        if (loadingUploadImage) return;
+        posthog.capture("profile_cover_image_upload_start", {});
+
+        const formData = new FormData();
+        formData.append("file", file);
+        uploadImage(
+          {
+            // oxlint-disable-next-line typescript/no-explicit-any wrong type returned by nitro
+            body: formData as any,
+          },
+          {
+            onSuccess: (data) => {
+              setPicture(data.url);
+              posthog.capture("profile_cover_image_upload_success", {});
+            },
+            onError: (error) => {
+              posthog.capture("profile_cover_image_upload_error", {});
+              toast.error(error.message);
+            },
+          },
+        );
+      },
+      [posthog, uploadImage, setPicture, loadingUploadImage],
     ),
-
-   onDrop = useCallback(
-    async (acceptedFiles: File[]) => {
-      const file = acceptedFiles[0];
-      if (!file) return;
-      if (loadingUploadImage) return;
-      posthog.capture("profile_cover_image_upload_start", {});
-
-      const formData = new FormData();
-      formData.append("file", file);
-      uploadImage(
-        {
-          // oxlint-disable-next-line typescript/no-explicit-any wrong type returned by nitro
-          body: formData as any,
-        },
-        {
-          onSuccess: (data) => {
-            setPicture(data.url);
-            posthog.capture("profile_cover_image_upload_success", {});
-          },
-          onError: (error) => {
-            posthog.capture("profile_cover_image_upload_error", {});
-            toast.error(error.message);
-          },
-        },
-      );
-    },
-    [posthog, uploadImage, setPicture, loadingUploadImage],
-  ),
-
-   { getRootProps, getInputProps } = useDropzone({
-    onDrop,
-    accept: {
-      "image/jpeg": [],
-      "image/png": [],
-    },
-  }),
-
-   resolvedPicture = picture ? resolveImageUrl(picture) : undefined;
+    { getRootProps, getInputProps } = useDropzone({
+      onDrop,
+      accept: {
+        "image/jpeg": [],
+        "image/png": [],
+      },
+    }),
+    resolvedPicture = picture ? resolveImageUrl(picture) : undefined;
 
   return (
     <Field>

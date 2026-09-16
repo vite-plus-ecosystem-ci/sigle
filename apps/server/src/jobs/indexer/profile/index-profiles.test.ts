@@ -28,7 +28,7 @@ vi.mock<typeof import("..")>(
 );
 
 const mockStacksApiClientGET = vi.fn(),
- mockGetStacksTransaction = vi.fn();
+  mockGetStacksTransaction = vi.fn();
 
 // oxlint-disable-next-line consistent-type-imports
 vi.mock<typeof import("@/lib/stacks")>(
@@ -94,37 +94,36 @@ describe("executeIndexerIndexProfilesJob", () => {
   });
 
   const createSetProfileEvent = (
-    txId: string,
-    address: string,
-    uri: string,
-  ) => {
-    const clarityValue = tupleCV({
-      a: stringAsciiCV("set-profile"),
-      address: stringAsciiCV(address),
-      uri: stringAsciiCV(uri),
-    });
-    return {
-      tx_id: txId,
-      event_type: "smart_contract_log" as const,
-      contract_log: {
-        topic: "print" as const,
-        value: {
-          hex: serializeCV(clarityValue),
+      txId: string,
+      address: string,
+      uri: string,
+    ) => {
+      const clarityValue = tupleCV({
+        a: stringAsciiCV("set-profile"),
+        address: stringAsciiCV(address),
+        uri: stringAsciiCV(uri),
+      });
+      return {
+        tx_id: txId,
+        event_type: "smart_contract_log" as const,
+        contract_log: {
+          topic: "print" as const,
+          value: {
+            hex: serializeCV(clarityValue),
+          },
         },
-      },
-    };
-  },
-
-   createSuccessTransaction = (
-    txId: string,
-    blockHeight: number,
-    timestamp: number,
-  ) => ({
-    tx_id: txId,
-    tx_status: "success" as const,
-    block_height: blockHeight,
-    burn_block_time: timestamp,
-  });
+      };
+    },
+    createSuccessTransaction = (
+      txId: string,
+      blockHeight: number,
+      timestamp: number,
+    ) => ({
+      tx_id: txId,
+      tx_status: "success" as const,
+      block_height: blockHeight,
+      burn_block_time: timestamp,
+    });
 
   it("returns 0 profiles when no events exist", async () => {
     mockStacksApiClientGET.mockResolvedValue({
@@ -407,16 +406,24 @@ describe("executeIndexerIndexProfilesJob", () => {
 
   it("handles pagination with multiple pages", async () => {
     const eventsPage1 = Array.from({ length: 50 }, (_, i) =>
-      createSetProfileEvent(
-        `0xtx${i}`,
-        userId,
-        `https://example.com/profile-${i}`,
+        createSetProfileEvent(
+          `0xtx${i}`,
+          userId,
+          `https://example.com/profile-${i}`,
+        ),
       ),
-    ),
-     eventsPage2 = [
-      createSetProfileEvent("0xtx50", userId, "https://example.com/profile-50"),
-      createSetProfileEvent("0xtx51", userId, "https://example.com/profile-51"),
-    ];
+      eventsPage2 = [
+        createSetProfileEvent(
+          "0xtx50",
+          userId,
+          "https://example.com/profile-50",
+        ),
+        createSetProfileEvent(
+          "0xtx51",
+          userId,
+          "https://example.com/profile-51",
+        ),
+      ];
 
     mockStacksApiClientGET
       .mockResolvedValueOnce({ data: { results: eventsPage1 } })
@@ -476,13 +483,13 @@ describe("executeIndexerIndexProfilesJob", () => {
     });
     mockGetStacksTransaction.mockImplementation((txId: string) => {
       const heights: Record<string, number> = {
-        "0xtx1": 100,
-        "0xtx2": 101,
-      },
-       timestamps: Record<string, number> = {
-        "0xtx1": 1700000000,
-        "0xtx2": 1700000010,
-      };
+          "0xtx1": 100,
+          "0xtx2": 101,
+        },
+        timestamps: Record<string, number> = {
+          "0xtx1": 1700000000,
+          "0xtx2": 1700000010,
+        };
       return Result.ok(
         createSuccessTransaction(txId, heights[txId], timestamps[txId]),
       );
@@ -519,26 +526,26 @@ describe("executeIndexerIndexProfilesJob", () => {
 
   it("handles pagination with more than two pages", async () => {
     const eventsPage1 = Array.from({ length: 50 }, (_, i) =>
-      createSetProfileEvent(
-        `0xtx${i}`,
-        userId,
-        `https://example.com/profile-${i}`,
+        createSetProfileEvent(
+          `0xtx${i}`,
+          userId,
+          `https://example.com/profile-${i}`,
+        ),
       ),
-    ),
-     eventsPage2 = Array.from({ length: 50 }, (_, i) =>
-      createSetProfileEvent(
-        `0xtx${50 + i}`,
-        userId,
-        `https://example.com/profile-${50 + i}`,
+      eventsPage2 = Array.from({ length: 50 }, (_, i) =>
+        createSetProfileEvent(
+          `0xtx${50 + i}`,
+          userId,
+          `https://example.com/profile-${50 + i}`,
+        ),
       ),
-    ),
-     eventsPage3 = [
-      createSetProfileEvent(
-        "0xtx100",
-        userId,
-        "https://example.com/profile-100",
-      ),
-    ];
+      eventsPage3 = [
+        createSetProfileEvent(
+          "0xtx100",
+          userId,
+          "https://example.com/profile-100",
+        ),
+      ];
 
     mockStacksApiClientGET
       .mockResolvedValueOnce({ data: { results: eventsPage1 } })

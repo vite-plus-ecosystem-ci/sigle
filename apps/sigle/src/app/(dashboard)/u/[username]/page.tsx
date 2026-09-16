@@ -12,25 +12,21 @@ interface Props {
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params,
-
-   { data: user } = await sigleApiFetchClient.GET(
-    "/api/users/{username}",
-    {
+    { data: user } = await sigleApiFetchClient.GET("/api/users/{username}", {
       params: {
         path: {
           username: params.username,
         },
       },
-    },
-  );
+    });
   if (!user) {
     notFound();
   }
 
   const title = user.id,
-   description = user.profile?.description
-    ? user.profile.description
-    : `Read ${title} publications on Sigle.`;
+    description = user.profile?.description
+      ? user.profile.description
+      : `Read ${title} publications on Sigle.`;
 
   return {
     title: `${title} | Sigle Profile`,

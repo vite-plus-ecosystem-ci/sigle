@@ -21,19 +21,19 @@ const headerIconSize = 20;
  */
 export const EditorHeader = () => {
   const { watch } = useFormContext<EditorPostFormData>(),
-   type = watch("type"),
-   menuOpen = useEditorStore((state) => state.menuOpen),
-   setMenuOpen = useEditorStore((state) => state.setMenuOpen),
-   [scrollDirection, setScrollDirection] = useState<"down" | "up" | null>(
-    null,
-  );
+    type = watch("type"),
+    menuOpen = useEditorStore((state) => state.menuOpen),
+    setMenuOpen = useEditorStore((state) => state.setMenuOpen),
+    [scrollDirection, setScrollDirection] = useState<"down" | "up" | null>(
+      null,
+    );
 
   useEffect(() => {
     let lastScrollY = window.pageYOffset;
 
     const updateScrollDirection = () => {
       const scrollY = window.pageYOffset,
-       direction = scrollY > lastScrollY ? "down" : "up";
+        direction = scrollY > lastScrollY ? "down" : "up";
       if (
         direction !== scrollDirection &&
         (scrollY - lastScrollY > 10 || scrollY - lastScrollY < -10)

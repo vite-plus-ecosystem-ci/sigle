@@ -30,7 +30,7 @@ export const Header = ({ site }: HeaderProps) => {
 
     const updateScrollDirection = () => {
       const scrollY = window.scrollY,
-       direction = scrollY > lastScrollY ? "down" : "up";
+        direction = scrollY > lastScrollY ? "down" : "up";
       if (
         direction !== scrollDirection &&
         (scrollY - lastScrollY > 10 || scrollY - lastScrollY < -10)

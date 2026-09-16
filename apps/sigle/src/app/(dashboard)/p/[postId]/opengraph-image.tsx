@@ -40,11 +40,11 @@ export default async function Image({
   // ]);
 
   const title = post.title,
-   avatar = post.user.profile?.pictureUri
-    ? resolveImageUrl(post.user.profile.pictureUri.id)
-    : undefined,
-   username = post.user.profile?.displayName,
-   handle = post.user.id;
+    avatar = post.user.profile?.pictureUri
+      ? resolveImageUrl(post.user.profile.pictureUri.id)
+      : undefined,
+    username = post.user.profile?.displayName,
+    handle = post.user.id;
 
   return new ImageResponse(
     <div

@@ -76,13 +76,12 @@ describe("api/sites/[domain]/index.get", () => {
     mockGetRouterParam.mockReturnValue("blog.sigle.io");
 
     const mockEvent = {
-      context: {},
-      path: "/api/sites/blog.sigle.io",
-      method: "GET",
-      headers: {},
-    } as unknown as H3Event,
-
-     result = await handler(mockEvent);
+        context: {},
+        path: "/api/sites/blog.sigle.io",
+        method: "GET",
+        headers: {},
+      } as unknown as H3Event,
+      result = await handler(mockEvent);
 
     expect(result).toMatchObject({
       address: siteAddress,
@@ -143,13 +142,12 @@ describe("api/sites/[domain]/index.get", () => {
     mockGetRouterParam.mockReturnValue("blog.sigle.io");
 
     const mockEvent = {
-      context: {},
-      path: "/api/sites/blog.sigle.io",
-      method: "GET",
-      headers: {},
-    } as unknown as H3Event,
-
-     result = await handler(mockEvent);
+        context: {},
+        path: "/api/sites/blog.sigle.io",
+        method: "GET",
+        headers: {},
+      } as unknown as H3Event,
+      result = await handler(mockEvent);
 
     expect(result?.address).toBe(siteAddress);
   });

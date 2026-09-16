@@ -58,29 +58,27 @@ vi.mock(import("./BottomInfo"), () => ({
 }));
 
 const getMarkdownOutput = (): string => {
-  const store = useEditorStore.getState(),
-   editor = store.editor;
-  expect(editor).toBeDefined();
-  return editor?.getMarkdown() ?? "";
-},
-
- waitForEditor = async () => {
-  await waitFor(() => {
-    expect(useEditorStore.getState().editor).not.toBeNull();
-  });
-},
-
- defaultPost = {
-  type: "draft" as const,
-  title: "",
-  content: "",
-  coverImage: undefined,
-  published: false,
-  timestamp: 0,
-  id: "test-id",
-  createdAt: "2024-01-01T00:00:00.000Z",
-  updatedAt: "2024-01-01T00:00:00.000Z",
-};
+    const store = useEditorStore.getState(),
+      editor = store.editor;
+    expect(editor).toBeDefined();
+    return editor?.getMarkdown() ?? "";
+  },
+  waitForEditor = async () => {
+    await waitFor(() => {
+      expect(useEditorStore.getState().editor).not.toBeNull();
+    });
+  },
+  defaultPost = {
+    type: "draft" as const,
+    title: "",
+    content: "",
+    coverImage: undefined,
+    published: false,
+    timestamp: 0,
+    id: "test-id",
+    createdAt: "2024-01-01T00:00:00.000Z",
+    updatedAt: "2024-01-01T00:00:00.000Z",
+  };
 
 describe("editor tiptap - markdown serialization", () => {
   beforeEach(() => {

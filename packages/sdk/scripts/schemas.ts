@@ -4,18 +4,16 @@ import * as z from "zod";
 import { PostMetadataSchema, ProfileMetadataSchema } from "../src/index.js";
 
 const outputDir = "jsonschemas",
-
- schemas = new Map<string, z.ZodSchema<unknown>>([
-  ["posts/1.0.0.json", PostMetadataSchema],
-  ["profile/1.0.0.json", ProfileMetadataSchema],
-]);
+  schemas = new Map<string, z.ZodSchema<unknown>>([
+    ["posts/1.0.0.json", PostMetadataSchema],
+    ["profile/1.0.0.json", ProfileMetadataSchema],
+  ]);
 
 for (const [path, Schema] of schemas) {
   const outputFile = join(outputDir, path),
-
-   jsonSchema = z.toJSONSchema(Schema, {
-    target: "draft-2020-12",
-  });
+    jsonSchema = z.toJSONSchema(Schema, {
+      target: "draft-2020-12",
+    });
 
   fs.writeFileSync(outputFile, JSON.stringify(jsonSchema, null, 2), "utf-8");
 }

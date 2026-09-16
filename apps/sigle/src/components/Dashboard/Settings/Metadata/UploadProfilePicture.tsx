@@ -20,50 +20,47 @@ export const UploadProfilePicture = ({
   setPicture,
 }: UploadProfilePictureProps) => {
   const posthog = usePostHog(),
-   { mutate: uploadImage, isPending: loadingUploadImage } =
-    sigleApiClient.useMutation(
-      "post",
-      "/api/protected/user/profile/upload-avatar",
+    { mutate: uploadImage, isPending: loadingUploadImage } =
+      sigleApiClient.useMutation(
+        "post",
+        "/api/protected/user/profile/upload-avatar",
+      ),
+    onDrop = useCallback(
+      async (acceptedFiles: File[]) => {
+        const file = acceptedFiles[0];
+        if (!file) return;
+        if (loadingUploadImage) return;
+        posthog.capture("profile_image_upload_start", {});
+
+        const formData = new FormData();
+        formData.append("file", file);
+        uploadImage(
+          {
+            // oxlint-disable-next-line typescript/no-explicit-any
+            body: formData as any,
+          },
+          {
+            onSuccess: (data) => {
+              setPicture(data.url);
+              posthog.capture("profile_image_upload_success", {});
+            },
+            onError: (error) => {
+              posthog.capture("profile_image_upload_error", {});
+              toast.error(error.message);
+            },
+          },
+        );
+      },
+      [posthog, uploadImage, setPicture, loadingUploadImage],
     ),
-
-   onDrop = useCallback(
-    async (acceptedFiles: File[]) => {
-      const file = acceptedFiles[0];
-      if (!file) return;
-      if (loadingUploadImage) return;
-      posthog.capture("profile_image_upload_start", {});
-
-      const formData = new FormData();
-      formData.append("file", file);
-      uploadImage(
-        {
-          // oxlint-disable-next-line typescript/no-explicit-any
-          body: formData as any,
-        },
-        {
-          onSuccess: (data) => {
-            setPicture(data.url);
-            posthog.capture("profile_image_upload_success", {});
-          },
-          onError: (error) => {
-            posthog.capture("profile_image_upload_error", {});
-            toast.error(error.message);
-          },
-        },
-      );
-    },
-    [posthog, uploadImage, setPicture, loadingUploadImage],
-  ),
-
-   { getRootProps, getInputProps } = useDropzone({
-    onDrop,
-    accept: {
-      "image/jpeg": [],
-      "image/png": [],
-    },
-  }),
-
-   resolvedPicture = picture ? resolveImageUrl(picture) : undefined;
+    { getRootProps, getInputProps } = useDropzone({
+      onDrop,
+      accept: {
+        "image/jpeg": [],
+        "image/png": [],
+      },
+    }),
+    resolvedPicture = picture ? resolveImageUrl(picture) : undefined;
 
   return (
     <Field>

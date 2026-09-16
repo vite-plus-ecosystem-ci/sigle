@@ -86,103 +86,100 @@ interface SubsetStory {
 
 export default function MigrationPage() {
   const [username, setUsername] = useState<{ value: string; ready: boolean }>({
-    value: "",
-    ready: false,
-  }),
-   [loadingPostId, setLoadingPostId] = useState<string | null>(null),
-
-   fetchPosts = async (): Promise<SubsetStory[]> => {
-    const res = await fetch(`/api/migration/list?username=${username.value}`),
-     data = await res.json();
-    if (!res.ok) {
-      throw new Error(data.message);
-    }
-    return data;
-  },
-
-   handleMigrate = async (id: string) => {
-    setLoadingPostId(id);
-    try {
-      // 1. Fetch the post from old API
-      const res = await fetch(
-        `/api/migration/${id}?username=${username.value}`,
-      ),
-       data: Story = await res.json();
-      console.log("handleMigrate", data);
-
-      // 2. Create a new draft
-      const { data: newPost, error: newPostError } =
-        await sigleApiFetchClient.POST("/api/protected/drafts/create", {});
-      if (newPostError) {
-        toast.error(newPostError.message);
-        return;
+      value: "",
+      ready: false,
+    }),
+    [loadingPostId, setLoadingPostId] = useState<string | null>(null),
+    fetchPosts = async (): Promise<SubsetStory[]> => {
+      const res = await fetch(`/api/migration/list?username=${username.value}`),
+        data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.message);
       }
-      console.log("newPost", newPost);
+      return data;
+    },
+    handleMigrate = async (id: string) => {
+      setLoadingPostId(id);
+      try {
+        // 1. Fetch the post from old API
+        const res = await fetch(
+            `/api/migration/${id}?username=${username.value}`,
+          ),
+          data: Story = await res.json();
+        console.log("handleMigrate", data);
 
-      // 3. Update the draft with the content from the old post
-      const { data: updatePost, error: updatePostError } =
-        await sigleApiFetchClient.POST(
-          "/api/protected/drafts/{draftId}/update",
-          {
-            params: {
-              path: {
-                draftId: newPost.id,
-              },
-            },
-            body: {
-              title: data.title,
-              content: data.content,
-              metaTitle: data.metaTitle,
-              coverImage: data.coverImage,
-              metaDescription: data.metaDescription,
-              canonicalUri: data.canonicalUrl,
-              collect: {
-                collectPrice: {
-                  type: "free",
-                  price: 0,
-                },
-                collectLimit: {
-                  type: "open",
-                  limit: 100,
+        // 2. Create a new draft
+        const { data: newPost, error: newPostError } =
+          await sigleApiFetchClient.POST("/api/protected/drafts/create", {});
+        if (newPostError) {
+          toast.error(newPostError.message);
+          return;
+        }
+        console.log("newPost", newPost);
+
+        // 3. Update the draft with the content from the old post
+        const { data: updatePost, error: updatePostError } =
+          await sigleApiFetchClient.POST(
+            "/api/protected/drafts/{draftId}/update",
+            {
+              params: {
+                path: {
+                  draftId: newPost.id,
                 },
               },
+              body: {
+                title: data.title,
+                content: data.content,
+                metaTitle: data.metaTitle,
+                coverImage: data.coverImage,
+                metaDescription: data.metaDescription,
+                canonicalUri: data.canonicalUrl,
+                collect: {
+                  collectPrice: {
+                    type: "free",
+                    price: 0,
+                  },
+                  collectLimit: {
+                    type: "open",
+                    limit: 100,
+                  },
+                },
+              },
             },
-          },
+          );
+        console.log("updatePost", updatePost);
+        if (updatePostError) {
+          toast.error(updatePostError.message);
+          return;
+        }
+
+        window.open(
+          Routes.editPost(
+            { postId: updatePost.id },
+            {
+              search: {
+                forceSave: "true",
+              },
+            },
+          ),
+          "_blank",
         );
-      console.log("updatePost", updatePost);
-      if (updatePostError) {
-        toast.error(updatePostError.message);
-        return;
+      } catch (error) {
+        console.error(error);
+        toast.error(error as string);
+      } finally {
+        setLoadingPostId(null);
       }
-
-      window.open(
-        Routes.editPost(
-          { postId: updatePost.id },
-          {
-            search: {
-              forceSave: "true",
-            },
-          },
-        ),
-        "_blank",
-      );
-    } catch (error) {
-      console.error(error);
-      toast.error(error as string);
-    } finally {
-      setLoadingPostId(null);
-    }
-  },
-
-   {
-    data: posts,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["migration", username.value],
-    queryFn: fetchPosts,
-    enabled: !!username.ready,
-  });
+    },
+    {
+      data: posts,
+      isLoading,
+      error,
+    } = useQuery({
+      queryKey: ["migration", username.value],
+      queryFn: fetchPosts,
+      enabled: !!username.ready,
+    });
 
   return (
     <div className="py-10">

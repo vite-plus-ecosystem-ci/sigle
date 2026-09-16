@@ -11,18 +11,18 @@ import { UpdateProfileMetadata } from "./UpdateProfileMetadata";
 
 export const SettingsProfileMetadata = () => {
   const [editingProfileMetadata, setEditingProfileMetadata] = useState(false),
-   { data: session } = useSession(),
-   { data: user } = sigleApiClient.useSuspenseQuery(
-    "get",
-    "/api/users/{username}",
-    {
-      params: {
-        path: {
-          username: session?.user.id || "",
+    { data: session } = useSession(),
+    { data: user } = sigleApiClient.useSuspenseQuery(
+      "get",
+      "/api/users/{username}",
+      {
+        params: {
+          path: {
+            username: session?.user.id || "",
+          },
         },
       },
-    },
-  );
+    );
   if (!user) {
     return null;
   }

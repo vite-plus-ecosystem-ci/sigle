@@ -5,8 +5,8 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params,
-   { searchParams } = new URL(request.url),
-   username = searchParams.get("username");
+    { searchParams } = new URL(request.url),
+    username = searchParams.get("username");
   if (!username) {
     return NextResponse.json(
       { error: "username is required" },
@@ -14,8 +14,8 @@ export async function GET(
     );
   }
   const res = await fetch(
-    `https://api.sigle.io/api/gaia/${username}/stories/${id}`,
-  ),
-   data = await res.json();
+      `https://api.sigle.io/api/gaia/${username}/stories/${id}`,
+    ),
+    data = await res.json();
   return NextResponse.json(data);
 }

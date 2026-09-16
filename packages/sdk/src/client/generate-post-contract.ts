@@ -41,9 +41,9 @@ export const generatePostContract = ({
   networkName: StacksNetworkName;
 }): GeneratePostReturn => {
   const nftTrait = config[networkName].nftTrait,
-   commissionTrait = config[networkName].commissionTrait,
-   fixedPriceMinter = config[networkName].fixedPriceMinter,
-   postTrait = config[networkName].postTrait;
+    commissionTrait = config[networkName].commissionTrait,
+    fixedPriceMinter = config[networkName].fixedPriceMinter,
+    postTrait = config[networkName].postTrait;
 
   let contract = contracts.siglePostV0.replace(
     "{__BASE_TOKEN_URI__}",

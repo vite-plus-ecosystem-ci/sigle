@@ -67,45 +67,44 @@ export const SlashCommands = Extension.create<{
         },
         render: () => {
           let reactRenderer: ReactRenderer<CommandListRef> | null = null,
-           container: HTMLDivElement | null = null,
-           cleanup: (() => void) | null = null;
+            container: HTMLDivElement | null = null,
+            cleanup: (() => void) | null = null;
 
           const getVirtualElement = (
-            clientRect: (() => DOMRect | null) | null | undefined,
-          ): VirtualElement => ({
-            getBoundingClientRect: () => {
-              const rect = clientRect?.();
-              return (
-                rect ?? {
-                  x: 0,
-                  y: 0,
-                  width: 0,
-                  height: 0,
-                  top: 0,
-                  right: 0,
-                  bottom: 0,
-                  left: 0,
-                }
-              );
-            },
-          }),
-
-           updatePosition = (
-            clientRect: (() => DOMRect | null) | null | undefined,
-          ) => {
-            if (!container) return;
-            const virtualEl = getVirtualElement(clientRect);
-            computePosition(virtualEl, container, {
-              placement: "bottom-start",
-              middleware: [offset(4), flip()],
-            }).then(({ x, y }) => {
+              clientRect: (() => DOMRect | null) | null | undefined,
+            ): VirtualElement => ({
+              getBoundingClientRect: () => {
+                const rect = clientRect?.();
+                return (
+                  rect ?? {
+                    x: 0,
+                    y: 0,
+                    width: 0,
+                    height: 0,
+                    top: 0,
+                    right: 0,
+                    bottom: 0,
+                    left: 0,
+                  }
+                );
+              },
+            }),
+            updatePosition = (
+              clientRect: (() => DOMRect | null) | null | undefined,
+            ) => {
               if (!container) return;
-              Object.assign(container.style, {
-                left: `${x}px`,
-                top: `${y}px`,
+              const virtualEl = getVirtualElement(clientRect);
+              computePosition(virtualEl, container, {
+                placement: "bottom-start",
+                middleware: [offset(4), flip()],
+              }).then(({ x, y }) => {
+                if (!container) return;
+                Object.assign(container.style, {
+                  left: `${x}px`,
+                  top: `${y}px`,
+                });
               });
-            });
-          };
+            };
 
           return {
             onStart: (props) => {

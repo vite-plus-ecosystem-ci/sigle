@@ -6,8 +6,8 @@ import { betterAuthSiws } from "./siws-auth";
 
 // Only enable secure cookies with https to get localhost to work
 const useSecureCookies = env.APP_URL.startsWith("https://"),
- hostname = new URL(env.APP_URL).hostname,
- rootDomain = hostname.split(".").slice(-2).join(".");
+  hostname = new URL(env.APP_URL).hostname,
+  rootDomain = hostname.split(".").slice(-2).join(".");
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, { provider: "postgresql" }),

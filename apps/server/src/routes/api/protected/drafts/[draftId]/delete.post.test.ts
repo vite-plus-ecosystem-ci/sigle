@@ -63,16 +63,15 @@ describe("api/protected/drafts/[draftId]/delete.post", () => {
     mockGetRouterParam.mockReturnValue("draft-1");
 
     const mockEvent = {
-      context: {
-        user: { id: userId },
-        $posthog: { capture: vi.fn() },
-      },
-      path: "/api/protected/drafts/draft-1/delete",
-      method: "POST",
-      headers: {},
-    } as unknown as H3Event,
-
-     result = await handler(mockEvent);
+        context: {
+          user: { id: userId },
+          $posthog: { capture: vi.fn() },
+        },
+        path: "/api/protected/drafts/draft-1/delete",
+        method: "POST",
+        headers: {},
+      } as unknown as H3Event,
+      result = await handler(mockEvent);
 
     expect(result).toBe(true);
 

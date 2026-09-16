@@ -34,27 +34,26 @@ interface EditorBubbleMenuProps {
 
 export const EditorBubbleMenu = ({ editor }: EditorBubbleMenuProps) => {
   const linkOpen = useBubbleMenuStore((state) => state.linkOpen),
-   setLinkValue = useBubbleMenuStore((state) => state.setLinkValue),
-   setLinkOpen = useBubbleMenuStore((state) => state.setLinkOpen),
-
-   {
-    isActiveBold,
-    isActiveItalic,
-    isActiveUnderline,
-    isActiveStrike,
-    isActiveCode,
-    isActiveLink,
-  } = useEditorState({
-    editor,
-    selector: (context) => ({
-      isActiveBold: context.editor.isActive("bold"),
-      isActiveItalic: context.editor.isActive("italic"),
-      isActiveUnderline: context.editor.isActive("underline"),
-      isActiveStrike: context.editor.isActive("strike"),
-      isActiveCode: context.editor.isActive("code"),
-      isActiveLink: context.editor.isActive("link"),
-    }),
-  });
+    setLinkValue = useBubbleMenuStore((state) => state.setLinkValue),
+    setLinkOpen = useBubbleMenuStore((state) => state.setLinkOpen),
+    {
+      isActiveBold,
+      isActiveItalic,
+      isActiveUnderline,
+      isActiveStrike,
+      isActiveCode,
+      isActiveLink,
+    } = useEditorState({
+      editor,
+      selector: (context) => ({
+        isActiveBold: context.editor.isActive("bold"),
+        isActiveItalic: context.editor.isActive("italic"),
+        isActiveUnderline: context.editor.isActive("underline"),
+        isActiveStrike: context.editor.isActive("strike"),
+        isActiveCode: context.editor.isActive("code"),
+        isActiveLink: context.editor.isActive("link"),
+      }),
+    });
 
   // Listen to any key press to detect cmd + k and activate the link edition
   // oxlint-disable-next-line exhaustive-deps
@@ -72,19 +71,18 @@ export const EditorBubbleMenu = ({ editor }: EditorBubbleMenuProps) => {
   }, []);
 
   const onSelectLink = () => {
-    // Get href of selected link to pre fill the input
-    const existingHref = editor.isActive("link")
-      ? editor.getAttributes("link").href
-      : "";
+      // Get href of selected link to pre fill the input
+      const existingHref = editor.isActive("link")
+        ? editor.getAttributes("link").href
+        : "";
 
-    setLinkOpen(true);
-    setLinkValue(existingHref);
-  },
-
-   resetLink = () => {
-    setLinkOpen(false);
-    setLinkValue("");
-  };
+      setLinkOpen(true);
+      setLinkValue(existingHref);
+    },
+    resetLink = () => {
+      setLinkOpen(false);
+      setLinkValue("");
+    };
 
   return (
     <TipTapBubbleMenu
@@ -100,20 +98,18 @@ export const EditorBubbleMenu = ({ editor }: EditorBubbleMenuProps) => {
         // Take the initial implementation of the plugin and extends it
         // https://github.com/ueberdosis/tiptap/blob/main/packages/extension-bubble-menu/src/bubble-menu-plugin.ts#L195
         const { doc, selection } = state,
-         { empty } = selection,
-
-        // Sometime check for `empty` is not enough.
-        // Doubleclick an empty paragraph returns a node size of 2.
-        // So we check also for an empty text size.
-         isEmptyTextBlock =
-          !doc.textBetween(from, to).length && isTextSelection(state.selection),
-
-        // When clicking on a element inside the bubble menu the editor "blur" event
-        // is called and the bubble menu item is focussed. In this case we should
-        // consider the menu as part of the editor and keep showing the menu
-         isChildOfMenu = element.contains(document.activeElement),
-
-         hasEditorFocus = view.hasFocus() || isChildOfMenu;
+          { empty } = selection,
+          // Sometime check for `empty` is not enough.
+          // Doubleclick an empty paragraph returns a node size of 2.
+          // So we check also for an empty text size.
+          isEmptyTextBlock =
+            !doc.textBetween(from, to).length &&
+            isTextSelection(state.selection),
+          // When clicking on a element inside the bubble menu the editor "blur" event
+          // is called and the bubble menu item is focussed. In this case we should
+          // consider the menu as part of the editor and keep showing the menu
+          isChildOfMenu = element.contains(document.activeElement),
+          hasEditorFocus = view.hasFocus() || isChildOfMenu;
 
         if (
           !hasEditorFocus ||

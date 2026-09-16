@@ -33,20 +33,19 @@ export const arweaveUploadFile = async ({
   tags?: ArweaveTag[];
 }): Promise<Result<{ id: string }, ArweaveUploadFailedError>> => {
   const fileSize = file.byteLength,
-   cid = await createCIDv1FromBuffer(file),
-
-   arweaveTags: ArweaveTag[] = [
-    {
-      name: "Content-Type",
-      value: contentType,
-    },
-    {
-      name: "App-Name",
-      value: env.APP_ID,
-    },
-    { name: "IPFS-CID", value: cid },
-    ...tags,
-  ];
+    cid = await createCIDv1FromBuffer(file),
+    arweaveTags: ArweaveTag[] = [
+      {
+        name: "Content-Type",
+        value: contentType,
+      },
+      {
+        name: "App-Name",
+        value: env.APP_ID,
+      },
+      { name: "IPFS-CID", value: cid },
+      ...tags,
+    ];
 
   return Result.tryPromise({
     try: async () => {

@@ -11,24 +11,23 @@ export async function generateMetadata({
   params: Promise<{ domain: string }>;
 }): Promise<Metadata | null> {
   const { domain: domainUnsafe } = await params,
-   domain = decodeURIComponent(domainUnsafe),
-
-   { data: site } = await sigleApiFetchClient.GET("/api/sites/{domain}", {
-    params: {
-      path: {
-        domain,
+    domain = decodeURIComponent(domainUnsafe),
+    { data: site } = await sigleApiFetchClient.GET("/api/sites/{domain}", {
+      params: {
+        path: {
+          domain,
+        },
       },
-    },
-  });
+    });
   if (!site) {
     notFound();
   }
 
   const title = `${site.user.profile?.displayName} | Blog`,
-   description = site.user.profile?.description,
-   image = site.user.profile?.pictureUri
-    ? resolveImageUrl(site.user.profile.pictureUri.id)
-    : undefined;
+    description = site.user.profile?.description,
+    image = site.user.profile?.pictureUri
+      ? resolveImageUrl(site.user.profile.pictureUri.id)
+      : undefined;
 
   return {
     metadataBase: new URL(site.url),
@@ -62,15 +61,14 @@ export default async function PageLayout({
   params: Promise<{ domain: string }>;
 }) {
   const { domain: domainUnsafe } = await params,
-   domain = decodeURIComponent(domainUnsafe),
-
-   { data: site } = await sigleApiFetchClient.GET("/api/sites/{domain}", {
-    params: {
-      path: {
-        domain,
+    domain = decodeURIComponent(domainUnsafe),
+    { data: site } = await sigleApiFetchClient.GET("/api/sites/{domain}", {
+      params: {
+        path: {
+          domain,
+        },
       },
-    },
-  });
+    });
   if (!site) {
     notFound();
   }

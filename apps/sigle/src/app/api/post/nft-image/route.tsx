@@ -18,12 +18,11 @@ const size = {
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url),
-
-   validationResult = paramsSchema.safeParse({
-    title: searchParams.get("title"),
-    username: searchParams.get("username"),
-    coverImage: searchParams.get("coverImage") || undefined,
-  });
+    validationResult = paramsSchema.safeParse({
+      title: searchParams.get("title"),
+      username: searchParams.get("username"),
+      coverImage: searchParams.get("coverImage") || undefined,
+    });
   if (!validationResult.success) {
     return Response.json(
       {
@@ -49,14 +48,14 @@ export async function GET(request: Request) {
   }
 
   const title = validationResult.data.title,
-   avatar = user.profile?.pictureUri
-    ? resolveImageUrl(user.profile.pictureUri.id)
-    : undefined,
-   username = user.profile?.displayName,
-   handle = user.id,
-   coverImage = validationResult.data.coverImage
-    ? resolveImageUrl(validationResult.data.coverImage)
-    : undefined;
+    avatar = user.profile?.pictureUri
+      ? resolveImageUrl(user.profile.pictureUri.id)
+      : undefined,
+    username = user.profile?.displayName,
+    handle = user.id,
+    coverImage = validationResult.data.coverImage
+      ? resolveImageUrl(validationResult.data.coverImage)
+      : undefined;
 
   return new ImageResponse(
     <div

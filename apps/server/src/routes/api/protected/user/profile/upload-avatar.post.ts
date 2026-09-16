@@ -67,8 +67,7 @@ const fileSchema = z.object({
 
 export default defineEventHandler(async (event) => {
   const formData = await readFormData(event, "5mb"),
-
-   file = formData.get("file");
+    file = formData.get("file");
   if (!file || !(file instanceof File)) {
     throw new HTTPError({
       status: 400,
@@ -102,11 +101,10 @@ export default defineEventHandler(async (event) => {
   }
 
   const optimizedBuffer = optimizeResult.value,
-
-   quotaResult = await checkUploadQuota(
-    event.context.user.id,
-    optimizedBuffer.length,
-  );
+    quotaResult = await checkUploadQuota(
+      event.context.user.id,
+      optimizedBuffer.length,
+    );
 
   if (quotaResult.isErr()) {
     throw new HTTPError({

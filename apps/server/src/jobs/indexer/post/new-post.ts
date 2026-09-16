@@ -9,14 +9,14 @@ import { generateImageBlurhashJob } from "../../generate-image-blurhash";
 
 function extractBaseTokenUri(contractString: string): string | null {
   const regex =
-    /\(define-data-var base-token-uri \(string-ascii \d+\) "([^"]+)"\)/,
-   match = contractString.match(regex);
+      /\(define-data-var base-token-uri \(string-ascii \d+\) "([^"]+)"\)/,
+    match = contractString.match(regex);
   return match ? match[1] : null;
 }
 
 function extractMaxSupply(contractString: string): bigint | null {
   const regex = /\(define-data-var max-supply uint u(\d+)\)/,
-   match = contractString.match(regex);
+    match = contractString.match(regex);
   return match ? BigInt(match[1]) : null;
 }
 
@@ -27,8 +27,8 @@ function extractFixedPricingDetails(contractString: string): {
   createRefferer?: string;
 } | null {
   const regex =
-    /\(unwrap-panic \(as-contract \(contract-call\? '(.+?) init-mint-details u(\d+) u(\d+) u(\d+) (none|some .*)\)\)\)/,
-   match = contractString.match(regex);
+      /\(unwrap-panic \(as-contract \(contract-call\? '(.+?) init-mint-details u(\d+) u(\d+) u(\d+) (none|some .*)\)\)\)/,
+    match = contractString.match(regex);
 
   if (!match) return null;
 
@@ -47,39 +47,36 @@ export async function getMetadataFromUri(baseTokenUri: string) {
     url = `${env.ARWEAVE_GATEWAY_URL}/${arweaveTxId}`;
   }
   const response = await fetch(url),
-   json = await response.json(),
-
-  // Verify data is correct
-   postMetadata = PostMetadataSchema.safeParse(json);
+    json = await response.json(),
+    // Verify data is correct
+    postMetadata = PostMetadataSchema.safeParse(json);
   if (!postMetadata.success) {
     throw new Error(`Invalid postV1: ${postMetadata.error}`);
   }
   const postData = postMetadata.data,
-
-   metaTitle = postData.content.attributes?.find(
-    (attribute) => attribute.key === "meta-title",
-  )?.value,
-   metaDescription = postData.content.attributes?.find(
-    (attribute) => attribute.key === "meta-description",
-  )?.value,
-   excerpt = postData.content.attributes?.find(
-    (attribute) => attribute.key === "excerpt",
-  )?.value,
-   canonicalUri = postData.content.attributes?.find(
-    (attribute) => attribute.key === "canonical-uri",
-  )?.value,
-
-   metadata = {
-    id: postData.content.id,
-    title: postData.content.title,
-    content: postData.content.content,
-    metaTitle,
-    metaDescription,
-    excerpt: excerpt || "",
-    coverImage: postData.content.coverImage,
-    tags: postData.content.tags,
-    canonicalUri,
-  };
+    metaTitle = postData.content.attributes?.find(
+      (attribute) => attribute.key === "meta-title",
+    )?.value,
+    metaDescription = postData.content.attributes?.find(
+      (attribute) => attribute.key === "meta-description",
+    )?.value,
+    excerpt = postData.content.attributes?.find(
+      (attribute) => attribute.key === "excerpt",
+    )?.value,
+    canonicalUri = postData.content.attributes?.find(
+      (attribute) => attribute.key === "canonical-uri",
+    )?.value,
+    metadata = {
+      id: postData.content.id,
+      title: postData.content.title,
+      content: postData.content.content,
+      metaTitle,
+      metaDescription,
+      excerpt: excerpt || "",
+      coverImage: postData.content.coverImage,
+      tags: postData.content.tags,
+      canonicalUri,
+    };
 
   return metadata;
 }
@@ -111,9 +108,8 @@ export const executeNewPostJob = async (
     throw new Error(`Invalid maxSupply: ${maxSupply}`);
   }
   const openEdition = maxSupply === BigInt(MAX_UINT),
-
-  // Verify that the contract matches the template
-   fixedPricingDetails = extractFixedPricingDetails(data.contract);
+    // Verify that the contract matches the template
+    fixedPricingDetails = extractFixedPricingDetails(data.contract);
   if (!fixedPricingDetails) {
     throw new Error(`Invalid fixedPricingDetails: ${fixedPricingDetails}`);
   }
@@ -133,15 +129,15 @@ export const executeNewPostJob = async (
 
   await prisma.$transaction(async (tx) => {
     const userId = data.sender,
-     post = await tx.post.findUnique({
-      select: {
-        id: true,
-        txId: true,
-      },
-      where: {
-        id: metadata.id,
-      },
-    });
+      post = await tx.post.findUnique({
+        select: {
+          id: true,
+          txId: true,
+        },
+        where: {
+          id: metadata.id,
+        },
+      });
     if (post && post.txId !== data.txId) {
       throw new Error(
         `Post id ${metadata.id} already exists with txId ${post.txId}`,

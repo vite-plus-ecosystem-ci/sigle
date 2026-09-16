@@ -25,9 +25,8 @@ interface PostListItemProps {
 
 export const PostListItem = ({ post }: PostListItemProps) => {
   const { data: session } = useSession(),
-   [shareDialogOpen, setShareDialogOpen] = useState(false),
-
-   isCurrentUser = session?.user.id === post.user.id;
+    [shareDialogOpen, setShareDialogOpen] = useState(false),
+    isCurrentUser = session?.user.id === post.user.id;
 
   return (
     <div className="space-y-3 border-b border-solid border-border py-5 last:border-b-0">

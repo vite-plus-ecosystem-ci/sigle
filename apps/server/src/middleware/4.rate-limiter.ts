@@ -23,56 +23,54 @@ interface RouteConfig {
 
 // Define route configurations
 const routeConfigs: RouteConfig[] = [
-  {
-    path: "/api/protected/drafts/:draftId/upload-media",
-    method: "POST",
-    config: {
-      // limit to 10 requests per user per minute
-      points: 10,
-      duration: 60,
+    {
+      path: "/api/protected/drafts/:draftId/upload-media",
+      method: "POST",
+      config: {
+        // limit to 10 requests per user per minute
+        points: 10,
+        duration: 60,
+      },
     },
-  },
-  {
-    path: "/api/protected/drafts/:draftId/upload-metadata",
-    method: "POST",
-    config: {
-      // limit to 4 requests per user per minute
-      points: 4,
-      duration: 60,
+    {
+      path: "/api/protected/drafts/:draftId/upload-metadata",
+      method: "POST",
+      config: {
+        // limit to 4 requests per user per minute
+        points: 4,
+        duration: 60,
+      },
     },
-  },
-  {
-    path: "/api/protected/user/profile/upload-avatar",
-    method: "POST",
-    config: {
-      // limit to 4 requests per user per minute
-      points: 4,
-      duration: 60,
+    {
+      path: "/api/protected/user/profile/upload-avatar",
+      method: "POST",
+      config: {
+        // limit to 4 requests per user per minute
+        points: 4,
+        duration: 60,
+      },
     },
-  },
-  {
-    path: "/api/protected/user/profile/upload-cover",
-    method: "POST",
-    config: {
-      // limit to 4 requests per user per minute
-      points: 4,
-      duration: 60,
+    {
+      path: "/api/protected/user/profile/upload-cover",
+      method: "POST",
+      config: {
+        // limit to 4 requests per user per minute
+        points: 4,
+        duration: 60,
+      },
     },
-  },
-  {
-    path: "/api/protected/user/profile/upload-metadata",
-    method: "POST",
-    config: {
-      // limit to 4 requests per user per minute
-      points: 4,
-      duration: 60,
+    {
+      path: "/api/protected/user/profile/upload-metadata",
+      method: "POST",
+      config: {
+        // limit to 4 requests per user per minute
+        points: 4,
+        duration: 60,
+      },
     },
-  },
-],
-
- router = createRouter<RouteConfig>(),
-
- rateLimiters = new Map<string, RateLimiterPrisma>();
+  ],
+  router = createRouter<RouteConfig>(),
+  rateLimiters = new Map<string, RateLimiterPrisma>();
 
 for (const routeConfig of routeConfigs) {
   const { path, method, config } = routeConfig;
@@ -100,16 +98,15 @@ function getClientIdentifier(event: H3Event): string {
 
 export default defineEventHandler(async (event) => {
   const path = event.req.url || "/",
-   method = event.req.method || "GET",
-
-   match = findRoute<RouteConfig>(router, method, path);
+    method = event.req.method || "GET",
+    match = findRoute<RouteConfig>(router, method, path);
 
   // No rate limit for this route
   if (!match) return;
 
   const config = match.data.config,
-   routePath = match.data.path,
-   rateLimiter = rateLimiters.get(routePath);
+    routePath = match.data.path,
+    rateLimiter = rateLimiters.get(routePath);
 
   if (!rateLimiter) return;
 

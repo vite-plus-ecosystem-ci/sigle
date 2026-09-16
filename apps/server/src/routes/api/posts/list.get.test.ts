@@ -63,14 +63,13 @@ describe("api/posts/list.get", () => {
     });
 
     const mockEvent = {
-      context: {},
-      path: "/api/posts",
-      method: "GET",
-      headers: {},
-      query: {},
-    } as unknown as H3Event,
-
-     result = await handler(mockEvent);
+        context: {},
+        path: "/api/posts",
+        method: "GET",
+        headers: {},
+        query: {},
+      } as unknown as H3Event,
+      result = await handler(mockEvent);
 
     expect(result.limit).toBe(10);
     expect(result.offset).toBe(0);
@@ -80,7 +79,7 @@ describe("api/posts/list.get", () => {
 
   it("returns posts filtered by username", async () => {
     const user1 = await createTestUser({ id: "user1" }),
-     user2 = await createTestUser({ id: "user2" });
+      user2 = await createTestUser({ id: "user2" });
     await createTestPost({
       id: "post-1",
       userId: user1.id,
@@ -99,14 +98,13 @@ describe("api/posts/list.get", () => {
     });
 
     const mockEvent = {
-      context: {},
-      path: "/api/posts",
-      method: "GET",
-      headers: {},
-      query: {},
-    } as unknown as H3Event,
-
-     result = await handler(mockEvent);
+        context: {},
+        path: "/api/posts",
+        method: "GET",
+        headers: {},
+        query: {},
+      } as unknown as H3Event,
+      result = await handler(mockEvent);
 
     expect(result.total).toBe(1);
     expect(result.results).toHaveLength(1);
@@ -137,14 +135,13 @@ describe("api/posts/list.get", () => {
     });
 
     const mockEvent = {
-      context: {},
-      path: "/api/posts",
-      method: "GET",
-      headers: {},
-      query: {},
-    } as unknown as H3Event,
-
-     result = await handler(mockEvent);
+        context: {},
+        path: "/api/posts",
+        method: "GET",
+        headers: {},
+        query: {},
+      } as unknown as H3Event,
+      result = await handler(mockEvent);
 
     expect(result.limit).toBe(2);
     expect(result.offset).toBe(1);
@@ -159,14 +156,13 @@ describe("api/posts/list.get", () => {
     });
 
     const mockEvent = {
-      context: {},
-      path: "/api/posts",
-      method: "GET",
-      headers: {},
-      query: {},
-    } as unknown as H3Event,
-
-     result = await handler(mockEvent);
+        context: {},
+        path: "/api/posts",
+        method: "GET",
+        headers: {},
+        query: {},
+      } as unknown as H3Event,
+      result = await handler(mockEvent);
 
     expect(result.total).toBe(0);
     expect(result.results).toHaveLength(0);

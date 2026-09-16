@@ -98,47 +98,44 @@ const Draft = ({
   refetchDrafts: () => Promise<unknown>;
 }) => {
   const [isDeleting, setIsDeleting] = useState(false),
-   { mutateAsync: deletePost } = sigleApiClient.useMutation(
-    "post",
-    "/api/protected/drafts/{draftId}/delete",
-    {
-      onError: (error: { message: string }) => {
-        toast.error("Failed to upload metadata", {
-          description: error.message,
-        });
-      },
-    },
-  ),
-
-   onDelete = async () => {
-    // oxlint-disable-next-line no-alert
-    const ok = confirm("Are you sure you want to delete this draft?");
-    if (!ok) return;
-
-    setIsDeleting(true);
-    await deletePost({
-      params: {
-        path: {
-          draftId: draft.id,
+    { mutateAsync: deletePost } = sigleApiClient.useMutation(
+      "post",
+      "/api/protected/drafts/{draftId}/delete",
+      {
+        onError: (error: { message: string }) => {
+          toast.error("Failed to upload metadata", {
+            description: error.message,
+          });
         },
       },
-    });
-    await refetchDrafts();
-    toast.message("Draft deleted");
-  },
+    ),
+    onDelete = async () => {
+      // oxlint-disable-next-line no-alert
+      const ok = confirm("Are you sure you want to delete this draft?");
+      if (!ok) return;
 
-   isTxPending = draft.txStatus === "pending",
-
-   heading =
-    draft.metaTitle || draft.title ? (
-      <h3 className="line-clamp-2 text-lg font-medium">
-        {draft.metaTitle || draft.title}
-      </h3>
-    ) : (
-      <h3 className="line-clamp-2 text-lg font-medium text-muted-foreground">
-        No title
-      </h3>
-    );
+      setIsDeleting(true);
+      await deletePost({
+        params: {
+          path: {
+            draftId: draft.id,
+          },
+        },
+      });
+      await refetchDrafts();
+      toast.message("Draft deleted");
+    },
+    isTxPending = draft.txStatus === "pending",
+    heading =
+      draft.metaTitle || draft.title ? (
+        <h3 className="line-clamp-2 text-lg font-medium">
+          {draft.metaTitle || draft.title}
+        </h3>
+      ) : (
+        <h3 className="line-clamp-2 text-lg font-medium text-muted-foreground">
+          No title
+        </h3>
+      );
 
   return (
     <div className="border-b border-solid border-border py-5 first:pt-0 last:border-b-0 last:pb-0">

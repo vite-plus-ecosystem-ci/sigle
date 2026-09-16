@@ -3,110 +3,109 @@ import { describe, expect, it, vi, expectTypeOf } from "vite-plus/test";
 import type { SlashCommandsCommand } from "./SlashCommands";
 
 const filterCommands = (
-  commands: SlashCommandsCommand[],
-  query: string,
-): SlashCommandsCommand[] => {
-  return commands
-    .filter(
-      (item) =>
-        item.title.toLowerCase().startsWith(query.toLowerCase()) ||
-        (item.keywords || []).some((keyword) =>
-          keyword.toLowerCase().startsWith(query.toLowerCase()),
-        ),
-    )
-    .slice(0, query.length > 0 ? 10 : 20);
-},
-
- mockCommands: SlashCommandsCommand[] = [
-  {
-    title: "Plain Text",
-    description: "Normal paragraph style",
-    section: "basic",
-    icon: () => null as unknown as ReactElement,
-    command: vi.fn(),
-    keywords: ["text", "paragraph"],
+    commands: SlashCommandsCommand[],
+    query: string,
+  ): SlashCommandsCommand[] => {
+    return commands
+      .filter(
+        (item) =>
+          item.title.toLowerCase().startsWith(query.toLowerCase()) ||
+          (item.keywords || []).some((keyword) =>
+            keyword.toLowerCase().startsWith(query.toLowerCase()),
+          ),
+      )
+      .slice(0, query.length > 0 ? 10 : 20);
   },
-  {
-    title: "Big Heading",
-    description: "Big section heading",
-    section: "basic",
-    icon: () => null as unknown as ReactElement,
-    command: vi.fn(),
-    keywords: ["heading", "h2"],
-  },
-  {
-    title: "Small Heading",
-    description: "Small section heading",
-    section: "basic",
-    icon: () => null as unknown as ReactElement,
-    command: vi.fn(),
-    keywords: ["heading", "h3"],
-  },
-  {
-    title: "Image",
-    description: "Upload from your computer",
-    section: "basic",
-    icon: () => null as unknown as ReactElement,
-    command: vi.fn(),
-    keywords: ["picture", "photo"],
-  },
-  {
-    title: "Bulleted list",
-    description: "Create a bulleted list",
-    section: "basic",
-    icon: () => null as unknown as ReactElement,
-    command: vi.fn(),
-    keywords: ["list", "bullet"],
-  },
-  {
-    title: "Numbered list",
-    description: "Create a numbered list",
-    section: "basic",
-    icon: () => null as unknown as ReactElement,
-    command: vi.fn(),
-    keywords: ["list", "ordered"],
-  },
-  {
-    title: "Quote",
-    description: "Create a quote",
-    section: "basic",
-    icon: () => null as unknown as ReactElement,
-    command: vi.fn(),
-    keywords: ["blockquote"],
-  },
-  {
-    title: "Divider",
-    description: "Create a divider",
-    section: "basic",
-    icon: () => null as unknown as ReactElement,
-    command: vi.fn(),
-    keywords: ["hr", "horizontal"],
-  },
-  {
-    title: "Code",
-    description: "Create a code snippet",
-    section: "basic",
-    icon: () => null as unknown as ReactElement,
-    command: vi.fn(),
-    keywords: ["codeblock"],
-  },
-  {
-    title: "Twitter",
-    description: "Add a Twitter embed",
-    section: "embed",
-    icon: () => null as unknown as ReactElement,
-    command: vi.fn(),
-    keywords: ["tweet", "social"],
-  },
-  {
-    title: "Video",
-    description: "Add a video embed",
-    section: "embed",
-    icon: () => null as unknown as ReactElement,
-    command: vi.fn(),
-    keywords: ["youtube", "embed"],
-  },
-];
+  mockCommands: SlashCommandsCommand[] = [
+    {
+      title: "Plain Text",
+      description: "Normal paragraph style",
+      section: "basic",
+      icon: () => null as unknown as ReactElement,
+      command: vi.fn(),
+      keywords: ["text", "paragraph"],
+    },
+    {
+      title: "Big Heading",
+      description: "Big section heading",
+      section: "basic",
+      icon: () => null as unknown as ReactElement,
+      command: vi.fn(),
+      keywords: ["heading", "h2"],
+    },
+    {
+      title: "Small Heading",
+      description: "Small section heading",
+      section: "basic",
+      icon: () => null as unknown as ReactElement,
+      command: vi.fn(),
+      keywords: ["heading", "h3"],
+    },
+    {
+      title: "Image",
+      description: "Upload from your computer",
+      section: "basic",
+      icon: () => null as unknown as ReactElement,
+      command: vi.fn(),
+      keywords: ["picture", "photo"],
+    },
+    {
+      title: "Bulleted list",
+      description: "Create a bulleted list",
+      section: "basic",
+      icon: () => null as unknown as ReactElement,
+      command: vi.fn(),
+      keywords: ["list", "bullet"],
+    },
+    {
+      title: "Numbered list",
+      description: "Create a numbered list",
+      section: "basic",
+      icon: () => null as unknown as ReactElement,
+      command: vi.fn(),
+      keywords: ["list", "ordered"],
+    },
+    {
+      title: "Quote",
+      description: "Create a quote",
+      section: "basic",
+      icon: () => null as unknown as ReactElement,
+      command: vi.fn(),
+      keywords: ["blockquote"],
+    },
+    {
+      title: "Divider",
+      description: "Create a divider",
+      section: "basic",
+      icon: () => null as unknown as ReactElement,
+      command: vi.fn(),
+      keywords: ["hr", "horizontal"],
+    },
+    {
+      title: "Code",
+      description: "Create a code snippet",
+      section: "basic",
+      icon: () => null as unknown as ReactElement,
+      command: vi.fn(),
+      keywords: ["codeblock"],
+    },
+    {
+      title: "Twitter",
+      description: "Add a Twitter embed",
+      section: "embed",
+      icon: () => null as unknown as ReactElement,
+      command: vi.fn(),
+      keywords: ["tweet", "social"],
+    },
+    {
+      title: "Video",
+      description: "Add a video embed",
+      section: "embed",
+      icon: () => null as unknown as ReactElement,
+      command: vi.fn(),
+      keywords: ["youtube", "embed"],
+    },
+  ];
 
 describe("slash commands - filter functionality", () => {
   it("should return all commands when query is empty", () => {

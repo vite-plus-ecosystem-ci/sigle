@@ -32,21 +32,20 @@ const embedSchema = z.object({
 
 export const EmbedComponent = (props: NodeViewProps) => {
   const {
-    register,
-    handleSubmit,
-    getValues,
-    setFocus,
-    formState: { errors },
-  } = useForm({
-    resolver: zodResolver(embedSchema),
-  }),
-
-   url: string | undefined = props.node.attrs.url,
-   embedType = useMemo(() => {
-    if (!url) return undefined;
-    if (isValidTwitterUrl(url)) return "twitter";
-    if (isValidYoutubeUrl(url)) return "video";
-  }, [url]);
+      register,
+      handleSubmit,
+      getValues,
+      setFocus,
+      formState: { errors },
+    } = useForm({
+      resolver: zodResolver(embedSchema),
+    }),
+    url: string | undefined = props.node.attrs.url,
+    embedType = useMemo(() => {
+      if (!url) return undefined;
+      if (isValidTwitterUrl(url)) return "twitter";
+      if (isValidYoutubeUrl(url)) return "video";
+    }, [url]);
 
   // Override tiptap focus and focus on input instead
   useEffect(() => {
@@ -58,23 +57,22 @@ export const EmbedComponent = (props: NodeViewProps) => {
   }, [url, setFocus]);
 
   const onSubmit = handleSubmit((formValues) => {
-    props.editor.commands.updateAttributes("embed", {
-      ...props.node.attrs,
-      url: formValues.url,
-    });
+      props.editor.commands.updateAttributes("embed", {
+        ...props.node.attrs,
+        url: formValues.url,
+      });
 
-    props.editor.commands.createParagraphNear();
-  }),
-
-  // Remove input if empty and user presses backspace or delete key
-   onKeyDown = (event: React.KeyboardEvent) => {
-    if (
-      (!getValues().url && event.key === "Backspace") ||
-      event.key === "Delete"
-    ) {
-      props.deleteNode();
-    }
-  };
+      props.editor.commands.createParagraphNear();
+    }),
+    // Remove input if empty and user presses backspace or delete key
+    onKeyDown = (event: React.KeyboardEvent) => {
+      if (
+        (!getValues().url && event.key === "Backspace") ||
+        event.key === "Delete"
+      ) {
+        props.deleteNode();
+      }
+    };
 
   return (
     <NodeViewWrapper data-embed>

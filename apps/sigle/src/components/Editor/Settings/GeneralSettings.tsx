@@ -6,42 +6,36 @@ import type { EditorPostFormData } from "../EditorFormProvider";
 
 export const GeneralSettings = () => {
   const { setValue, watch } = useFormContext<EditorPostFormData>(),
-   tags = watch("tags") || [],
-
-   handleDelete = (index: number) => {
-    setValue(
-      "tags",
-      tags?.filter((_, i) => i !== index),
-    );
-  },
-
-   handleTagUpdate = (index: number, newTag: Tag) => {
-    const updatedTags = [...tags];
-    updatedTags.splice(index, 1, newTag.id);
-    setValue("tags", updatedTags);
-  },
-
-   handleAddition = (tag: Tag) => {
-    setValue("tags", [...tags, tag.id]);
-  },
-
-   handleDrag = (tag: Tag, currPos: number, newPos: number) => {
-    const newTags = tags.slice();
-    newTags.splice(currPos, 1);
-    newTags.splice(newPos, 0, tag.id);
-    // re-render
-    setValue("tags", newTags);
-  },
-
-   handleClearAll = () => {
-    setValue("tags", []);
-  },
-
-   formattedTags = tags.map((tag) => ({
-    id: tag,
-    text: tag,
-    className: "",
-  }));
+    tags = watch("tags") || [],
+    handleDelete = (index: number) => {
+      setValue(
+        "tags",
+        tags?.filter((_, i) => i !== index),
+      );
+    },
+    handleTagUpdate = (index: number, newTag: Tag) => {
+      const updatedTags = [...tags];
+      updatedTags.splice(index, 1, newTag.id);
+      setValue("tags", updatedTags);
+    },
+    handleAddition = (tag: Tag) => {
+      setValue("tags", [...tags, tag.id]);
+    },
+    handleDrag = (tag: Tag, currPos: number, newPos: number) => {
+      const newTags = tags.slice();
+      newTags.splice(currPos, 1);
+      newTags.splice(newPos, 0, tag.id);
+      // re-render
+      setValue("tags", newTags);
+    },
+    handleClearAll = () => {
+      setValue("tags", []);
+    },
+    formattedTags = tags.map((tag) => ({
+      id: tag,
+      text: tag,
+      className: "",
+    }));
 
   return (
     <div className="border-b border-border p-4">

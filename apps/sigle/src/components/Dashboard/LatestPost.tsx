@@ -19,19 +19,19 @@ import {
 
 export const LatestPost = () => {
   const { data: session } = useSession(),
-   { data: posts } = sigleApiClient.useSuspenseQuery(
-    "get",
-    "/api/posts/list",
-    {
-      params: {
-        query: {
-          username: session?.user.id || "",
-          limit: 1,
+    { data: posts } = sigleApiClient.useSuspenseQuery(
+      "get",
+      "/api/posts/list",
+      {
+        params: {
+          query: {
+            username: session?.user.id || "",
+            limit: 1,
+          },
         },
       },
-    },
-  ),
-   post = posts.results[0];
+    ),
+    post = posts.results[0];
 
   return (
     <div>

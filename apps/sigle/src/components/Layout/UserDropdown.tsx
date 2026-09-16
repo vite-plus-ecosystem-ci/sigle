@@ -24,32 +24,29 @@ import { ProfileAvatar } from "../Shared/Profile/ProfileAvatar";
 
 export const UserDropdown = () => {
   const posthog = usePostHog(),
-   { resolvedTheme, setTheme } = useTheme(),
-   { data: session } = useSession(),
-   { logout } = useStacksLogin(),
-
-   { data: user } = sigleApiClient.useSuspenseQuery(
-    "get",
-    "/api/users/{username}",
-    {
-      params: {
-        path: {
-          username: session?.user.id || "",
+    { resolvedTheme, setTheme } = useTheme(),
+    { data: session } = useSession(),
+    { logout } = useStacksLogin(),
+    { data: user } = sigleApiClient.useSuspenseQuery(
+      "get",
+      "/api/users/{username}",
+      {
+        params: {
+          path: {
+            username: session?.user.id || "",
+          },
         },
       },
-    },
-  ),
-
-   { data: userWhitelist } = sigleApiClient.useQuery(
-    "get",
-    "/api/protected/user/whitelisted",
-  ),
-
-   onThemeChange = () => {
-    const newTheme = resolvedTheme === "dark" ? "light" : "dark";
-    setTheme(newTheme);
-    posthog.capture("theme_change", { theme: newTheme });
-  };
+    ),
+    { data: userWhitelist } = sigleApiClient.useQuery(
+      "get",
+      "/api/protected/user/whitelisted",
+    ),
+    onThemeChange = () => {
+      const newTheme = resolvedTheme === "dark" ? "light" : "dark";
+      setTheme(newTheme);
+      posthog.capture("theme_change", { theme: newTheme });
+    };
 
   if (!session) {
     return null;

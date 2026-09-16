@@ -57,8 +57,7 @@ function makeRoute<Params extends z.ZodSchema, Search extends z.ZodSchema>(
 ): RouteBuilder<Params, Search> {
   const routeBuilder: RouteBuilder<Params, Search> = (params, options) => {
     const baseUrl = fn(params as z.input<Params>),
-     searchString =
-      options?.search && queryString.stringify(options.search);
+      searchString = options?.search && queryString.stringify(options.search);
     return [baseUrl, searchString ? `?${searchString}` : ""].join("");
   };
 

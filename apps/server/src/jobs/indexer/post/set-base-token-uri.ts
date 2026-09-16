@@ -16,20 +16,19 @@ export const executeIndexerSetBaseTokenUriJob = async (
   data: z.TypeOf<typeof indexerSetBaseTokenUriSchema>["data"],
 ) => {
   const metadata = await getMetadataFromUri(data.uri),
-
-   collectible = await prisma.collectible.findUnique({
-    select: {
-      post: {
-        select: {
-          id: true,
-          coverImageId: true,
+    collectible = await prisma.collectible.findUnique({
+      select: {
+        post: {
+          select: {
+            id: true,
+            coverImageId: true,
+          },
         },
       },
-    },
-    where: {
-      address: data.address,
-    },
-  });
+      where: {
+        address: data.address,
+      },
+    });
   if (!collectible) {
     throw new Error(`Post not found for address ${data.address}`);
   }

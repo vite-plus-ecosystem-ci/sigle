@@ -14,8 +14,8 @@ import { SeoPreview } from "./SeoPreview";
 
 export const MetaSettings = () => {
   const { register, watch } = useFormContext<EditorPostFormData>(),
-   watchMetaTitle = watch("metaTitle"),
-   watchMetaDescription = watch("metaDescription");
+    watchMetaTitle = watch("metaTitle"),
+    watchMetaDescription = watch("metaDescription");
 
   return (
     <div className="animate-in px-4 slide-in-from-right-5 fade-in">

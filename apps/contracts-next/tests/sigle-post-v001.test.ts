@@ -5,27 +5,26 @@ import { Cl } from "@stacks/transactions";
 import { beforeEach, describe, expect, it } from "vite-plus/test";
 
 const contract = "sigle-post-v001",
- minterContract = "sigle-minter-fixed-price-v001",
- accounts = simnet.getAccounts(),
- deployer = accounts.get("deployer")!,
- wallet1 = accounts.get("wallet_1")!,
- wallet2 = accounts.get("wallet_2")!,
- wallet3 = accounts.get("wallet_3")!,
-
- sigleClient = createClient({
-  network: STACKS_MOCKNET,
-  networkName: "mocknet",
-});
+  minterContract = "sigle-minter-fixed-price-v001",
+  accounts = simnet.getAccounts(),
+  deployer = accounts.get("deployer")!,
+  wallet1 = accounts.get("wallet_1")!,
+  wallet2 = accounts.get("wallet_2")!,
+  wallet3 = accounts.get("wallet_3")!,
+  sigleClient = createClient({
+    network: STACKS_MOCKNET,
+    networkName: "mocknet",
+  });
 
 describe("sigle-post-v001", () => {
   const { contract: defaultContract } = sigleClient.generatePostContract({
-    collectInfo: {
-      amount: 0,
-      maxSupply: 100,
-    },
-    metadata: "ipfs://anything",
-  }),
-   defaultContractName = `${wallet1}.default-contract`;
+      collectInfo: {
+        amount: 0,
+        maxSupply: 100,
+      },
+      metadata: "ipfs://anything",
+    }),
+    defaultContractName = `${wallet1}.default-contract`;
 
   describe("initialization", () => {
     beforeEach(() => {
@@ -116,12 +115,12 @@ describe("sigle-post-v001", () => {
   describe("metadata management", () => {
     it("should allow owner to set base token URI", () => {
       const newUri = "https://api.example.com/tokens/",
-       { result } = simnet.callPublicFn(
-        contract,
-        "set-base-token-uri",
-        [Cl.stringAscii(newUri)],
-        deployer,
-      );
+        { result } = simnet.callPublicFn(
+          contract,
+          "set-base-token-uri",
+          [Cl.stringAscii(newUri)],
+          deployer,
+        );
       expect(result).toBeOk(Cl.bool(true));
     });
 

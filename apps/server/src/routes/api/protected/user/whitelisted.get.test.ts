@@ -48,13 +48,12 @@ describe("api/protected/user/whitelisted.get", () => {
     vi.mocked(isUserWhitelisted).mockReturnValue(true);
 
     const mockEvent = {
-      context: { user: { id: userId } },
-      path: "/api/protected/user/whitelisted",
-      method: "GET",
-      headers: {},
-    } as unknown as H3Event,
-
-     result = await handler(mockEvent);
+        context: { user: { id: userId } },
+        path: "/api/protected/user/whitelisted",
+        method: "GET",
+        headers: {},
+      } as unknown as H3Event,
+      result = await handler(mockEvent);
 
     expect(result).toStrictEqual({ whitelisted: true });
   });
@@ -65,13 +64,12 @@ describe("api/protected/user/whitelisted.get", () => {
     vi.mocked(isUserWhitelisted).mockReturnValue(false);
 
     const mockEvent = {
-      context: { user: { id: userId } },
-      path: "/api/protected/user/whitelisted",
-      method: "GET",
-      headers: {},
-    } as unknown as H3Event,
-
-     result = await handler(mockEvent);
+        context: { user: { id: userId } },
+        path: "/api/protected/user/whitelisted",
+        method: "GET",
+        headers: {},
+      } as unknown as H3Event,
+      result = await handler(mockEvent);
 
     expect(result).toStrictEqual({ whitelisted: false });
   });

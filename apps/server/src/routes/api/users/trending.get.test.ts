@@ -41,19 +41,18 @@ describe("api/users/trending.get", () => {
 
   it("returns trending users with posts", async () => {
     const user1 = await createTestUser({ id: "user1" }),
-     user2 = await createTestUser({ id: "user2" });
+      user2 = await createTestUser({ id: "user2" });
 
     await createTestPost({ id: "post-1", userId: user1.id, title: "Post 1" });
     await createTestPost({ id: "post-2", userId: user2.id, title: "Post 2" });
 
     const mockEvent = {
-      context: {},
-      path: "/api/users/trending",
-      method: "GET",
-      headers: {},
-    } as unknown as Parameters<typeof handler>[0],
-
-     result = await handler(mockEvent);
+        context: {},
+        path: "/api/users/trending",
+        method: "GET",
+        headers: {},
+      } as unknown as Parameters<typeof handler>[0],
+      result = await handler(mockEvent);
 
     expect(result).toHaveLength(2);
   });
@@ -63,13 +62,12 @@ describe("api/users/trending.get", () => {
     await createTestUser({ id: "user2" });
 
     const mockEvent = {
-      context: {},
-      path: "/api/users/trending",
-      method: "GET",
-      headers: {},
-    } as unknown as Parameters<typeof handler>[0],
-
-     result = await handler(mockEvent);
+        context: {},
+        path: "/api/users/trending",
+        method: "GET",
+        headers: {},
+      } as unknown as Parameters<typeof handler>[0],
+      result = await handler(mockEvent);
 
     expect(result).toHaveLength(0);
   });
@@ -81,16 +79,15 @@ describe("api/users/trending.get", () => {
     await createTestPost({ id: "post-2", userId: user.id, title: "Post 2" });
 
     const mockEvent = {
-      context: {},
-      path: "/api/users/trending",
-      method: "GET",
-      headers: {},
-    } as unknown as Parameters<typeof handler>[0],
-
-     result = (await handler(mockEvent)) as unknown as {
-      id: string;
-      postsCount: number;
-    }[];
+        context: {},
+        path: "/api/users/trending",
+        method: "GET",
+        headers: {},
+      } as unknown as Parameters<typeof handler>[0],
+      result = (await handler(mockEvent)) as unknown as {
+        id: string;
+        postsCount: number;
+      }[];
 
     expect(result).toHaveLength(1);
     expect(result[0]).toHaveProperty("postsCount", 2);

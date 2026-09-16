@@ -5,8 +5,8 @@ import { resolveImageUrl } from "@/lib/images";
 
 export const ImageComponent = (props: NodeViewProps) => {
   const alt = props.node.attrs.alt || "",
-   src = resolveImageUrl(props.node.attrs.src || "", { gateway: true }),
-   uploadId = props.node.attrs.uploadId;
+    src = resolveImageUrl(props.node.attrs.src || "", { gateway: true }),
+    uploadId = props.node.attrs.uploadId;
 
   return (
     <NodeViewWrapper data-drag-handle className="relative">

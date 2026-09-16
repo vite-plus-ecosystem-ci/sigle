@@ -54,22 +54,21 @@ describe("api/posts/[postId]/index.get", () => {
 
   it("returns post by id", async () => {
     const user = await createTestUser({ id: userId }),
-     post = await createTestPost({
-      id: "post-1",
-      userId: user.id,
-      title: "Test Post",
-    });
+      post = await createTestPost({
+        id: "post-1",
+        userId: user.id,
+        title: "Test Post",
+      });
 
     mockGetRouterParam.mockReturnValue("post-1");
 
     const mockEvent = {
-      context: {},
-      path: "/api/posts/post-1",
-      method: "GET",
-      headers: {},
-    } as unknown as H3Event,
-
-     result = await handler(mockEvent);
+        context: {},
+        path: "/api/posts/post-1",
+        method: "GET",
+        headers: {},
+      } as unknown as H3Event,
+      result = await handler(mockEvent);
 
     expect(result).toMatchObject({
       id: post.id,
@@ -95,27 +94,25 @@ describe("api/posts/[postId]/index.get", () => {
     mockGetRouterParam.mockReturnValue("non-existent-post");
 
     const mockEvent = {
-      context: {},
-      path: "/api/posts/non-existent-post",
-      method: "GET",
-      headers: {},
-    } as unknown as H3Event,
-
-     result = await handler(mockEvent);
+        context: {},
+        path: "/api/posts/non-existent-post",
+        method: "GET",
+        headers: {},
+      } as unknown as H3Event,
+      result = await handler(mockEvent);
 
     expect(result).toStrictEqual({ collectorsCount: 0 });
   });
 
   it("returns collectors count", async () => {
     const user = await createTestUser({ id: userId }),
-     post = await createTestPost({
-      id: "post-1",
-      userId: user.id,
-      title: "Test Post",
-    }),
-
-    // Create NFT with a different minter
-     minter1 = await createTestUser({ id: "minter1" });
+      post = await createTestPost({
+        id: "post-1",
+        userId: user.id,
+        title: "Test Post",
+      }),
+      // Create NFT with a different minter
+      minter1 = await createTestUser({ id: "minter1" });
 
     await testDb.db.postNft.create({
       data: {
@@ -130,13 +127,12 @@ describe("api/posts/[postId]/index.get", () => {
     mockGetRouterParam.mockReturnValue("post-1");
 
     const mockEvent = {
-      context: {},
-      path: "/api/posts/post-1",
-      method: "GET",
-      headers: {},
-    } as unknown as H3Event,
-
-     result = await handler(mockEvent);
+        context: {},
+        path: "/api/posts/post-1",
+        method: "GET",
+        headers: {},
+      } as unknown as H3Event,
+      result = await handler(mockEvent);
 
     expect(result?.collectorsCount).toBe(1);
   });

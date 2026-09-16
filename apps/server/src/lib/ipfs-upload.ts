@@ -35,20 +35,18 @@ export const ipfsUploadFile = async (
   return Result.tryPromise({
     try: async () => {
       const computedCid = await createCIDv1FromBuffer(content),
-       Key = `u/${event.context.user.id}/${computedCid}`,
-
-       response = await s3Client.send(
-        new PutObjectCommand({
-          Bucket: env.S3_BUCKET,
-          Key,
-          Body: content,
-          ContentType: contentType,
-        }),
-      ),
-
-       serverCid = (
-        response.$metadata as { httpHeaders?: Record<string, string> }
-      ).httpHeaders?.["x-amz-meta-cid"];
+        Key = `u/${event.context.user.id}/${computedCid}`,
+        response = await s3Client.send(
+          new PutObjectCommand({
+            Bucket: env.S3_BUCKET,
+            Key,
+            Body: content,
+            ContentType: contentType,
+          }),
+        ),
+        serverCid = (
+          response.$metadata as { httpHeaders?: Record<string, string> }
+        ).httpHeaders?.["x-amz-meta-cid"];
 
       if (serverCid && serverCid !== computedCid) {
         consola.warn("CID mismatch", { serverCid, computedCid });

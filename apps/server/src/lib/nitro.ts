@@ -7,7 +7,7 @@ export const getValidatedQueryZod = async <T, Event extends H3Event = H3Event>(
   schema: z.ZodType<T>,
 ) => {
   const query = getQuery(event),
-   response = schema.safeParse(query);
+    response = schema.safeParse(query);
 
   if (!response.success) {
     throw new HTTPError({

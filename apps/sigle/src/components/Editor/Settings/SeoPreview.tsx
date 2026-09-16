@@ -14,16 +14,14 @@ import { useEditorStore } from "../store";
 
 export const SeoPreview = () => {
   const editor = useEditorStore((state) => state.editor),
-   { watch } = useFormContext<EditorPostFormData>(),
-   watchTitle = watch("title"),
-   watchMetaTitle = watch("metaTitle"),
-   watchMetaDescription = watch("metaDescription"),
-   watchCoverImage = watch("coverImage"),
-
-   metaTitle = watchMetaTitle || watchTitle,
-   metaDescription =
-    watchMetaDescription || editor?.getText().slice(0, 90),
-   metaImage = watchCoverImage;
+    { watch } = useFormContext<EditorPostFormData>(),
+    watchTitle = watch("title"),
+    watchMetaTitle = watch("metaTitle"),
+    watchMetaDescription = watch("metaDescription"),
+    watchCoverImage = watch("coverImage"),
+    metaTitle = watchMetaTitle || watchTitle,
+    metaDescription = watchMetaDescription || editor?.getText().slice(0, 90),
+    metaImage = watchCoverImage;
 
   return (
     <div>

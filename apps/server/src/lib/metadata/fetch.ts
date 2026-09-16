@@ -20,7 +20,7 @@ export function fetchMetadata(
     {
       try: async () => {
         const response = await fetch(url),
-         json = await response.json();
+          json = await response.json();
         return json;
       },
       catch: (error) => {

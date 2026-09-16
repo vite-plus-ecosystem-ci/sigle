@@ -10,39 +10,38 @@ const PAGE_SIZE = 20;
 
 export const ExplorePostsList = () => {
   const { data: initialPosts } = sigleApiClient.useSuspenseQuery(
-    "get",
-    "/api/posts/list",
-    {
-      params: {
-        query: {
-          limit: PAGE_SIZE,
+      "get",
+      "/api/posts/list",
+      {
+        params: {
+          query: {
+            limit: PAGE_SIZE,
+          },
         },
       },
-    },
-  ),
-
-   [posts, setPosts] = useState(initialPosts.results || []),
-   [page, setPage] = useState(2), // Start from page 2 since page 1 is already fetched
-   [isLoading, setIsLoading] = useState(false),
-   [hasMore, setHasMore] = useState(true),
-   { ref, inView } = useInView({
-    threshold: 1.0,
-  });
+    ),
+    [posts, setPosts] = useState(initialPosts.results || []),
+    [page, setPage] = useState(2), // Start from page 2 since page 1 is already fetched
+    [isLoading, setIsLoading] = useState(false),
+    [hasMore, setHasMore] = useState(true),
+    { ref, inView } = useInView({
+      threshold: 1.0,
+    });
 
   useEffect(() => {
     const fetchPosts = async () => {
       setIsLoading(true);
       try {
         const response = await sigleApiFetchClient.GET("/api/posts/list", {
-          params: {
-            query: {
-              limit: PAGE_SIZE,
-              offset: (page - 1) * PAGE_SIZE,
-              page,
+            params: {
+              query: {
+                limit: PAGE_SIZE,
+                offset: (page - 1) * PAGE_SIZE,
+                page,
+              },
             },
-          },
-        }),
-         newPosts = response.data?.results || [];
+          }),
+          newPosts = response.data?.results || [];
         setPosts((prevPosts) => [...prevPosts, ...newPosts]);
         setHasMore(newPosts.length > 0); // If no more posts, stop loading
       } catch (error) {

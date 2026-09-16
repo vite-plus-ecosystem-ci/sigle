@@ -20,67 +20,62 @@ export function useMultiStepToast<T extends string>(
   options: UseMultiStepToastOptions<T>,
 ): UseMultiStepToastReturn<T> {
   const { steps: stepDefinitions, successMessage, onError } = options,
-   toastId = "multi-step-toast",
-
-   multiStep = useMultiStep({
-    steps: stepDefinitions,
-    onStepChange: () => {
+    toastId = "multi-step-toast",
+    multiStep = useMultiStep({
+      steps: stepDefinitions,
+      onStepChange: () => {
+        const { steps } = useMultiStepToastStore.getState();
+        toast(() => <MultiStepToast steps={steps} />, {
+          id: toastId,
+        });
+      },
+    }),
+    start = () => {
+      multiStep.start();
       const { steps } = useMultiStepToastStore.getState();
+
       toast(() => <MultiStepToast steps={steps} />, {
+        id: toastId,
+        duration: Infinity,
+        closeButton: false,
+      });
+    },
+    completeStep = (id: T) => {
+      const { steps } = useMultiStepToastStore.getState(),
+        currentIndex = steps.findIndex((s) => s.id === id),
+        isLastStep = currentIndex === steps.length - 1;
+
+      multiStep.completeStep(id);
+
+      if (isLastStep) {
+        setTimeout(() => {
+          multiStep.reset();
+          toast.success(successMessage);
+        }, 500);
+        return;
+      }
+
+      const { steps: updatedSteps } = useMultiStepToastStore.getState();
+      toast(() => <MultiStepToast steps={updatedSteps} />, {
         id: toastId,
       });
     },
-  }),
+    setStepError = (id: T, errorMessage: string) => {
+      multiStep.setStepError(id, errorMessage);
+      const { steps } = useMultiStepToastStore.getState();
 
-   start = () => {
-    multiStep.start();
-    const { steps } = useMultiStepToastStore.getState();
+      toast(() => <MultiStepToast steps={steps} />, {
+        id: toastId,
+        duration: Infinity,
+        closeButton: true,
+      });
 
-    toast(() => <MultiStepToast steps={steps} />, {
-      id: toastId,
-      duration: Infinity,
-      closeButton: false,
-    });
-  },
-
-   completeStep = (id: T) => {
-    const { steps } = useMultiStepToastStore.getState(),
-     currentIndex = steps.findIndex((s) => s.id === id),
-     isLastStep = currentIndex === steps.length - 1;
-
-    multiStep.completeStep(id);
-
-    if (isLastStep) {
-      setTimeout(() => {
-        multiStep.reset();
-        toast.success(successMessage);
-      }, 500);
-      return;
-    }
-
-    const { steps: updatedSteps } = useMultiStepToastStore.getState();
-    toast(() => <MultiStepToast steps={updatedSteps} />, {
-      id: toastId,
-    });
-  },
-
-   setStepError = (id: T, errorMessage: string) => {
-    multiStep.setStepError(id, errorMessage);
-    const { steps } = useMultiStepToastStore.getState();
-
-    toast(() => <MultiStepToast steps={steps} />, {
-      id: toastId,
-      duration: Infinity,
-      closeButton: true,
-    });
-
-    onError?.(new Error(errorMessage), id);
-  },
-
-   dismiss = () => {
-    multiStep.reset();
-    toast.dismiss(toastId);
-  };
+      onError?.(new Error(errorMessage), id);
+    },
+    dismiss = () => {
+      multiStep.reset();
+      toast.dismiss(toastId);
+    };
 
   return {
     start,

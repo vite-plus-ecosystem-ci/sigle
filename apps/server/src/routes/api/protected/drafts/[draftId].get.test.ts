@@ -63,22 +63,21 @@ describe("api/protected/drafts/[draftId].get", () => {
 
   it("returns draft by id", async () => {
     const user = await createTestUser({ id: userId }),
-     draft = await createTestDraft({
-      id: "draft-1",
-      userId: user.id,
-      title: "Test Draft",
-    });
+      draft = await createTestDraft({
+        id: "draft-1",
+        userId: user.id,
+        title: "Test Draft",
+      });
 
     mockGetRouterParam.mockReturnValue("draft-1");
 
     const mockEvent = {
-      context: { user: { id: userId } },
-      path: "/api/protected/drafts/draft-1",
-      method: "GET",
-      headers: {},
-    } as unknown as H3Event<Request>,
-
-     result = await handler(mockEvent);
+        context: { user: { id: userId } },
+        path: "/api/protected/drafts/draft-1",
+        method: "GET",
+        headers: {},
+      } as unknown as H3Event<Request>,
+      result = await handler(mockEvent);
 
     expect(result).toMatchObject({
       id: draft.id,
@@ -124,13 +123,12 @@ describe("api/protected/drafts/[draftId].get", () => {
     mockGetRouterParam.mockReturnValue("post-1");
 
     const mockEvent = {
-      context: { user: { id: userId } },
-      path: "/api/protected/drafts/post-1",
-      method: "GET",
-      headers: {},
-    } as unknown as H3Event<Request>,
-
-     result = await handler(mockEvent);
+        context: { user: { id: userId } },
+        path: "/api/protected/drafts/post-1",
+        method: "GET",
+        headers: {},
+      } as unknown as H3Event<Request>,
+      result = await handler(mockEvent);
 
     expect(result).toMatchObject({
       id: "post-1",

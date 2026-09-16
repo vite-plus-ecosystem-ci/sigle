@@ -13,7 +13,7 @@ export async function getProfileMetadataFromUri(
   >
 > {
   const url = resolveImageUrl(baseTokenUri),
-   fetchResult = await fetchMetadata(url);
+    fetchResult = await fetchMetadata(url);
 
   if (fetchResult.isErr()) {
     return fetchResult;

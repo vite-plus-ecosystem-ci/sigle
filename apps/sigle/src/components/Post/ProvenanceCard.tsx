@@ -71,15 +71,14 @@ function truncateId(id: string, startChars = 8, endChars = 6): string {
 
 export const PostProvenanceCard = ({ post }: PostProvenanceCardProps) => {
   const storageType = getStorageType(post.metadataUri),
-   storageLabel = getStorageLabel(storageType),
-   metadataLink = getMetadataLink(post.metadataUri),
-   metadataId = getMetadataId(post.metadataUri),
-   explorerUrl = getExplorerTransactionUrl(post.txId),
-
-   copyToClipboard = async (text: string) => {
-    await navigator.clipboard.writeText(text);
-    toast.success("Copied to clipboard");
-  };
+    storageLabel = getStorageLabel(storageType),
+    metadataLink = getMetadataLink(post.metadataUri),
+    metadataId = getMetadataId(post.metadataUri),
+    explorerUrl = getExplorerTransactionUrl(post.txId),
+    copyToClipboard = async (text: string) => {
+      await navigator.clipboard.writeText(text);
+      toast.success("Copied to clipboard");
+    };
 
   return (
     <Card>

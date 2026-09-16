@@ -3,9 +3,9 @@ import type { EditorPostFormData } from "./EditorFormProvider";
 
 export const EditorTitle = () => {
   const { register } = useFormContext<EditorPostFormData>(),
-   { errors } = useFormState<EditorPostFormData>({
-    name: "title",
-  });
+    { errors } = useFormState<EditorPostFormData>({
+      name: "title",
+    });
 
   return (
     <div className="mt-4 space-y-2">

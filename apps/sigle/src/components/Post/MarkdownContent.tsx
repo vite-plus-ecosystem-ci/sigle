@@ -19,9 +19,9 @@ import {
  */
 function customUrlTransform(value: string): string {
   const colon = value.indexOf(":"),
-   questionMark = value.indexOf("?"),
-   numberSign = value.indexOf("#"),
-   slash = value.indexOf("/");
+    questionMark = value.indexOf("?"),
+    numberSign = value.indexOf("#"),
+    slash = value.indexOf("/");
 
   if (
     // If there is no protocol, it's relative.

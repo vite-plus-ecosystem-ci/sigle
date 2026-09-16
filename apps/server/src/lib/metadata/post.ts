@@ -37,7 +37,7 @@ export async function getMetadataFromUri(
   >
 > {
   const url = resolveImageUrl(baseTokenUri),
-   fetchResult = await fetchMetadata(url);
+    fetchResult = await fetchMetadata(url);
 
   if (fetchResult.isErr()) {
     return fetchResult;
@@ -52,44 +52,41 @@ export async function getMetadataFromUri(
     );
   }
   const postData = postMetadata.data,
-
-   signatureResult = verifyPostSignature(postData, {
-    network: env.STACKS_ENV === "mainnet" ? "mainnet" : "testnet",
-  });
+    signatureResult = verifyPostSignature(postData, {
+      network: env.STACKS_ENV === "mainnet" ? "mainnet" : "testnet",
+    });
   if (signatureResult.isErr()) {
     return signatureResult;
   }
   const { recoveredAddress, signature } = signatureResult.value,
-
-   metaTitle = postData.content.attributes?.find(
-    (attribute) => attribute.key === "meta-title",
-  )?.value,
-   metaDescription = postData.content.attributes?.find(
-    (attribute) => attribute.key === "meta-description",
-  )?.value,
-   excerpt = postData.content.attributes?.find(
-    (attribute) => attribute.key === "excerpt",
-  )?.value,
-   canonicalUri = postData.content.attributes?.find(
-    (attribute) => attribute.key === "canonical-uri",
-  )?.value,
-
-   versionSplit = postData.$schema.split("/"),
-   version = versionSplit[versionSplit.length - 1].replace(".json", ""),
-   metadata: PostMetadata = {
-    version,
-    id: postData.content.id,
-    title: postData.content.title,
-    content: postData.content.content,
-    metaTitle,
-    metaDescription,
-    excerpt: excerpt || "",
-    coverImage: postData.content.coverImage,
-    tags: postData.content.tags,
-    canonicalUri,
-    signature,
-    recoveredAddress,
-  };
+    metaTitle = postData.content.attributes?.find(
+      (attribute) => attribute.key === "meta-title",
+    )?.value,
+    metaDescription = postData.content.attributes?.find(
+      (attribute) => attribute.key === "meta-description",
+    )?.value,
+    excerpt = postData.content.attributes?.find(
+      (attribute) => attribute.key === "excerpt",
+    )?.value,
+    canonicalUri = postData.content.attributes?.find(
+      (attribute) => attribute.key === "canonical-uri",
+    )?.value,
+    versionSplit = postData.$schema.split("/"),
+    version = versionSplit[versionSplit.length - 1].replace(".json", ""),
+    metadata: PostMetadata = {
+      version,
+      id: postData.content.id,
+      title: postData.content.title,
+      content: postData.content.content,
+      metaTitle,
+      metaDescription,
+      excerpt: excerpt || "",
+      coverImage: postData.content.coverImage,
+      tags: postData.content.tags,
+      canonicalUri,
+      signature,
+      recoveredAddress,
+    };
 
   return Result.ok(metadata);
 }

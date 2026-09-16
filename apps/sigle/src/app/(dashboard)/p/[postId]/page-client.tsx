@@ -24,18 +24,17 @@ interface Props {
 
 export function PostClientPage(props: Props) {
   const params = use(props.params),
-
-   { data: post } = sigleApiClient.useSuspenseQuery(
-    "get",
-    "/api/posts/{postId}",
-    {
-      params: {
-        path: {
-          postId: params.postId,
+    { data: post } = sigleApiClient.useSuspenseQuery(
+      "get",
+      "/api/posts/{postId}",
+      {
+        params: {
+          path: {
+            postId: params.postId,
+          },
         },
       },
-    },
-  );
+    );
 
   if (!post) {
     notFound();

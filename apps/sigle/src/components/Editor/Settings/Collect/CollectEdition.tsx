@@ -17,22 +17,19 @@ import type { EditorPostFormData } from "../../EditorFormProvider";
 
 export const CollectEdition = () => {
   const { setValue, watch, register } = useFormContext<EditorPostFormData>(),
-   type = watch("type"),
-   watchCollectLimitType = watch("collect.collectLimit.type"),
-   watchCollectLimitLimit = watch("collect.collectLimit.limit"),
-   { errors } = useFormState<EditorPostFormData>({
-    name: ["collect.collectLimit.type", "collect.collectLimit.limit"],
-  }),
-
-   onEditionChange = (value: typeof watchCollectLimitType) => {
-    setValue("collect.collectLimit.type", value, {
-      shouldValidate: true,
-    });
-  },
-
-  // oxlint-disable-next-line typescript/no-explicit-any
-   limitErrorMessage = (errors?.collect?.collectLimit as any)?.limit
-    ?.message;
+    type = watch("type"),
+    watchCollectLimitType = watch("collect.collectLimit.type"),
+    watchCollectLimitLimit = watch("collect.collectLimit.limit"),
+    { errors } = useFormState<EditorPostFormData>({
+      name: ["collect.collectLimit.type", "collect.collectLimit.limit"],
+    }),
+    onEditionChange = (value: typeof watchCollectLimitType) => {
+      setValue("collect.collectLimit.type", value, {
+        shouldValidate: true,
+      });
+    },
+    // oxlint-disable-next-line typescript/no-explicit-any
+    limitErrorMessage = (errors?.collect?.collectLimit as any)?.limit?.message;
 
   return (
     <Field>

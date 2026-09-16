@@ -9,16 +9,16 @@ export async function GET(
   { params }: { params: Promise<{ username: string }> },
 ) {
   const { username } = await params,
-   { data: user, error: userError } = await sigleApiFetchClient.GET(
-    "/api/users/{username}",
-    {
-      params: {
-        path: {
-          username,
+    { data: user, error: userError } = await sigleApiFetchClient.GET(
+      "/api/users/{username}",
+      {
+        params: {
+          path: {
+            username,
+          },
         },
       },
-    },
-  );
+    );
   if (!user) {
     return new NextResponse("User not found", {
       status: 404,
@@ -48,18 +48,18 @@ export async function GET(
   }
 
   const userLink = `${env.NEXT_PUBLIC_APP_URL}/u/${username}`,
-   feed = new Feed({
-    title: user.profile?.displayName || user.id,
-    description: user.profile?.description,
-    id: userLink,
-    link: userLink,
-    language: "en",
-    copyright: `All rights reserved ${new Date().getFullYear()}, ${username}`,
-    author: {
-      name: username,
+    feed = new Feed({
+      title: user.profile?.displayName || user.id,
+      description: user.profile?.description,
+      id: userLink,
       link: userLink,
-    },
-  });
+      language: "en",
+      copyright: `All rights reserved ${new Date().getFullYear()}, ${username}`,
+      author: {
+        name: username,
+        link: userLink,
+      },
+    });
 
   for (const post of posts.results) {
     const postLink = `${env.NEXT_PUBLIC_APP_URL}/p/${post.id}`;

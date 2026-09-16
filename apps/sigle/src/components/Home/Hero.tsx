@@ -8,7 +8,7 @@ import { Button } from "../ui/button";
 
 export const HomeHero = () => {
   const { login } = useStacksLogin(),
-   { data: session } = useSession();
+    { data: session } = useSession();
 
   return (
     <div className="container mx-auto px-4 py-10 text-center md:py-20">

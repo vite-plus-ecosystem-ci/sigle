@@ -40,35 +40,33 @@ export default defineCachedHandler(
   async () => {
     // First get count of all users with posts
     const totalUsers = await prisma.user.count({
-      where: {
-        posts: {
-          some: {},
-        },
-      },
-    }),
-
-    // Calculate random offset
-     randomSkip = Math.floor(
-      Math.random() * Math.max(0, totalUsers - NUMBER_OF_USERS),
-    ),
-
-     users = await prisma.user.findMany({
-      select: {
-        ...SELECT_PUBLIC_USER_FIELDS,
-        _count: {
-          select: {
-            posts: {},
+        where: {
+          posts: {
+            some: {},
           },
         },
-      },
-      where: {
-        posts: {
-          some: {},
+      }),
+      // Calculate random offset
+      randomSkip = Math.floor(
+        Math.random() * Math.max(0, totalUsers - NUMBER_OF_USERS),
+      ),
+      users = await prisma.user.findMany({
+        select: {
+          ...SELECT_PUBLIC_USER_FIELDS,
+          _count: {
+            select: {
+              posts: {},
+            },
+          },
         },
-      },
-      skip: randomSkip,
-      take: NUMBER_OF_USERS,
-    });
+        where: {
+          posts: {
+            some: {},
+          },
+        },
+        skip: randomSkip,
+        take: NUMBER_OF_USERS,
+      });
 
     return users.map((user) => ({
       ...user,

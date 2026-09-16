@@ -30,62 +30,57 @@ interface PaginationProps {
 
 export function Pagination({ page, total, itemsPerPage }: PaginationProps) {
   const router = useRouter(),
-
-   totalPages = Math.ceil(total / itemsPerPage),
-
-   handlePageChange = (newPage: number) => {
-    if (newPage >= 1 && newPage <= totalPages) {
-      router.push(newPage === 1 ? "/" : `/?page=${newPage}`);
-    }
-  },
-
-   renderPageItem = (pageNum: number) => (
-    <button
-      key={pageNum}
-      onClick={() => handlePageChange(pageNum)}
-      className={clsx(button({ active: page === pageNum }), "mx-1")}
-      aria-label={`Go to page ${pageNum}`}
-      type="button"
-    >
-      {pageNum}
-    </button>
-  ),
-
-   renderDots = () => <span className="mx-2">...</span>,
-
-   renderPageItems = () => {
-    const maxPagesToShow = 4,
-     items = [],
-     sidePagesToShow = Math.floor(maxPagesToShow / 2);
-
-    if (page <= sidePagesToShow + 1) {
-      for (let i = 1; i <= Math.min(maxPagesToShow, totalPages); i++) {
-        items.push(renderPageItem(i));
+    totalPages = Math.ceil(total / itemsPerPage),
+    handlePageChange = (newPage: number) => {
+      if (newPage >= 1 && newPage <= totalPages) {
+        router.push(newPage === 1 ? "/" : `/?page=${newPage}`);
       }
-      if (totalPages > maxPagesToShow) {
+    },
+    renderPageItem = (pageNum: number) => (
+      <button
+        key={pageNum}
+        onClick={() => handlePageChange(pageNum)}
+        className={clsx(button({ active: page === pageNum }), "mx-1")}
+        aria-label={`Go to page ${pageNum}`}
+        type="button"
+      >
+        {pageNum}
+      </button>
+    ),
+    renderDots = () => <span className="mx-2">...</span>,
+    renderPageItems = () => {
+      const maxPagesToShow = 4,
+        items = [],
+        sidePagesToShow = Math.floor(maxPagesToShow / 2);
+
+      if (page <= sidePagesToShow + 1) {
+        for (let i = 1; i <= Math.min(maxPagesToShow, totalPages); i++) {
+          items.push(renderPageItem(i));
+        }
+        if (totalPages > maxPagesToShow) {
+          items.push(renderDots());
+          items.push(renderPageItem(totalPages));
+        }
+      } else if (page > totalPages - sidePagesToShow) {
+        if (totalPages > maxPagesToShow) {
+          items.push(renderPageItem(1));
+          items.push(renderDots());
+        }
+        for (let i = totalPages - maxPagesToShow + 1; i <= totalPages; i++) {
+          items.push(renderPageItem(i));
+        }
+      } else {
+        items.push(renderPageItem(1));
+        items.push(renderDots());
+        for (let i = page - sidePagesToShow; i <= page + sidePagesToShow; i++) {
+          items.push(renderPageItem(i));
+        }
         items.push(renderDots());
         items.push(renderPageItem(totalPages));
       }
-    } else if (page > totalPages - sidePagesToShow) {
-      if (totalPages > maxPagesToShow) {
-        items.push(renderPageItem(1));
-        items.push(renderDots());
-      }
-      for (let i = totalPages - maxPagesToShow + 1; i <= totalPages; i++) {
-        items.push(renderPageItem(i));
-      }
-    } else {
-      items.push(renderPageItem(1));
-      items.push(renderDots());
-      for (let i = page - sidePagesToShow; i <= page + sidePagesToShow; i++) {
-        items.push(renderPageItem(i));
-      }
-      items.push(renderDots());
-      items.push(renderPageItem(totalPages));
-    }
 
-    return items;
-  };
+      return items;
+    };
 
   return (
     <div className="mt-16 flex items-center justify-center">

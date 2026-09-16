@@ -17,18 +17,17 @@ interface Props {
 
 export function UserClientPage(props: Props) {
   const params = use(props.params),
-
-   { data: user } = sigleApiClient.useSuspenseQuery(
-    "get",
-    "/api/users/{username}",
-    {
-      params: {
-        path: {
-          username: params.username,
+    { data: user } = sigleApiClient.useSuspenseQuery(
+      "get",
+      "/api/users/{username}",
+      {
+        params: {
+          path: {
+            username: params.username,
+          },
         },
       },
-    },
-  );
+    );
   if (!user) {
     notFound();
   }

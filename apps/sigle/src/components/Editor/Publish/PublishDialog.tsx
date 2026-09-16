@@ -32,176 +32,171 @@ interface PublishDialogProps {
 
 export const PublishDialog = ({ postId }: PublishDialogProps) => {
   const { data: session } = useSession(),
-   posthog = usePostHog(),
-   router = useRouter(),
-   { handleSubmit, watch } = useFormContext<EditorPostFormData>(),
-   type = watch("type"),
-   editor = useEditorStore((state) => state.editor),
-   publishOpen = useEditorStore((state) => state.publishOpen),
-   setPublishOpen = useEditorStore((state) => state.setPublishOpen),
-   [publishingLoading, setPublishingLoading] = useState(false),
-   { mutateAsync: uploadMetadata } = sigleApiClient.useMutation(
-    "post",
-    "/api/protected/drafts/{draftId}/upload-metadata",
-  ),
+    posthog = usePostHog(),
+    router = useRouter(),
+    { handleSubmit, watch } = useFormContext<EditorPostFormData>(),
+    type = watch("type"),
+    editor = useEditorStore((state) => state.editor),
+    publishOpen = useEditorStore((state) => state.publishOpen),
+    setPublishOpen = useEditorStore((state) => state.setPublishOpen),
+    [publishingLoading, setPublishingLoading] = useState(false),
+    { mutateAsync: uploadMetadata } = sigleApiClient.useMutation(
+      "post",
+      "/api/protected/drafts/{draftId}/upload-metadata",
+    ),
+    { steps, start, completeStep, setStepError, reset } = useMultiStep({
+      steps: [
+        { id: "preparing", title: "Preparing metadata & cover image" },
+        { id: "signature", title: "Signing with Stacks wallet" },
+        { id: "arweave", title: "Uploading data to Arweave" },
+      ] as const,
+    }),
+    hasError = steps.some((step) => step.status === "error"),
+    isSignaturePending =
+      steps.find((s) => s.id === "signature")?.status === "pending",
+    onSubmit = () => {
+      handleSubmit(
+        async (data) => {
+          if (!session) return;
+          setPublishingLoading(true);
+          start();
 
-   { steps, start, completeStep, setStepError, reset } = useMultiStep({
-    steps: [
-      { id: "preparing", title: "Preparing metadata & cover image" },
-      { id: "signature", title: "Signing with Stacks wallet" },
-      { id: "arweave", title: "Uploading data to Arweave" },
-    ] as const,
-  }),
-
-   hasError = steps.some((step) => step.status === "error"),
-   isSignaturePending =
-    steps.find((s) => s.id === "signature")?.status === "pending",
-
-   onSubmit = () => {
-    handleSubmit(
-      async (data) => {
-        if (!session) return;
-        setPublishingLoading(true);
-        start();
-
-        posthog.capture("post_publish_start", {
-          postId,
-        });
-
-        // oxlint-disable-next-line init-declarations
-        let metadata;
-        try {
-          metadata = await generateSigleMetadataFromForm({
-            userAddress: session.user.id,
-            type: data.type,
-            editor,
-            postId,
-            post: data,
-          });
-        } catch (error) {
-          console.error(error);
-          posthog.capture("post_publish_metadata_preparation_error", {
-            postId,
-            error,
-          });
-          const errorMessage =
-            error instanceof Error
-              ? error.message
-              : "Failed to prepare post metadata";
-          setStepError("preparing", errorMessage);
-          return;
-        }
-
-        if (metadata.content.content.includes("blob:")) {
-          posthog.capture("post_publish_images_uploading_error", {
+          posthog.capture("post_publish_start", {
             postId,
           });
-          toast.error("Images still uploading", {
-            description:
-              "Please wait for all images to finish uploading before publishing",
-          });
-          setPublishingLoading(false);
-          reset();
-          return;
-        }
 
-        completeStep("preparing");
+          // oxlint-disable-next-line init-declarations
+          let metadata;
+          try {
+            metadata = await generateSigleMetadataFromForm({
+              userAddress: session.user.id,
+              type: data.type,
+              editor,
+              postId,
+              post: data,
+            });
+          } catch (error) {
+            console.error(error);
+            posthog.capture("post_publish_metadata_preparation_error", {
+              postId,
+              error,
+            });
+            const errorMessage =
+              error instanceof Error
+                ? error.message
+                : "Failed to prepare post metadata";
+            setStepError("preparing", errorMessage);
+            return;
+          }
 
-        let signature = "";
-        try {
-          const { signature: _, ...metadataToSign } = metadata,
-           message = JSON.stringify(metadataToSign),
-           response = await request("stx_signMessage", {
-            message,
-          });
-          signature = response.signature;
-        } catch (error) {
-          console.error(error);
-          posthog.capture("post_publish_sign_message_error", {
-            postId,
-            error,
-          });
-          setStepError(
-            "signature",
-            "Wallet signature request was cancelled or failed.",
-          );
-          return;
-        }
+          if (metadata.content.content.includes("blob:")) {
+            posthog.capture("post_publish_images_uploading_error", {
+              postId,
+            });
+            toast.error("Images still uploading", {
+              description:
+                "Please wait for all images to finish uploading before publishing",
+            });
+            setPublishingLoading(false);
+            reset();
+            return;
+          }
 
-        // Add the signature to the metadata
-        metadata.signature = signature;
-        completeStep("signature");
+          completeStep("preparing");
 
-        const uploadedMetadataResult = await uploadMetadata({
-          params: {
-            path: {
-              draftId: postId,
-            },
-          },
-          body: {
-            type,
-            metadata: metadata as unknown as Record<string, never>,
-          },
-        })
-          .then((result) => Result.ok(result))
-          .catch((error) => Result.err(error));
-        if (uploadedMetadataResult.isErr()) {
-          posthog.capture("post_publish_upload_metadata_error", {
-            postId,
-            error: uploadedMetadataResult.error,
-          });
-          setStepError(
-            "arweave",
-            uploadedMetadataResult.error.message
-              ? uploadedMetadataResult.error.message
-              : "Failed to upload metadata to Arweave",
-          );
-          return;
-        }
+          let signature = "";
+          try {
+            const { signature: _, ...metadataToSign } = metadata,
+              message = JSON.stringify(metadataToSign),
+              response = await request("stx_signMessage", {
+                message,
+              });
+            signature = response.signature;
+          } catch (error) {
+            console.error(error);
+            posthog.capture("post_publish_sign_message_error", {
+              postId,
+              error,
+            });
+            setStepError(
+              "signature",
+              "Wallet signature request was cancelled or failed.",
+            );
+            return;
+          }
 
-        completeStep("arweave");
+          // Add the signature to the metadata
+          metadata.signature = signature;
+          completeStep("signature");
 
-        const { id: targetPostId, arweaveId } = uploadedMetadataResult.value;
-        posthog.capture("post_publish_success", {
-          postId: targetPostId,
-          arweaveId,
-        });
-
-        // wait 1s for a better UX
-        await new Promise((resolve) => {
-          setTimeout(resolve, 1000);
-        });
-
-        router.push(
-          Routes.post(
-            { postId: targetPostId },
-            {
-              search: {
-                published: true,
+          const uploadedMetadataResult = await uploadMetadata({
+            params: {
+              path: {
+                draftId: postId,
               },
             },
-          ),
-        );
-      },
-      (errors) => {
-        console.error("Publishing form errors", { errors });
-        toast.error("Error publishing", {
-          description: "Please check the form for errors",
-        });
-      },
-    )();
-  },
+            body: {
+              type,
+              metadata: metadata as unknown as Record<string, never>,
+            },
+          })
+            .then((result) => Result.ok(result))
+            .catch((error) => Result.err(error));
+          if (uploadedMetadataResult.isErr()) {
+            posthog.capture("post_publish_upload_metadata_error", {
+              postId,
+              error: uploadedMetadataResult.error,
+            });
+            setStepError(
+              "arweave",
+              uploadedMetadataResult.error.message
+                ? uploadedMetadataResult.error.message
+                : "Failed to upload metadata to Arweave",
+            );
+            return;
+          }
 
-   handleBackToReview = () => {
-    setPublishingLoading(false);
-    reset();
-  },
+          completeStep("arweave");
 
-   onOpenChange = (open: boolean) => {
-    if (!publishingLoading) {
-      setPublishOpen(open);
-    }
-  };
+          const { id: targetPostId, arweaveId } = uploadedMetadataResult.value;
+          posthog.capture("post_publish_success", {
+            postId: targetPostId,
+            arweaveId,
+          });
+
+          // wait 1s for a better UX
+          await new Promise((resolve) => {
+            setTimeout(resolve, 1000);
+          });
+
+          router.push(
+            Routes.post(
+              { postId: targetPostId },
+              {
+                search: {
+                  published: true,
+                },
+              },
+            ),
+          );
+        },
+        (errors) => {
+          console.error("Publishing form errors", { errors });
+          toast.error("Error publishing", {
+            description: "Please check the form for errors",
+          });
+        },
+      )();
+    },
+    handleBackToReview = () => {
+      setPublishingLoading(false);
+      reset();
+    },
+    onOpenChange = (open: boolean) => {
+      if (!publishingLoading) {
+        setPublishOpen(open);
+      }
+    };
 
   return (
     <Dialog open={publishOpen} onOpenChange={onOpenChange}>

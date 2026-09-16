@@ -16,11 +16,11 @@ import { UserDropdown } from "./UserDropdown";
 
 export const Header = () => {
   const posthog = usePostHog(),
-   pathname = usePathname(),
-   isClient = useIsClient(),
-   { login } = useStacksLogin(),
-   { data: session } = useSession(),
-   { resolvedTheme, setTheme } = useTheme();
+    pathname = usePathname(),
+    isClient = useIsClient(),
+    { login } = useStacksLogin(),
+    { data: session } = useSession(),
+    { resolvedTheme, setTheme } = useTheme();
 
   // Next.js has a problem with the scroll position when changing pages
   // https://github.com/vercel/next.js/issues/49427

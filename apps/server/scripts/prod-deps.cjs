@@ -1,6 +1,6 @@
 // oxlint-disable no-require-imports
 const path = require("node:path"),
- fs = require("node:fs").promises;
+  fs = require("node:fs").promises;
 
 (async () => {
   try {
@@ -12,14 +12,13 @@ const path = require("node:path"),
     }
 
     const clean = {
-      ...pj,
-      dependencies: {
-        prisma: pj.dependencies.prisma,
+        ...pj,
+        dependencies: {
+          prisma: pj.dependencies.prisma,
+        },
+        devDependencies: {},
       },
-      devDependencies: {},
-    },
-
-     backupPath = `${packagePath}.backup`;
+      backupPath = `${packagePath}.backup`;
     await fs.copyFile(packagePath, backupPath);
 
     await fs.writeFile(packagePath, JSON.stringify(clean, null, 2));

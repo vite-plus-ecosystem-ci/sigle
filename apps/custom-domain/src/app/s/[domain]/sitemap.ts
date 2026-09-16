@@ -7,41 +7,40 @@ import { sigleApiFetchClient } from "@/lib/sigle";
 export default async function sitemap() {
   // next.js sitemap function doesn't pass the params, so we use headers as a workaround
   const headersList = await headers(),
-   domain = headersList.get("host") || "",
-   { data: site } = await sigleApiFetchClient.GET("/api/sites/{domain}", {
-    params: {
-      path: {
-        domain,
+    domain = headersList.get("host") || "",
+    { data: site } = await sigleApiFetchClient.GET("/api/sites/{domain}", {
+      params: {
+        path: {
+          domain,
+        },
       },
-    },
-  });
+    });
   if (!site) {
     notFound();
   }
 
   const { data: posts } = await sigleApiFetchClient.GET("/api/posts/list", {
-    params: {
-      query: {
-        limit: 100,
-        username: site.address,
+      params: {
+        query: {
+          limit: 100,
+          username: site.address,
+        },
       },
-    },
-  }),
+    }),
+    sitemap: MetadataRoute.Sitemap = [
+      // Static pages
+      {
+        url: site.url,
+        lastModified: new Date().toISOString(),
+      },
 
-   sitemap: MetadataRoute.Sitemap = [
-    // Static pages
-    {
-      url: site.url,
-      lastModified: new Date().toISOString(),
-    },
-
-    // Post dynamic pages
-    ...(posts?.results.map((post) => ({
-      url: `${site.url}/posts/${post.id}`,
-      lastModified: new Date(post.updatedAt).toISOString(),
-      images: post.coverImage ? [resolveImageUrl(post.coverImage.id)] : [],
-    })) || []),
-  ];
+      // Post dynamic pages
+      ...(posts?.results.map((post) => ({
+        url: `${site.url}/posts/${post.id}`,
+        lastModified: new Date(post.updatedAt).toISOString(),
+        images: post.coverImage ? [resolveImageUrl(post.coverImage.id)] : [],
+      })) || []),
+    ];
 
   return sitemap;
 }

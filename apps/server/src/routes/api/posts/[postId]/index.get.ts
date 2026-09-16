@@ -45,24 +45,23 @@ export default defineEventHandler(async (event) => {
   }
 
   const post = await prisma.post.findUnique({
-    select: {
-      ...SELECT_PUBLIC_POST_FIELDS,
-      user: {
-        select: SELECT_PUBLIC_USER_FIELDS,
+      select: {
+        ...SELECT_PUBLIC_POST_FIELDS,
+        user: {
+          select: SELECT_PUBLIC_USER_FIELDS,
+        },
       },
-    },
-    where: {
-      id: postId,
-    },
-  }),
-
-   collectorsCount = await prisma.postNft.groupBy({
-    by: ["minterId"],
-    where: {
-      postId,
-    },
-    _count: true,
-  });
+      where: {
+        id: postId,
+      },
+    }),
+    collectorsCount = await prisma.postNft.groupBy({
+      by: ["minterId"],
+      where: {
+        postId,
+      },
+      _count: true,
+    });
 
   return {
     ...post,

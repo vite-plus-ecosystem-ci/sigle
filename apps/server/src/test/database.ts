@@ -14,20 +14,18 @@ export interface TestDatabase {
 
 export async function createTestDatabase(): Promise<TestDatabase> {
   const client = new PGlite(),
-
-  // Apply migrations from the migrations folder
-   migrationsDir = path.join(
-    import.meta.dirname,
-    "..",
-    "..",
-    "prisma",
-    "migrations",
-  ),
-
-   migrations = fs
-    .readdirSync(migrationsDir)
-    .filter((dir) => fs.statSync(path.join(migrationsDir, dir)).isDirectory())
-    .sort();
+    // Apply migrations from the migrations folder
+    migrationsDir = path.join(
+      import.meta.dirname,
+      "..",
+      "..",
+      "prisma",
+      "migrations",
+    ),
+    migrations = fs
+      .readdirSync(migrationsDir)
+      .filter((dir) => fs.statSync(path.join(migrationsDir, dir)).isDirectory())
+      .sort();
 
   for (const migration of migrations) {
     const sqlPath = path.join(migrationsDir, migration, "migration.sql");
@@ -39,7 +37,7 @@ export async function createTestDatabase(): Promise<TestDatabase> {
   }
 
   const adapter = new PrismaPGlite(client),
-   db = new PrismaClient({ adapter });
+    db = new PrismaClient({ adapter });
   setPrismaClient(db);
 
   await db.$connect();

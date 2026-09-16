@@ -17,30 +17,29 @@ import {
 
 // Consistent test private key (valid 32-byte hex + compressed byte)
 const TEST_PRIVATE_KEY =
-  "7287ba251d44a4d3fd9276c88ce3476c5aa9c784807a54ec29d5fa0605340d0f01",
- TEST_PUBLIC_KEY = privateKeyToPublic(TEST_PRIVATE_KEY) as string,
- EXPECTED_MAINNET_ADDRESS = publicKeyToAddress(TEST_PUBLIC_KEY, "mainnet"),
- EXPECTED_TESTNET_ADDRESS = publicKeyToAddress(TEST_PUBLIC_KEY, "testnet");
+    "7287ba251d44a4d3fd9276c88ce3476c5aa9c784807a54ec29d5fa0605340d0f01",
+  TEST_PUBLIC_KEY = privateKeyToPublic(TEST_PRIVATE_KEY) as string,
+  EXPECTED_MAINNET_ADDRESS = publicKeyToAddress(TEST_PUBLIC_KEY, "mainnet"),
+  EXPECTED_TESTNET_ADDRESS = publicKeyToAddress(TEST_PUBLIC_KEY, "testnet");
 
 function createSignedPostMetadata(
   contentOverrides?: Partial<PostMetadata["content"]>,
 ): PostMetadata {
   const metadataWithoutSignature = {
-    $schema: PostMetadataSchemaId.LATEST,
-    content: {
-      id: "post-test-123",
-      title: "Hello World",
-      content: "# Content here",
-      ...contentOverrides,
+      $schema: PostMetadataSchemaId.LATEST,
+      content: {
+        id: "post-test-123",
+        title: "Hello World",
+        content: "# Content here",
+        ...contentOverrides,
+      },
     },
-  },
-
-   message = JSON.stringify(metadataWithoutSignature),
-   messageHash = bytesToHex(hashMessage(message)),
-   signature = signMessageHashRsv({
-    messageHash,
-    privateKey: TEST_PRIVATE_KEY,
-  });
+    message = JSON.stringify(metadataWithoutSignature),
+    messageHash = bytesToHex(hashMessage(message)),
+    signature = signMessageHashRsv({
+      messageHash,
+      privateKey: TEST_PRIVATE_KEY,
+    });
 
   return {
     ...metadataWithoutSignature,
@@ -51,8 +50,7 @@ function createSignedPostMetadata(
 describe(verifyPostSignature, () => {
   it("should verify valid signature and return recovered address on mainnet by default", () => {
     const signedMetadata = createSignedPostMetadata(),
-
-     result = verifyPostSignature(signedMetadata);
+      result = verifyPostSignature(signedMetadata);
 
     expect(result.isOk()).toBe(true);
     const value = (result as unknown as { value: VerifyPostSignatureResult })
@@ -66,8 +64,7 @@ describe(verifyPostSignature, () => {
 
   it("should recover testnet address when testnet network option is passed", () => {
     const signedMetadata = createSignedPostMetadata(),
-
-     result = verifyPostSignature(signedMetadata, { network: "testnet" });
+      result = verifyPostSignature(signedMetadata, { network: "testnet" });
 
     expect(result.isOk()).toBe(true);
     const value = (result as unknown as { value: VerifyPostSignatureResult })
@@ -77,8 +74,7 @@ describe(verifyPostSignature, () => {
 
   it("should recover testnet address when devnet network option is passed", () => {
     const signedMetadata = createSignedPostMetadata(),
-
-     result = verifyPostSignature(signedMetadata, { network: "devnet" });
+      result = verifyPostSignature(signedMetadata, { network: "devnet" });
 
     expect(result.isOk()).toBe(true);
     const value = (result as unknown as { value: VerifyPostSignatureResult })
@@ -88,8 +84,7 @@ describe(verifyPostSignature, () => {
 
   it("should recover testnet address when mocknet network option is passed", () => {
     const signedMetadata = createSignedPostMetadata(),
-
-     result = verifyPostSignature(signedMetadata, { network: "mocknet" });
+      result = verifyPostSignature(signedMetadata, { network: "mocknet" });
 
     expect(result.isOk()).toBe(true);
     const value = (result as unknown as { value: VerifyPostSignatureResult })
@@ -99,15 +94,14 @@ describe(verifyPostSignature, () => {
 
   it("should return InvalidSignatureError when signature is missing", () => {
     const unsignedMetadata = {
-      $schema: PostMetadataSchemaId.LATEST,
-      content: {
-        id: "post-test-123",
-        title: "Hello World",
-        content: "# Content here",
+        $schema: PostMetadataSchemaId.LATEST,
+        content: {
+          id: "post-test-123",
+          title: "Hello World",
+          content: "# Content here",
+        },
       },
-    },
-
-     result = verifyPostSignature(unsignedMetadata);
+      result = verifyPostSignature(unsignedMetadata);
 
     expect(result.isOk()).toBe(false);
     const err = (result as unknown as { error: InvalidSignatureError }).error;
@@ -119,16 +113,14 @@ describe(verifyPostSignature, () => {
 
   it("should recover a different address when content is tampered", () => {
     const signedMetadata = createSignedPostMetadata(),
-
-     tamperedMetadata: PostMetadata = {
-      ...signedMetadata,
-      content: {
-        ...signedMetadata.content,
-        title: "Tampered Title",
+      tamperedMetadata: PostMetadata = {
+        ...signedMetadata,
+        content: {
+          ...signedMetadata.content,
+          title: "Tampered Title",
+        },
       },
-    },
-
-     result = verifyPostSignature(tamperedMetadata);
+      result = verifyPostSignature(tamperedMetadata);
 
     expect(result.isOk()).toBe(true);
     const value = (result as unknown as { value: VerifyPostSignatureResult })
@@ -138,16 +130,15 @@ describe(verifyPostSignature, () => {
 
   it("should return InvalidSignatureError when signature is malformed and preserve cause", () => {
     const malformedMetadata = {
-      $schema: PostMetadataSchemaId.LATEST,
-      content: {
-        id: "post-test-123",
-        title: "Hello World",
-        content: "# Content here",
+        $schema: PostMetadataSchemaId.LATEST,
+        content: {
+          id: "post-test-123",
+          title: "Hello World",
+          content: "# Content here",
+        },
+        signature: "not-a-valid-hex-signature",
       },
-      signature: "not-a-valid-hex-signature",
-    },
-
-     result = verifyPostSignature(malformedMetadata);
+      result = verifyPostSignature(malformedMetadata);
 
     expect(result.isOk()).toBe(false);
     const err = (result as unknown as { error: InvalidSignatureError }).error;
@@ -160,15 +151,13 @@ describe(verifyPostSignature, () => {
 
   it("should support exhaustive pattern matching with better-result matchError", () => {
     const unsignedMetadata = {
-      content: { id: "test" },
-    },
-
-     result = verifyPostSignature(unsignedMetadata),
-     err = (result as unknown as { error: InvalidSignatureError }).error,
-
-     formatted = matchError(err, {
-      InvalidSignatureError: (e) => `Handled: ${e.message}`,
-    });
+        content: { id: "test" },
+      },
+      result = verifyPostSignature(unsignedMetadata),
+      err = (result as unknown as { error: InvalidSignatureError }).error,
+      formatted = matchError(err, {
+        InvalidSignatureError: (e) => `Handled: ${e.message}`,
+      });
     expect(formatted).toBe("Handled: Invalid signature: Signature is required");
   });
 });
