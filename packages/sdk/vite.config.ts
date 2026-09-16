@@ -2,6 +2,7 @@ import { defineConfig } from "vite-plus";
 
 export default defineConfig({
   pack: {
+    deps: { resolveDepSubpath: true },
     entry: ["src/index.ts"],
     sourcemap: true,
     clean: true,
@@ -9,6 +10,7 @@ export default defineConfig({
     platform: "neutral",
   },
   test: {
+    clearMocks: false,
     environment: "node",
     include: ["**/*.test.ts", "**/*.test-d.ts"],
   },

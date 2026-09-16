@@ -5,6 +5,7 @@ export default defineConfig({
     tsconfigPaths: true,
   },
   test: {
+    clearMocks: false,
     environment: "node",
     include: ["src/**/*.test.ts"],
   },

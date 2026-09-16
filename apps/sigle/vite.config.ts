@@ -5,6 +5,7 @@ export default defineConfig({
     tsconfigPaths: true,
   },
   test: {
+    clearMocks: false,
     environment: "happy-dom",
     globals: true,
     setupFiles: ["./src/test/setup.ts"],
