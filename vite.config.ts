@@ -85,6 +85,7 @@ export default defineConfig({
       "prefer-promise-reject-errors": "off",
       "sort-imports": "off",
       "sort-keys": "off",
+      "one-var": "off",
       "react/no-multi-comp": "off",
       "vitest/no-importing-vitest-globals": "off",
       "vitest/prefer-called-once": "off",
