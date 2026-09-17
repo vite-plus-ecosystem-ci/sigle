@@ -59,6 +59,7 @@ export default defineConfig({
       pedantic: "error",
     },
     rules: {
+      "one-var": "off",
       "arrow-body-style": "off",
       curly: "off",
       complexity: "off",
