@@ -22,12 +22,12 @@ packages:
   - apps/*
   - packages/*
 catalog:
-  vite: npm:@voidzero-dev/vite-plus-core@0.2.8
-  vitest: 4.1.10
-  vite-plus: 0.2.8
+  vite: npm:@voidzero-dev/vite-plus-core@0.0.0-commit.6b26ec56e76df770e2aa5ad78571d42d20b5383c
+  vitest: 5.0.1
+  vite-plus: 0.0.0-commit.6b26ec56e76df770e2aa5ad78571d42d20b5383c
 overrides:
-  vite: "catalog:"
-  vitest: "catalog:"
+  vite@*: "catalog:"
+  vitest@*: "catalog:"
 peerDependencyRules:
   allowAny:
     - vite
