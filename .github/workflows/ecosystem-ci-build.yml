@@ -14,7 +14,9 @@ jobs:
         with:
           node-version: "24"
           cache: false
-          run-install: true
+          run-install: false
+      - name: vp install
+        run: vp install --no-frozen-lockfile
       - name: vp build
         run: vp run @sigle/sdk#build
       - name: vp check
