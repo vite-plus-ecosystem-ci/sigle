@@ -18,6 +18,9 @@ jobs:
       - name: vp install
         run: vp install --no-frozen-lockfile
       - name: vp build
-        run: vp run @sigle/sdk#build
+        run: |
+          cp apps/sigle/.env.development apps/sigle/.env.production.local
+          cp apps/custom-domain/.env.development apps/custom-domain/.env.production.local
+          vp run build
       - name: vp check
         run: vp check
