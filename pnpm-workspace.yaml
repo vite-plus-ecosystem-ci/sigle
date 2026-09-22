@@ -26,15 +26,15 @@ catalog:
   vitest: 5.0.1
   vite-plus: 0.0.0-commit.e0f77ee2353b38c77d7165d3305f9f6d705b4d62
 overrides:
-  vite@*: 'catalog:'
-  vitest@*: 'catalog:'
+  vite@*: "catalog:"
+  vitest@*: "catalog:"
 peerDependencyRules:
   allowAny:
     - vite
     - vitest
   allowedVersions:
-    vite: '*'
-    vitest: '*'
+    vite: "*"
+    vitest: "*"
 minimumReleaseAgeExclude:
   - "@oxc-project/runtime"
   - "@oxc-project/types"

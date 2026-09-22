@@ -117,6 +117,7 @@ export default defineConfig({
       "default-case": "off",
       "new-cap": "off",
       "no-use-before-define": "off",
+      "one-var": "off",
       "no-shadow": "off",
       "vitest/require-mock-type-parameters": "off",
       "no-useless-assignment": "off",

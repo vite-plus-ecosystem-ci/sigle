@@ -1,0 +1,21 @@
+# Ecosystem-ci smoke test: this fork has no PR CI.
+# Delete this workflow when upstream adds a pull_request workflow.
+name: ecosystem-ci build
+
+on:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: voidzero-dev/setup-vp@v1
+        with:
+          node-version: "24"
+          cache: false
+          run-install: true
+      - name: vp build
+        run: vp run @sigle/sdk#build
+      - name: vp check
+        run: vp check
