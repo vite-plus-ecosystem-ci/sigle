@@ -35,7 +35,7 @@ peerDependencyRules:
     vitest: "*"
 minimumReleaseAgeExclude:
   # ecosystem-ci smoke test: preview builds and freshly pinned toolchain packages
-  - '@effect/tsgo'
+  - "@effect/tsgo"
   - sign-in-with-stacks
   - vite-plus
   - "@voidzero-dev/*"
