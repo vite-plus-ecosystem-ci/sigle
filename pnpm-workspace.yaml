@@ -20,9 +20,9 @@ packages:
   - apps/*
   - packages/*
 catalog:
-  vite: npm:@voidzero-dev/vite-plus-core@1.1.0
-  vitest: 5.0.3
-  vite-plus: 1.1.0
+  vite: npm:@voidzero-dev/vite-plus-core@0.0.0-commit.6bc2d240a024170c08fbc831f0c201c162afd22e
+  vitest: 5.0.5
+  vite-plus: 0.0.0-commit.6bc2d240a024170c08fbc831f0c201c162afd22e
 overrides:
   vite@*: "catalog:"
   vitest@*: "catalog:"
@@ -34,6 +34,15 @@ peerDependencyRules:
     vite: "*"
     vitest: "*"
 minimumReleaseAgeExclude:
+  # ecosystem-ci smoke test: preview builds and freshly pinned toolchain packages
+  - "@oxc-project/*"
+  - tinybench
+  - yuku-core
+  - yuku-parser
+  - "@yuku-core/*"
+  - "@yuku-toolchain/*"
+  # ecosystem-ci smoke test: preview builds and freshly pinned toolchain packages
+  - "@effect/tsgo"
   - sign-in-with-stacks
   - vite-plus
   - "@voidzero-dev/*"
