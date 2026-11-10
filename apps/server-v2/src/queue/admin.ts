@@ -67,9 +67,7 @@ const parseElementJson = (raw: string): Schema.Json =>
     () => raw,
   );
 
-const pendingAgeMillis = (
-  oldestPending: Date | string | null,
-): number | null =>
+const pendingAgeMillis = (oldestPending: Date | string | null): number | null =>
   oldestPending === null
     ? null
     : Math.max(0, Date.now() - new Date(oldestPending).getTime());
