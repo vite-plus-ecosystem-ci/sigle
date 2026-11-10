@@ -188,8 +188,8 @@ importers:
         specifier: 2.31.1
         version: 2.31.1(@types/node@26.6.2)
       '@effect/tsgo':
-        specifier: 0.54.1
-        version: 0.54.1
+        specifier: 0.67.7
+        version: 0.67.7
       node:
         specifier: runtime:^26.9.0
         version: runtime:26.11.1
@@ -1627,43 +1627,43 @@ packages:
     peerDependencies:
       effect: ^4.0.0
 
-  '@effect/tsgo-darwin-arm64@0.54.1':
-    resolution: {integrity: sha512-eVLYXfsik3FTO24dBoXZN/KVYPYVM36Kc18hXM/3y6ixNdaxVnqzNqFyLlAuNdgse6skBXjeZq1V+XyShcl+7Q==, tarball: https://registry.npmjs.org/@effect/tsgo-darwin-arm64/-/tsgo-darwin-arm64-0.54.1.tgz}
+  '@effect/tsgo-darwin-arm64@0.67.7':
+    resolution: {integrity: sha512-5aqxhjyGPZvWxfWbxtS+F8YD3/edRcdAwVeksuZ56dWOIp3gnIMooTs2qr+aMbemvxpv6Da75yNTcyXXmbGcoA==, tarball: https://registry.npmjs.org/@effect/tsgo-darwin-arm64/-/tsgo-darwin-arm64-0.67.7.tgz}
     cpu: [arm64]
     os: [darwin]
 
-  '@effect/tsgo-darwin-x64@0.54.1':
-    resolution: {integrity: sha512-RPB1eSzsldpAeg5cVnxhqwrDLppYLRNPZQICv/cHG/I8vIngf/O7/UqyxlTDueySGo6eV8DqGDBwbYiXUT+z6Q==, tarball: https://registry.npmjs.org/@effect/tsgo-darwin-x64/-/tsgo-darwin-x64-0.54.1.tgz}
+  '@effect/tsgo-darwin-x64@0.67.7':
+    resolution: {integrity: sha512-r5bjAB5ECpM11CZRGhTnHULPz4f103Ph1gHnDdDfvsx2h+ikM+bG6qvm6384M1IWfBQ1IMC2VojWqPHLKKhTUg==, tarball: https://registry.npmjs.org/@effect/tsgo-darwin-x64/-/tsgo-darwin-x64-0.67.7.tgz}
     cpu: [x64]
     os: [darwin]
 
-  '@effect/tsgo-linux-arm64@0.54.1':
-    resolution: {integrity: sha512-S8gew1K70C8cbBHlAJ6L999Ca6UyOenaAJPnlc0dtvyi+7mRlA0GSM0ITUW62+dL0Y2ZanCB6L1d6CAgFd0Kdg==, tarball: https://registry.npmjs.org/@effect/tsgo-linux-arm64/-/tsgo-linux-arm64-0.54.1.tgz}
+  '@effect/tsgo-linux-arm64@0.67.7':
+    resolution: {integrity: sha512-4mX5u7JhLka7XdcKZ8HHEbIhyDRJifZSKeldJv7iwicD2kTfX2OlJs0VGeB2t+RcHZPF4RLp+lIAAVLyP4/7zQ==, tarball: https://registry.npmjs.org/@effect/tsgo-linux-arm64/-/tsgo-linux-arm64-0.67.7.tgz}
     cpu: [arm64]
     os: [linux]
 
-  '@effect/tsgo-linux-arm@0.54.1':
-    resolution: {integrity: sha512-IyYRagBLRjdcDq25aRVlk28RkS0ve5OfwoDMXg1OsLKjkfqKK+JDjUx1OlZsfoUTDIFx7BypYqvSYAdYVLDvcw==, tarball: https://registry.npmjs.org/@effect/tsgo-linux-arm/-/tsgo-linux-arm-0.54.1.tgz}
+  '@effect/tsgo-linux-arm@0.67.7':
+    resolution: {integrity: sha512-XzVPf9BBp9f9aBvwVmv/wTJPJHLlN101hCrPZcR6vLV1UGcQmF20bYRLyylTaCUw+JAu7XRzrnn1L7ofXGXSeQ==, tarball: https://registry.npmjs.org/@effect/tsgo-linux-arm/-/tsgo-linux-arm-0.67.7.tgz}
     cpu: [arm]
     os: [linux]
 
-  '@effect/tsgo-linux-x64@0.54.1':
-    resolution: {integrity: sha512-jWMxNGmkZ6MKNhtTc7H90TK6f3rZAYTeKy+erEsmi6q+rVecvE8wgxmIJTvh+aEYS7HEw3+1q2UmsfEtBBR+yQ==, tarball: https://registry.npmjs.org/@effect/tsgo-linux-x64/-/tsgo-linux-x64-0.54.1.tgz}
+  '@effect/tsgo-linux-x64@0.67.7':
+    resolution: {integrity: sha512-uzr4y5y7Ys6gIZ1Ouin/Hofl82eG305JLJfbse9ApUJj4oDUFnbj8eUUU04n2rKxeXiV2P4wRvIGOjyCpkPbKQ==, tarball: https://registry.npmjs.org/@effect/tsgo-linux-x64/-/tsgo-linux-x64-0.67.7.tgz}
     cpu: [x64]
     os: [linux]
 
-  '@effect/tsgo-win32-arm64@0.54.1':
-    resolution: {integrity: sha512-0YAdScXZ944fH0BGULC8l6ZpGhXhX/RNv8LJWo7FW69QJ6q83QBF5aNOJnNmHKZko1TKAAtnoALDYX4GF7c4xQ==, tarball: https://registry.npmjs.org/@effect/tsgo-win32-arm64/-/tsgo-win32-arm64-0.54.1.tgz}
+  '@effect/tsgo-win32-arm64@0.67.7':
+    resolution: {integrity: sha512-Wj0uurKDr3x2O/I8RGD69D7Ot7iowdGzzzRoH04qoKx1ZXpnEmZ8I+8CFmcMpKeYTP4T+OPjiAm8vbQgf2be+A==, tarball: https://registry.npmjs.org/@effect/tsgo-win32-arm64/-/tsgo-win32-arm64-0.67.7.tgz}
     cpu: [arm64]
     os: [win32]
 
-  '@effect/tsgo-win32-x64@0.54.1':
-    resolution: {integrity: sha512-/BWavNrNQlH/Amn7cmO/xYEeKVc9Ir9PwAfQKy08V9Wt5a5iRE4FBVR2zHa1EEblkgJh4OjwV+S/q2eiymOMEw==, tarball: https://registry.npmjs.org/@effect/tsgo-win32-x64/-/tsgo-win32-x64-0.54.1.tgz}
+  '@effect/tsgo-win32-x64@0.67.7':
+    resolution: {integrity: sha512-42Z+8gL9JR6ntmeAoZXHaJ/5fb+F9i9HMJaa9yY8lBbtns1RHTT807qV//RISm7M5pUloM9qzAmNbGJB2FbIbA==, tarball: https://registry.npmjs.org/@effect/tsgo-win32-x64/-/tsgo-win32-x64-0.67.7.tgz}
     cpu: [x64]
     os: [win32]
 
-  '@effect/tsgo@0.54.1':
-    resolution: {integrity: sha512-X7oGQODYMzAgeuVvOgQnEqDJqnWzn4CIY4ZJxYo8REHaMhCdlS8DXWoBHm3FhFpyAOF/8qrbqrY9hakx+pNGDg==, tarball: https://registry.npmjs.org/@effect/tsgo/-/tsgo-0.54.1.tgz}
+  '@effect/tsgo@0.67.7':
+    resolution: {integrity: sha512-1OPkF+7L11BGGonHsgVgfplCqEq0AkoXWcr55hfs4KomhTdRhfSAzuHbRXWoloobVRNF3i7ZgABHm6xeJ5H9Tg==, tarball: https://registry.npmjs.org/@effect/tsgo/-/tsgo-0.67.7.tgz}
     hasBin: true
 
   '@effect/vitest@4.0.0':
@@ -14174,36 +14174,36 @@ snapshots:
       '@electric-sql/pglite': 0.5.8
       effect: 4.0.0
 
-  '@effect/tsgo-darwin-arm64@0.54.1':
+  '@effect/tsgo-darwin-arm64@0.67.7':
     optional: true
 
-  '@effect/tsgo-darwin-x64@0.54.1':
+  '@effect/tsgo-darwin-x64@0.67.7':
     optional: true
 
-  '@effect/tsgo-linux-arm64@0.54.1':
+  '@effect/tsgo-linux-arm64@0.67.7':
     optional: true
 
-  '@effect/tsgo-linux-arm@0.54.1':
+  '@effect/tsgo-linux-arm@0.67.7':
     optional: true
 
-  '@effect/tsgo-linux-x64@0.54.1':
+  '@effect/tsgo-linux-x64@0.67.7':
     optional: true
 
-  '@effect/tsgo-win32-arm64@0.54.1':
+  '@effect/tsgo-win32-arm64@0.67.7':
     optional: true
 
-  '@effect/tsgo-win32-x64@0.54.1':
+  '@effect/tsgo-win32-x64@0.67.7':
     optional: true
 
-  '@effect/tsgo@0.54.1':
+  '@effect/tsgo@0.67.7':
     optionalDependencies:
-      '@effect/tsgo-darwin-arm64': 0.54.1
-      '@effect/tsgo-darwin-x64': 0.54.1
-      '@effect/tsgo-linux-arm': 0.54.1
-      '@effect/tsgo-linux-arm64': 0.54.1
-      '@effect/tsgo-linux-x64': 0.54.1
-      '@effect/tsgo-win32-arm64': 0.54.1
-      '@effect/tsgo-win32-x64': 0.54.1
+      '@effect/tsgo-darwin-arm64': 0.67.7
+      '@effect/tsgo-darwin-x64': 0.67.7
+      '@effect/tsgo-linux-arm': 0.67.7
+      '@effect/tsgo-linux-arm64': 0.67.7
+      '@effect/tsgo-linux-x64': 0.67.7
+      '@effect/tsgo-win32-arm64': 0.67.7
+      '@effect/tsgo-win32-x64': 0.67.7
 
   '@effect/vitest@4.0.0(effect@4.0.0)(vitest@5.1.0)':
     dependencies:
