@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "@changesets/cli": "2.31.1",
-    "@effect/tsgo": "0.56.0",
+    "@effect/tsgo": "0.73.2",
     "railway": "3.17.0",
     "syncpack": "15.3.2",
     "turbo": "2.11.2",
