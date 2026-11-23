@@ -203,41 +203,43 @@ export const updateProfile = (payload: typeof UpdateProfilePayload.Type) =>
           updatedAt: now,
         };
 
-        const previousProfile = yield* db
-          .transaction((tx) =>
-            Effect.gen(function* () {
-              const [previous] = yield* tx
-                .select({
-                  coverPicture: profile.coverPicture,
-                  picture: profile.picture,
-                })
-                .from(profile)
-                .where(eq(profile.address, recoveredAddress))
-                .limit(1);
+        const previousProfile = yield* (
+          db
+            .transaction((tx) =>
+              Effect.gen(function* () {
+                const [previous] = yield* tx
+                  .select({
+                    coverPicture: profile.coverPicture,
+                    picture: profile.picture,
+                  })
+                  .from(profile)
+                  .where(eq(profile.address, recoveredAddress))
+                  .limit(1);
 
-              yield* tx
-                .insert(profile)
-                .values({
-                  ...fields,
+                yield* tx
+                  .insert(profile)
+                  .values({
+                    ...fields,
+                    address: recoveredAddress,
+                    createdAt: now,
+                  })
+                  .onConflictDoUpdate({
+                    target: profile.address,
+                    set: fields,
+                  });
+
+                yield* tx.insert(profileUpdate).values({
+                  arweaveTxId: uploaded.id,
+                  userId: user.id,
                   address: recoveredAddress,
-                  createdAt: now,
-                })
-                .onConflictDoUpdate({
-                  target: profile.address,
-                  set: fields,
                 });
 
-              yield* tx.insert(profileUpdate).values({
-                arweaveTxId: uploaded.id,
-                userId: user.id,
-                address: recoveredAddress,
-              });
-
-              return previous;
-            }),
-          )
-          // Like the queries, a failed transaction is a defect.
-          .pipe(Effect.orDie);
+                return previous;
+              }),
+            )
+            // Like the queries, a failed transaction is a defect.
+            .pipe(Effect.orDie)
+        );
 
         return {
           result: uploaded,
